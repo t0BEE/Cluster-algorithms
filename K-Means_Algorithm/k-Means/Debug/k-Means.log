@@ -1,0 +1,10 @@
+﻿  cluster.cpp
+c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\cluster.cpp(25): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\cluster.cpp(24): warning C4101: 'index': unreferenced local variable
+  main.cpp
+c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\main.cpp(12): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\main.cpp(16): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\main.cpp(62): warning C4101: 'e': unreferenced local variable
+  point.cpp
+  Generating Code...
+  k-Means.vcxproj -> C:\Users\schiffmt\OneDrive - Hewlett Packard Enterprise\Dokumente\Uni\schriftliche Arbeiten\Studienarbeit\Studienarbeit\Code\k-Means\Debug\k-Means.exe
