@@ -1,5 +1,6 @@
 #include "main.h"
-#define CLUSTER_TOTAL 3   // = k
+#define CLUSTER_TOTAL 2   // = k
+#define ITERARTIONS 6
 
 std::vector<Point> total;
 std::vector<Cluster> clusters;
@@ -78,7 +79,7 @@ int main()
 	// Init phase ----------------------------- 
 	
 	//read CSV
-	readCSV("../Sample.csv");
+	readCSV("../../Sample.csv");
 	std::cout << "--- start ---" << std::endl;
 	std::cout << "Number of Points: " << total.size() << std::endl;
 	std::cout << "Number of Clusters: " << CLUSTER_TOTAL << std::endl;
@@ -92,15 +93,18 @@ int main()
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
 		clusters[i].printList();
 	}
-	//////////////////////////////////////////////////////////
 
-	for (int i = 0; i < 6; ++i)
+	////       start working       //////////////
+	
+	for (int i = 0; i < ITERARTIONS; ++i)
 	{
 		calcCentroids();
 		assignPoints();
 	}
+
 	std::cout << "--- ----- ---" << std::endl;
-	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
+	for (int i = 0; i < CLUSTER_TOTAL; ++i) 
+	{
 		clusters[i].printList();
 	}
 
