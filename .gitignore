@@ -1,0 +1,3 @@
+#exclude csv output files
+*.csv
+*ipynb*
