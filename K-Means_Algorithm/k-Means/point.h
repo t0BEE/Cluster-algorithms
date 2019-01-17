@@ -1,8 +1,4 @@
 #pragma once
-
-#ifndef POINT_H
-#define POINT_H
-
 #include <vector>
 
 class Point
@@ -25,4 +21,3 @@ class Centroid: public Point
 public:
 	void setPosition(double, double);
 };
-#endif

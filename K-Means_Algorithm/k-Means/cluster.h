@@ -1,8 +1,4 @@
 #pragma once
-
-#ifndef CLUSTER_H
-#define CLUSTER_H
-
 #include <vector>
 #include "point.h"
 #include <iostream>
@@ -21,5 +17,3 @@ public:
 	Point getCentroid();
 	void printList();
 };
-
-#endif

@@ -1,8 +1,4 @@
 #pragma once
-
-#ifndef MAIN_H
-#define MAIN_H
-
 #include "point.h"
 #include "cluster.h"
 #include <iostream>
@@ -19,7 +15,6 @@ void assignPoints();
 void readCSV(std::string filename);
 void calcCentroids();
 double calcDistance(Point, Point);
-
-#endif // !MAIN_H
+void writeCSVFile(std::ofstream&, std::string);
 
 
