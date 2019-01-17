@@ -1,10 +1,12 @@
 ﻿  cluster.cpp
-c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\cluster.cpp(25): warning C4018: '<': signed/unsigned mismatch
-c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\cluster.cpp(24): warning C4101: 'index': unreferenced local variable
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\cluster.cpp(25): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\cluster.cpp(24): warning C4101: 'index': unreferenced local variable
   main.cpp
-c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\main.cpp(12): warning C4018: '<': signed/unsigned mismatch
-c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\main.cpp(16): warning C4018: '<': signed/unsigned mismatch
-c:\users\schiffmt\onedrive - hewlett packard enterprise\dokumente\uni\schriftliche arbeiten\studienarbeit\studienarbeit\code\k-means\k-means\main.cpp(62): warning C4101: 'e': unreferenced local variable
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\main.cpp(13): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\main.cpp(17): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\main.cpp(63): warning C4101: 'e': unreferenced local variable
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\main.cpp(81): warning C4018: '<': signed/unsigned mismatch
+c:\users\schiffmt\source\repos\k-means\k-means_algorithm\k-means\main.cpp(99): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   point.cpp
   Generating Code...
-  k-Means.vcxproj -> C:\Users\schiffmt\OneDrive - Hewlett Packard Enterprise\Dokumente\Uni\schriftliche Arbeiten\Studienarbeit\Studienarbeit\Code\k-Means\Debug\k-Means.exe
+  k-Means.vcxproj -> C:\Users\schiffmt\source\repos\k-Means\K-Means_Algorithm\Debug\k-Means.exe
