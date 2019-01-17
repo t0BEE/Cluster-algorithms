@@ -74,10 +74,30 @@ double calcDistance(Point one, Point two)
 	return distance;
 }
 
+void writeCSVFile(std::ofstream &fileOStream, std::string filename)
+{
+	fileOStream.open((filename));
+	fileOStream << "a;b;c\n";
+	for (int j = 0; j < total.size(); ++j)
+	{
+		fileOStream << std::to_string(total[j].getX()) << ";" << std::to_string(total[j].getY()) << ";" << std::to_string(total[j].getCluster()) << "\n";
+	}
+	// write Centroids in CSV with cluster number = total
+	for (int j = 0; j < CLUSTER_TOTAL; ++j)
+	{
+		fileOStream << std::to_string(clusters[j].getCentroid().getX()) << ";" << std::to_string(clusters[j].getCentroid().getY()) << ";" << std::to_string(CLUSTER_TOTAL) << "\n";
+	}
+	fileOStream.close();
+}
+
 int main()
 {
 	// Init phase ----------------------------- 
-	
+	std::ofstream csvOutputfile;
+
+	// really randomize the pick
+	std::srand(std::time(nullptr));
+
 	//read CSV
 	readCSV("../../Sample.csv");
 	std::cout << "--- start ---" << std::endl;
@@ -85,11 +105,13 @@ int main()
 	std::cout << "Number of Clusters: " << CLUSTER_TOTAL << std::endl;
 	// Init Clusters
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
-		clusters.push_back(Cluster(i, total[std::rand()%total.size()]));
+		//clusters.push_back(Cluster(i, total[std::rand()%total.size()]));
+		clusters.push_back(Cluster(i, Point(std::rand()%7, std::rand()%7)));
 	}
 
 	assignPoints();
-	
+	writeCSVFile(csvOutputfile, "outpuBefore.csv");
+
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
 		clusters[i].printList();
 	}
@@ -100,6 +122,7 @@ int main()
 	{
 		calcCentroids();
 		assignPoints();
+		writeCSVFile(csvOutputfile, ("output" + std::to_string(i) + ".csv"));
 	}
 
 	std::cout << "--- ----- ---" << std::endl;

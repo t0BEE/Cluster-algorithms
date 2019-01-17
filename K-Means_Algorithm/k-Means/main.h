@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
 double calcDistance(Point, Point);
 int main();		// k = number of clusters
