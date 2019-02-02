@@ -21,8 +21,7 @@ void Cluster::addPoint(Point insert)
 
 void Cluster::removePoint(Point remove)
 {
-	int index;
-	for (int i = 0; i < pointList.size(); ++i)
+	for (unsigned int i = 0; i < pointList.size(); ++i)
 	{
 		if (abs(calcDistance(remove, pointList[i])) < 0.005) // comparison with 0.0 does not work well
 		{

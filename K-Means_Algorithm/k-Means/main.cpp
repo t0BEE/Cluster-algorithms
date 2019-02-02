@@ -10,11 +10,11 @@ int randomInt = 0;
 
 void assignPoints()
 {
-	for (int i = 0; i < total.size(); ++i)
+	for (unsigned int i = 0; i < total.size(); ++i)
 	{
 		int shortestDistance = -1;
 		double distance = DBL_MAX, tmpDis;
-		for (int k = 0; k < clusters.size(); ++k)
+		for (unsigned int k = 0; k < clusters.size(); ++k)
 		{
 			tmpDis = calcDistance(clusters[k].getCentroid(), total[i]);
 			if (tmpDis < distance)
@@ -60,7 +60,7 @@ void readCSV(std::string filename)
 		try
 		{
 			total.push_back(Point(std::stod(dataX), std::stod(dataY)));
-		}catch(const std::exception& e)
+		}catch(std::exception)
 		{ }
 		// erste Zeile schmeißt Exception! ("x","y")
 	}
@@ -78,7 +78,7 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 {
 	fileOStream.open((filename));
 	fileOStream << "a;b;c\n";
-	for (int j = 0; j < total.size(); ++j)
+	for (unsigned int j = 0; j < total.size(); ++j)
 	{
 		fileOStream << std::to_string(total[j].getX()) << ";" << std::to_string(total[j].getY()) << ";" << std::to_string(total[j].getCluster()) << "\n";
 	}
@@ -96,7 +96,7 @@ int main()
 	std::ofstream csvOutputfile;
 
 	// really randomize the pick
-	std::srand(std::time(nullptr));
+	std::srand((unsigned int)std::time(nullptr));
 
 	//read CSV
 	readCSV("../../Sample.csv");
