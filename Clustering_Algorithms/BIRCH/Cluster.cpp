@@ -67,9 +67,44 @@ void Cluster::calcCentroid()
 	this->centroid.setPosition(newCentroid);
 }
 
+// This function first recalculates the centroid and uses it to
+// measure the average distance between it and all points in the cluster
+// Input: --
+// Output: --
+// Effect: the radius variable in cluster is changed
 void Cluster::calcRadius()
 {
 	this->calcCentroid();
-	this->radius = 
+	double varRadius = 0.0;
+	for (int i = 0; i < cluster.size(); ++i)
+	{
+		varRadius += pow(calcDistance(cluster[i], this->centroid), 2.0);
+	}
+	this->radius = sqrt(varRadius / cluster.size());
 }
-void Cluster::clacDiameter();
+
+// This function calculates the average distance between all points in the cluster
+// Input: --
+// Output: --
+// Effect: the diameter variable in cluster is changed
+void Cluster::calcDiameter()
+{
+	double varDiameter = 0.0;
+	for (int i = 0; i < cluster.size(); ++i)
+	{
+		for (int j = 0; j < cluster.size(); ++j)
+		{
+			varDiameter += pow(calcDistance(cluster[i], cluster[j]), 2.0);
+		}
+	}
+	this->diameter = sqrt(varDiameter / (cluster.size()*(cluster.size() - 1)));
+}
+
+// Get the CF
+// Input: --
+// Output: CF of the cluster
+// Effect: --
+ClusteringFeature Cluster::getCF()
+{
+	return this->cf;
+}

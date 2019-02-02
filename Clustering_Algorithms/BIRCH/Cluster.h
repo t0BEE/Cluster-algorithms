@@ -2,6 +2,7 @@
 
 #include "Point.h"
 #include "Parameter.h"
+#include "ClusteringFeature.h"
 #include <vector>
 #include <math.h>
 
@@ -10,8 +11,9 @@ class Cluster
 private:
 	std::vector<Point> cluster;
 	Centroid centroid;
-	double radius[DIMENSION];
-	double diameter[DIMENSION];
+	ClusteringFeature cf;
+	double radius;
+	double diameter;
 
 public:
 	Cluster();
@@ -20,5 +22,6 @@ public:
 	double calcDistance(Point& pEins, Point& pZwei);
 	void calcCentroid();
 	void calcRadius();
-	void clacDiameter();
+	void calcDiameter();
+	ClusteringFeature getCF();
 };

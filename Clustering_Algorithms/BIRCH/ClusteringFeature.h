@@ -8,12 +8,20 @@
 class ClusteringFeature 
 {
 private:
-	std::vector <Cluster> clusters;
-	unsigned int NumberOfClusters;
-	std::vector <double> LinearSum;
-	std::vector <double> SquareSum;
+	std::vector<Cluster> childClusters;
+	unsigned int NumberOfPoints;
+	double linearSum[DIMENSION];
+	double squareSum[DIMENSION];
+	bool leafNode;
 
-public:
 	void calcLinearSum();
 	void calcSquareSum();
+
+public:
+	ClusteringFeature();
+	std::vector<Point> getClusterOfThisLevel();
+	void recalculate();
+	void changeLeafNode();
+	double getLS();
+	double getSS();
 };

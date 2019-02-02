@@ -41,6 +41,10 @@ double Point::getCoordinate(int dimension)
 	return this->coordinates[dimension];
 }
 
+// Set the centroids position
+// Input: array of type double
+// Output: --
+// Effect: centroid variable is changed
 void Centroid::setPosition(double newCoordinates[DIMENSION])
 {
 	for (int i = 0; i < DIMENSION; ++i)
