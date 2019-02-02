@@ -1,8 +1,9 @@
 #exclude csv output files
 *.csv
 *ipynb*
-K-Means_Algorithm/k-Means/Debug/*
-K-Means_Algorithm/Debug/*
-K-Means_Algorithm/.vs/*
-K-Means_Algorithm/k-Means.sln
-K-Means_Algorithm/k-Means/k-Means.vcx*
+Clustering_Algorithms/k-Means/Debug/*
+Clustering_Algorithms/Debug/*
+Clustering_Algorithms/.vs/*
+Clustering_Algorithms/ClusteringAlgorithms.sln
+Clustering_Algorithms/k-Means/k-Means.vcx*
+Clustering_Algorithms/BIRCH/BIRCH.vcx*
