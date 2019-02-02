@@ -7,3 +7,5 @@ Clustering_Algorithms/.vs/*
 Clustering_Algorithms/ClusteringAlgorithms.sln
 Clustering_Algorithms/k-Means/k-Means.vcx*
 Clustering_Algorithms/BIRCH/BIRCH.vcx*
+Clustering_Algorithms/k-Means/x64/*
+Clustering_Algorithms/x64/*
