@@ -22,6 +22,6 @@ public:
 	std::vector<Point> getClusterOfThisLevel();
 	void recalculate();
 	void changeLeafNode();
-	double getLS();
-	double getSS();
+	void getLS(double* buffer);
+	void getSS(double* buffer);
 };

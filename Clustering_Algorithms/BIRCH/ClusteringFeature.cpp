@@ -13,19 +13,24 @@ ClusteringFeature::ClusteringFeature()
 // Effect: value of LS in a CF change
 void ClusteringFeature::calcLinearSum() 
 {
-	double varLS = 0.0;
+	double varLS[DIMENSION];
+	double tmpVar[DIMENSION];
 	if (this->leafNode)
 	{
 
 	}
 	else
 	{
-		for (int i = 0; i < this->childClusters.size(); ++i)
+		for (int j = 0; j < DIMENSION; ++j)
 		{
-			varLS += childClusters[i].getCF().getLS();
+			for (int i = 0; i < this->childClusters.size(); ++i)
+			{
+				childClusters[i].getCF().getLS(varLS);
+				tmpVar[j] += varLS[j];
+			}
+			this->linearSum[j] = tmpVar[j];
 		}
 	}
-	this->linearSum = varLS;
 }
 
 // Recalculate the Square Sum of the CF
@@ -36,19 +41,24 @@ void ClusteringFeature::calcLinearSum()
 // Effect: value of SS in a CF change
 void ClusteringFeature::calcSquareSum() 
 {
-	double varSS = 0.0;
+	double varSS[DIMENSION];
+	double tmpVar[DIMENSION];
 	if (this->leafNode)
 	{
 
 	}
 	else
 	{
-		for (int i = 0; i < this->childClusters.size(); ++i)
+		for (int j = 0; j < DIMENSION; ++j)
 		{
-			varSS += childClusters[i].getCF().getSS();
+			for (int i = 0; i < this->childClusters.size(); ++i)
+			{
+				childClusters[i].getCF().getLS(varSS);
+				tmpVar[j] += varSS[j];
+			}
+			this->linearSum[j] = tmpVar[j];
 		}
 	}
-	this->squareSum = varSS;
 }
 
 
@@ -84,19 +94,25 @@ void ClusteringFeature::changeLeafNode()
 }
 
 // Get the Linear Sum of the Clustering Feature
-// Input: --
-// Output: LS of the CF
-// Effect: --
-double ClusteringFeature::getLS()
+// Input: pointer to transfer the values
+// Output: --
+// Effect: the buffer contains the linear sum
+void ClusteringFeature::getLS(double* buffer)
 {
-	return this->linearSum;
+	for (int i = 0; i < DIMENSION; ++i)
+	{
+		buffer[i] = this->linearSum[i];
+	}
 }
 
 // Get the Square Sum of the Clustering Feature
-// Input: --
-// Output: SS of the CF
-// Effect: --
-double ClusteringFeature::getSS()
+// Input: pointer to transfer the values
+// Output: --
+// Effect: the buffer contains the square sum
+void ClusteringFeature::getSS(double* buffer)
 {
-	return this->squareSum;
+	for (int i = 0; i < DIMENSION; ++i)
+	{
+		buffer[i] = this->squareSum[i];
+	}
 }
