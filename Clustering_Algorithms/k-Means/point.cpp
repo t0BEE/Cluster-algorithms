@@ -1,37 +1,73 @@
 #include "point.h"
 
+// Constructor of class Point
+// Input: 
+// Output: --
+// Effect: New Point instance created
 Point::Point(){}
 
-Point::Point(double x, double y)
+// Constructor of class Point
+// Input: double array with coordinates
+// Output: --
+// Effect: New Cluster instance created with position and neutral clusterNumber
+Point::Point(double position[DIMENSIONS])
 {
-	this->x = x;
-	this->y = y;
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		this->coordinates[i] = position[i];
+	}
 	this->clusterNumber = -1;
 }
 
+// Set the cluster number of a point
+// Input: integer for cluster number
+// Output: --
+// Effect: variable clusterNumber is changed
 void Point::setCluster(int clusterNumber)
 {
 	this->clusterNumber = clusterNumber;
 }
 
-double Point::getX()
+// Get coordinates of a point
+// A pointer is necessary because returning an array is not possible
+// Input: double pointer for an array to write the coordinates in
+// Output: --
+// Effect: the input array contains the coordinates
+void Point::getCoordinates(double* coordinateBuffer)
 {
-	return this->x;
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		coordinateBuffer[i] = this->coordinates[i];
+	}
 }
 
-double Point::getY()
-{
-	return this->y;
-}
-
+// Get cluster number of a point
+// Input: --
+// Output: integer for the cluster number
+// Effect: --
 int Point::getCluster()
 {
 	return this->clusterNumber;
 }
 
-void Centroid::setPosition(double x, double y)
+// Get coordinate of only one dimension
+// Input: dimension to look for
+// Output: double value of dimension coordinate
+// Effect: --
+double Point::getCoordinate(int dimension)
 {
-	this->x = x;
-	this->y = y;
+	return this->coordinates[dimension];
+}
+
+// Set the position of a centroid
+// Input: double array with coordinates
+// Output: --
+// Effect: the position of a centroid has changed
+void Centroid::setPosition(double position[DIMENSIONS])
+{
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		this->coordinates[i] = position[i];
+	}
 }
 

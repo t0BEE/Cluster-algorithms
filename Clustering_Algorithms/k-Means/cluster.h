@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "point.h"
+#include "Parameter.h"
 #include <iostream>
 
 class Cluster

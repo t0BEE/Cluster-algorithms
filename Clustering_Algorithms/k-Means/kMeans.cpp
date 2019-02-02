@@ -1,6 +1,5 @@
 #include "kMeans.h"
-#define CLUSTER_TOTAL 4   // = k
-#define ITERARTIONS 6
+
 
 
 std::vector<Point> total;
@@ -8,7 +7,12 @@ std::vector<Cluster> clusters;
 int randomInt = 0;
 
 
-
+// Assign points to clusters
+// By calculating the distance to the centroid in iterative way
+// if the next centroid is closer overwrite the closest integer
+// Input: --
+// Output: --
+// Effect: cluster number of point is set & pointList of cluster will be increased in size
 void assignPoints()
 {
 	for (unsigned int i = 0; i < total.size(); ++i)
@@ -36,6 +40,10 @@ void assignPoints()
 	}
 }
 
+// Recalculate centroids of clusters
+// Input: --
+// Output: --
+// Effect: centroids will be moved
 void calcCentroids()
 {
 	for (int i = 0; i < CLUSTER_TOTAL; ++i)
@@ -44,6 +52,10 @@ void calcCentroids()
 	}
 }
 
+// Read data from csv file
+// Input: String file name
+// Output: --
+// Effect: size of total will be increased
 void readCSV(std::string filename)
 {
 	std::ifstream input(filename);
@@ -52,41 +64,62 @@ void readCSV(std::string filename)
 	{
 		// put line in stringstream to seperate 
 		std::stringstream ststream(line);
-		std::string dataX;
-		std::string dataY;
-		// seperated with ; in CSV  -- get first value X
-		std::getline(ststream, dataX, ';');
-		// -- get second value Y
-		std::getline(ststream, dataY, ';');
+		std::string sData[DIMENSIONS];
+		double dData[DIMENSIONS];
+		// seperated with ; in CSV  -- get value after value
+		for (int i = 0; i < DIMENSIONS; ++i)
+		{
+			std::getline(ststream, sData[i], ';');
+			dData[i] = std::stod(sData[i]);
+		}
 		try
 		{
-			total.push_back(Point(std::stod(dataX), std::stod(dataY)));
+			total.push_back(Point(dData));
 		}catch(std::exception)
 		{ }
 		// erste Zeile schmeißt Exception! ("x","y")
 	}
 }
 
+// Calculate the distance between 2 points
 // Manhatten distance
+// Input: 2 Points
+// Output: double value of distance
+// Effect: --
 double calcDistance(Point one, Point two)
 {
-	double distance = abs((one.getX() - two.getX()));
-	distance += abs((one.getY() - two.getY()));
+	double distance = 0;
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		distance += abs(one.getCoordinate(i) - two.getCoordinate(i));
+	}
 	return distance;
 }
 
+// Write results in csv file
+// Input: fileStream , filename
+// Output: --
+// Effect: new file
 void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 {
 	fileOStream.open((filename));
 	fileOStream << "a;b;c\n";
 	for (unsigned int j = 0; j < total.size(); ++j)
 	{
-		fileOStream << std::to_string(total[j].getX()) << ";" << std::to_string(total[j].getY()) << ";" << std::to_string(total[j].getCluster()) << "\n";
+		for (int k = 0; k < DIMENSIONS; ++k)
+		{
+		fileOStream << std::to_string(total[j].getCoordinate(k)) << ";";
+		}			
+		fileOStream << std::to_string(total[j].getCluster()) << "\n";
 	}
 	// write Centroids in CSV with cluster number = total
 	for (int j = 0; j < CLUSTER_TOTAL; ++j)
 	{
-		fileOStream << std::to_string(clusters[j].getCentroid().getX()) << ";" << std::to_string(clusters[j].getCentroid().getY()) << ";" << std::to_string(CLUSTER_TOTAL) << "\n";
+		for (int k = 0; k < DIMENSIONS; ++k)
+		{
+			fileOStream << std::to_string(clusters[j].getCentroid().getCoordinate(k)) << ";";
+		}			
+		fileOStream << std::to_string(CLUSTER_TOTAL) << "\n";
 	}
 	fileOStream.close();
 }
@@ -111,7 +144,7 @@ int main()
 	}
 
 	assignPoints();
-	writeCSVFile(csvOutputfile, "outpuBefore.csv");
+	writeCSVFile(csvOutputfile, "outputBefore.csv");
 
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
 		clusters[i].printList();

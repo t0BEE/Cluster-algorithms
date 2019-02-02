@@ -1,6 +1,7 @@
 #pragma once
 #include "point.h"
 #include "cluster.h"
+#include "Parameter.h"
 #include <iostream>
 #include <vector>
 #include <float.h>

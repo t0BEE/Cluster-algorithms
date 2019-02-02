@@ -1,23 +1,23 @@
 #pragma once
 #include <vector>
+#include "Parameter.h"
 
 class Point
 {
 	int clusterNumber;
 protected:
-	double x;
-	double y;
+	double coordinates[DIMENSIONS];
 public:
 	Point();
-	Point(double, double);
+	Point(double position[DIMENSIONS]);
 	void setCluster(int);
-	double getX();
-	double getY();
+	void getCoordinates(double* coordinateBuffer);
 	int getCluster();
+	double getCoordinate(int dimension);
 };
 
 class Centroid: public Point
 {
 public:
-	void setPosition(double, double);
+	void setPosition(double position[DIMENSIONS]);
 };
