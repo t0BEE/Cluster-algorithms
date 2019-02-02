@@ -1,5 +1,5 @@
 #include "cluster.h"
-#include "main.h"
+#include "kMeans.h"
 
 Cluster::Cluster(int clusterNumber, Point startCentroid)
 {
@@ -26,6 +26,7 @@ void Cluster::removePoint(Point remove)
 		if (abs(calcDistance(remove, pointList[i])) < 0.005) // comparison with 0.0 does not work well
 		{
 			pointList.erase(pointList.begin() + i);
+			break;
 		}
 	}
 }

@@ -1,6 +1,7 @@
-#include "main.h"
-#define CLUSTER_TOTAL 2   // = k
+#include "kMeans.h"
+#define CLUSTER_TOTAL 4   // = k
 #define ITERARTIONS 6
+
 
 std::vector<Point> total;
 std::vector<Cluster> clusters;
@@ -99,14 +100,14 @@ int main()
 	std::srand((unsigned int)std::time(nullptr));
 
 	//read CSV
-	readCSV("../../Sample.csv");
+	readCSV("../../Inputfiles/Sample.csv");
 	std::cout << "--- start ---" << std::endl;
 	std::cout << "Number of Points: " << total.size() << std::endl;
 	std::cout << "Number of Clusters: " << CLUSTER_TOTAL << std::endl;
 	// Init Clusters
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
-		//clusters.push_back(Cluster(i, total[std::rand()%total.size()]));
-		clusters.push_back(Cluster(i, Point(std::rand()%7, std::rand()%7)));
+		clusters.push_back(Cluster(i, total[(unsigned int) std::rand()%total.size()]));
+		//clusters.push_back(Cluster(i, Point(std::rand()%7, std::rand()%7)));
 	}
 
 	assignPoints();
