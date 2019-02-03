@@ -1,33 +1,25 @@
 #pragma once
 
-#include "Point.h"
 #include "Parameter.h"
-#include "ClusteringFeature.h"
+#include "Point.h"
 #include <vector>
-#include <math.h>
 
-class Cluster 
+class Cluster
 {
 private:
 	std::vector<Point> cluster;
-	std::vector<Cluster*> childCluster;
-	Centroid centroid;
-	ClusteringFeature cf;
 	double radius;
 	double diameter;
-	bool isLeafNode;
-
+	Centroid centroid;
 public:
-	Cluster();
-	void addToCluster(Point addPoint);
-	void removeFromCluster(Point rmPoint);
-	double calcDistance(Point& pEins, Point& pZwei);
+	Cluster(Point initialPoint);
+	void addPoint(Point insert);
+	void removePoint(Point remove);
+	std::vector<Point> getPoints();
 	void calcCentroid();
-	void calcRadius();
-	void calcDiameter();
-	ClusteringFeature getCF();
-	bool getIsLeafNode();	
-	void changeLeafNode(bool value);
-	void recalculateCF();
-
+	double calcRadius();
+	double calcDiameter();
+	double calcDistance(Point& pEins, Point& pZwei);
+	Point getCentroid();
+	void update();
 };

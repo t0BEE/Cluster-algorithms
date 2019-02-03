@@ -10,9 +10,9 @@ Point::Point() {}
 // Input: double array --> coordinates of the point
 // Output: --
 // Effect: New Point instance created
-Point::Point(double in[DIMENSION])
+Point::Point(double in[DIMENSIONS])
 {
-	for (int i = 0; i < DIMENSION; ++i)
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		this->coordinates[i] = in[i];
 	}
@@ -26,7 +26,7 @@ Point::Point(double in[DIMENSION])
 // Effect: Change the values in the array which is given by the pointer
 void Point::getCoordinates(double* pointerToDoubleArray)
 {
-	for (int i = 0; i < DIMENSION; ++i)
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		pointerToDoubleArray[i] = this->coordinates[i];
 	}
@@ -45,9 +45,9 @@ double Point::getCoordinate(int dimension)
 // Input: array of type double
 // Output: --
 // Effect: centroid variable is changed
-void Centroid::setPosition(double newCoordinates[DIMENSION])
+void Centroid::setPosition(double newCoordinates[DIMENSIONS])
 {
-	for (int i = 0; i < DIMENSION; ++i)
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		this->coordinates[i] = newCoordinates[i];
 	}

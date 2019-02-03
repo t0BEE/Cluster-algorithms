@@ -1,50 +1,35 @@
 #include "Cluster.h"
 
-// Constructor of class Cluster
-// Input: --
-// Output: --
-// Effect: New Cluster instance created
-Cluster::Cluster() {}
-
-// A point is added to the cluster
-// Input: Points
-// Output: --
-// Effect: cluster variable is changed / increased in size
-void Cluster::addToCluster(Point addPoint)
+Cluster::Cluster(Point initialPoint)
 {
-	this->cluster.push_back(addPoint);
+	cluster.push_back(initialPoint);
 }
 
-// The distance is calculated by Euclidean Distance
-// Input: 2 Points as References
-// Output: double value --> distance
-// Effect: --
-double Cluster::calcDistance(Point& pEins, Point& pZwei)
+void Cluster::addPoint(Point insert)
 {
-	double retValue = 0.0;
-	for (int i = 0; i < DIMENSION; ++i)
-	{
-		retValue += pow(pEins.getCoordinate(i) - pZwei.getCoordinate(i), 2.0 );
-	}
-	return sqrt(retValue);
+	this->cluster.push_back(insert);
 }
 
-// The Point is searched by finding a Point in the cluster which is "close" enough
-// This point will be removed from the cluster
-// Input: Point to be removed
-// Output: --
-// Effect: the cluster variable is changed
-void Cluster::removeFromCluster(Point rmPoint)
+void Cluster::removePoint(Point remove)
 {
-	for (unsigned int i = 0; i < cluster.size(); ++i)
-	{
-		// Difference comparison with 0.0 for doubles leads to errors
-		if (abs(calcDistance(rmPoint, cluster[i])) < 0.005) 
-		{
-			cluster.erase(cluster.begin() + i);
-			break;
-		}
-	}
+
+}
+
+std::vector<Point> Cluster::getPoints()
+{
+	return this->cluster;
+}
+
+Point Cluster::getCentroid()
+{
+	return this->centroid;
+}
+
+void Cluster::update()
+{
+	calcCentroid();
+	calcDiameter();
+	calcRadius();
 }
 
 // Centroid is calculated by defining the average value for each dimension first
@@ -54,8 +39,8 @@ void Cluster::removeFromCluster(Point rmPoint)
 // Effect: the centroid variable in cluster is changed
 void Cluster::calcCentroid()
 {
-	double newCentroid[DIMENSION];
-	for (unsigned int i = 0; i < DIMENSION; ++i)
+	double newCentroid[DIMENSIONS];
+	for (unsigned int i = 0; i < DIMENSIONS; ++i)
 	{
 		newCentroid[i] = 0.0;
 		for (unsigned int j = 0; j < cluster.size(); ++j)
@@ -72,7 +57,7 @@ void Cluster::calcCentroid()
 // Input: --
 // Output: --
 // Effect: the radius variable in cluster is changed
-void Cluster::calcRadius()
+double Cluster::calcRadius()
 {
 	this->calcCentroid();
 	double varRadius = 0.0;
@@ -81,13 +66,14 @@ void Cluster::calcRadius()
 		varRadius += pow(calcDistance(cluster[i], this->centroid), 2.0);
 	}
 	this->radius = sqrt(varRadius / cluster.size());
+	return this->radius;
 }
 
 // This function calculates the average distance between all points in the cluster
 // Input: --
 // Output: --
 // Effect: the diameter variable in cluster is changed
-void Cluster::calcDiameter()
+double Cluster::calcDiameter()
 {
 	double varDiameter = 0.0;
 	for (int i = 0; i < cluster.size(); ++i)
@@ -98,42 +84,19 @@ void Cluster::calcDiameter()
 		}
 	}
 	this->diameter = sqrt(varDiameter / (cluster.size()*(cluster.size() - 1)));
+	return this->diameter;
 }
 
-// Get the CF
-// Input: --
-// Output: CF of the cluster
+// The distance is calculated by Euclidean Distance
+// Input: 2 Points as References
+// Output: double value --> distance
 // Effect: --
-ClusteringFeature Cluster::getCF()
+double Cluster::calcDistance(Point& pEins, Point& pZwei)
 {
-	return this->cf;
-}
-
-// Is the cluster a leaf node ?
-// Input: --
-// Output: boolean
-// Effect: --
-bool Cluster::getIsLeafNode()
-{
-	return this->isLeafNode;
-}
-
-// Toggeling the value of leafNode in the cluster feature
-// Input: boolean of new value
-// Output: --
-// Effect: the value of leafNode changes
-void Cluster::changeLeafNode(bool value)
-{
-		this->isLeafNode = value;
-}
-
-// Recalculate the Linear Sum & Square Sum of the CF to refresh
-// This function is public
-// Input: --
-// Output: --
-// Effect: value of SS & LS in a CF change
-void Cluster::recalculateCF()
-{
-	this->cf.calcLinearSum(this->isLeafNode, this->cluster, this->childCluster);
-	this->cf.calcSquareSum(this->isLeafNode, this->cluster, this->childCluster);
+	double retValue = 0.0;
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		retValue += pow(pEins.getCoordinate(i) - pZwei.getCoordinate(i), 2.0);
+	}
+	return sqrt(retValue);
 }

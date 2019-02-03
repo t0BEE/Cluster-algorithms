@@ -5,10 +5,10 @@
 class Point
 {
 protected:
-	double coordinates[DIMENSION];
+	double coordinates[DIMENSIONS];
 public:
 	Point();
-	Point(double in[DIMENSION] );
+	Point(double in[DIMENSIONS] );
 	void getCoordinates(double* pointerToDoubleArray);
 	double getCoordinate(int dimension);
 };
@@ -16,5 +16,5 @@ public:
 class Centroid : public Point
 {
 public:
-	void setPosition(double newCoordinates[DIMENSION]);
+	void setPosition(double newCoordinates[DIMENSIONS]);
 };
