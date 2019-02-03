@@ -16,10 +16,14 @@ public:
 	void addPoint(Point insert);
 	void removePoint(Point remove);
 	std::vector<Point> getPoints();
+
+	void update();
 	void calcCentroid();
 	double calcRadius();
 	double calcDiameter();
-	double calcDistance(Point& pEins, Point& pZwei);
+	double calcDistance(Point pEins, Point pZwei);
+
 	Point getCentroid();
-	void update();
+	double getRadius();
+	double getDiameter();
 };

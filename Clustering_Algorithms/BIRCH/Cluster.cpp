@@ -12,7 +12,14 @@ void Cluster::addPoint(Point insert)
 
 void Cluster::removePoint(Point remove)
 {
-
+	for (int i = 0; i < cluster.size(); ++i)
+	{
+		if (calcDistance(cluster[i], remove) < 0.005)
+		{
+			cluster.erase(cluster.begin() + i);
+			break;
+		}
+	}
 }
 
 std::vector<Point> Cluster::getPoints()
@@ -23,6 +30,16 @@ std::vector<Point> Cluster::getPoints()
 Point Cluster::getCentroid()
 {
 	return this->centroid;
+}
+
+double Cluster::getRadius()
+{
+	return this->radius;
+}
+
+double Cluster::getDiameter()
+{
+	return this->diameter;
 }
 
 void Cluster::update()
@@ -91,7 +108,7 @@ double Cluster::calcDiameter()
 // Input: 2 Points as References
 // Output: double value --> distance
 // Effect: --
-double Cluster::calcDistance(Point& pEins, Point& pZwei)
+double Cluster::calcDistance(Point pEins, Point pZwei)
 {
 	double retValue = 0.0;
 	for (int i = 0; i < DIMENSIONS; ++i)

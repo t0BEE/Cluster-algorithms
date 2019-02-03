@@ -24,12 +24,15 @@ private:
 	// Leaf Node Variables
 	CFTreeNode* prev;
 	CFTreeNode* next;
-	std::vector<Cluster> clustersOfPoints;
+	std::vector<Cluster> clustersInLeafNode;
+
+	// return the new node in case of a split, otherwise return NULL
+	CFTreeNode insertToLeaf(Point addPoint);
 
 public:
 	CFTreeNode();
 	void insertPoint(Point addPoint);
-	void removeFromCluster(Point rmPoint);
+	void removeFromNode(int clusterIndex);
 	double calcDistance(Point pEins, Point pZwei);
 	ClusteringFeature getCF();
 	bool getIsLeafNode();	

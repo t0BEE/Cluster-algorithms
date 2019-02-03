@@ -24,30 +24,10 @@ void CFTreeNode::insertPoint(Point addPoint)
 	// for leaf nodes
 	if (this->isLeafNode)
 	{	
-		// If not all entries are used place the point in a new entry
-		if (this->clustersOfPoints.size() < (B_ENTRIES - 1))
-			clustersOfPoints.push_back(Cluster(addPoint));
-		// if all entries used place the point within the closest cluster entry
-		else
-		{	
-			double distance = DBL_MAX, tmpDis;
-			int closestIndex;
-			for (int i = 0; i < B_ENTRIES; ++i)
-			{
-				// clustersOfPoints[i].calcCentroid();			// don't know if necessary
-				tmpDis = calcDistance(addPoint, clustersOfPoints[i].getCentroid());
-				if (tmpDis < distance)
-				{
-					distance = tmpDis;
-					closestIndex = i;
-				}
-			}
-			this->clustersOfPoints[closestIndex].addPoint(addPoint);
-			this->clustersOfPoints[closestIndex].update();
-		}
+		insertToLeaf(addPoint);
 	}
+	// go down the tree recursively to find a leaf node to place the point
 	else {
-		// go down the tree to find a leaf node to place the point
 		double distance = DBL_MAX, tmpDis;
 		int closestIndex;
 		for (int i = 0; i < childCluster.size(); ++i)
@@ -63,7 +43,7 @@ void CFTreeNode::insertPoint(Point addPoint)
 		childCluster[closestIndex].insertPoint(addPoint);
 		this->update();
 
-		/* add splits
+		/*
 		|
 		|
 		|
@@ -90,33 +70,78 @@ double CFTreeNode::calcDistance(Point pEins, Point pZwei)
 	return sqrt(retValue);
 }
 
-// The Point is searched by finding a Point in the cluster which is "close" enough
-// This point will be removed from the cluster
-// Input: Point to be removed
-// Output: --
-// Effect: the cluster variable is changed
-void CFTreeNode::removeFromCluster(Point rmPoint)
+
+void CFTreeNode::removeFromNode(int clusterIndex)
 {
-	/*
-|
-|
-|
-|
-|
-|
-|
-|
-*/
-	for (unsigned int i = 0; i < cluster.size(); ++i)
+	this->clustersInLeafNode.erase(clustersInLeafNode.begin() + clusterIndex);
+}
+
+
+CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
+{
+
+	double distance = DBL_MAX, tmpDis;
+	int closestIndex = 0;
+	for (int i = 0; i < clustersInLeafNode.size(); ++i)
 	{
-		// Difference comparison with 0.0 for doubles leads to errors
-		if (abs(calcDistance(rmPoint, cluster[i])) < 0.005) 
+		tmpDis = calcDistance(addPoint, clustersInLeafNode[i].getCentroid());
+		if (tmpDis < distance)
 		{
-			cluster.erase(cluster.begin() + i);
-			break;
+			distance = tmpDis;
+			closestIndex = i;
 		}
 	}
+	if (clustersInLeafNode.size() == 0)
+	clustersInLeafNode.push_back(Cluster(addPoint));
+	this->clustersInLeafNode[closestIndex].addPoint(addPoint);
+	this->clustersInLeafNode[closestIndex].update();
+	// Check if threshold condition is still valid
+	if (this->clustersInLeafNode[closestIndex].getRadius() > threshold_Value)
+	{
+		// If not --> remove point again and place anywhere else
+		this->clustersInLeafNode[closestIndex].removePoint(addPoint);
+		this->clustersInLeafNode[closestIndex].update();
+		// If not all entries are used in node place the point in a new entry
+		if (this->clustersInLeafNode.size() < (L_ENTRIES - 1))
+		{ 
+			clustersInLeafNode.push_back(Cluster(addPoint));
+			return;
+		}
+		// If the Leaf Node is full --> split
+		else
+		{	
+			// choose farthest pair of entries
+			int far1, far2;
+			double farDis = 0.0, tmpDis;
+			for (int i = 0; i < clustersInLeafNode.size(); ++i)
+			{
+				for (int j = 0; j < clustersInLeafNode.size(); ++j)
+				{
+					tmpDis = calcDistance(clustersInLeafNode[i].getCentroid(), clustersInLeafNode[j].getCentroid());
+					if (tmpDis > farDis)
+					{
+						farDis = tmpDis;
+						far1 = i;
+						far2 = j;
+					}
+				}
+			}
+			// create new Leaf Node and assign the rest entries to each
+			// TDOD
+
+
+
+
+
+		}
+	}
+	return;
+	
 }
+
+
+
+
 
 // Get the CF
 // Input: --
@@ -174,11 +199,11 @@ void CFTreeNode::calcCentroid()
 	for (unsigned int i = 0; i < DIMENSIONS; ++i)
 	{
 		newCentroid[i] = 0.0;
-		for (unsigned int j = 0; j < clustersOfPoints.size(); ++j)
+		for (unsigned int j = 0; j < clustersInLeafNode.size(); ++j)
 		{
-			newCentroid[i] += clustersOfPoints[j].getCentroid().getCoordinate(i);
+			newCentroid[i] += clustersInLeafNode[j].getCentroid().getCoordinate(i);
 		}
-		newCentroid[i] = newCentroid[i] / clustersOfPoints.size();
+		newCentroid[i] = newCentroid[i] / clustersInLeafNode.size();
 	}
 	this->centroid.setPosition(newCentroid);
 }
@@ -192,11 +217,11 @@ double CFTreeNode::calcRadius()
 {
 	this->calcCentroid();
 	double varRadius = 0.0;
-	for (int i = 0; i < clustersOfPoints.size(); ++i)
+	for (int i = 0; i < clustersInLeafNode.size(); ++i)
 	{
-		varRadius += pow(calcDistance(clustersOfPoints[i].getCentroid(), this->centroid), 2.0);
+		varRadius += pow(calcDistance(clustersInLeafNode[i].getCentroid(), this->centroid), 2.0);
 	}
-	this->radius = sqrt(varRadius / clustersOfPoints.size());
+	this->radius = sqrt(varRadius / clustersInLeafNode.size());
 	return this->radius;
 }
 
@@ -207,13 +232,13 @@ double CFTreeNode::calcRadius()
 double CFTreeNode::calcDiameter()
 {
 	double varDiameter = 0.0;
-	for (int i = 0; i < clustersOfPoints.size(); ++i)
+	for (int i = 0; i < clustersInLeafNode.size(); ++i)
 	{
-		for (int j = 0; j < clustersOfPoints.size(); ++j)
+		for (int j = 0; j < clustersInLeafNode.size(); ++j)
 		{
-			varDiameter += pow(calcDistance(clustersOfPoints[i].getCentroid(), clustersOfPoints[j].getCentroid), 2.0);
+			varDiameter += pow(calcDistance(clustersInLeafNode[i].getCentroid(), clustersInLeafNode[j].getCentroid), 2.0);
 		}
 	}
-	this->diameter = sqrt(varDiameter / (clustersOfPoints.size()*(clustersOfPoints.size() - 1)));
+	this->diameter = sqrt(varDiameter / (clustersInLeafNode.size()*(clustersInLeafNode.size() - 1)));
 	return this->diameter;
 }
