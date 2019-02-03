@@ -10,10 +10,12 @@ class Cluster
 {
 private:
 	std::vector<Point> cluster;
+	std::vector<Cluster*> childCluster;
 	Centroid centroid;
 	ClusteringFeature cf;
 	double radius;
 	double diameter;
+	bool isLeafNode;
 
 public:
 	Cluster();
@@ -24,4 +26,8 @@ public:
 	void calcRadius();
 	void calcDiameter();
 	ClusteringFeature getCF();
+	bool getIsLeafNode();	
+	void changeLeafNode(bool value);
+	void recalculateCF();
+
 };

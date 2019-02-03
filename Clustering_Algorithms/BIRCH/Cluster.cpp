@@ -108,3 +108,32 @@ ClusteringFeature Cluster::getCF()
 {
 	return this->cf;
 }
+
+// Is the cluster a leaf node ?
+// Input: --
+// Output: boolean
+// Effect: --
+bool Cluster::getIsLeafNode()
+{
+	return this->isLeafNode;
+}
+
+// Toggeling the value of leafNode in the cluster feature
+// Input: boolean of new value
+// Output: --
+// Effect: the value of leafNode changes
+void Cluster::changeLeafNode(bool value)
+{
+		this->isLeafNode = value;
+}
+
+// Recalculate the Linear Sum & Square Sum of the CF to refresh
+// This function is public
+// Input: --
+// Output: --
+// Effect: value of SS & LS in a CF change
+void Cluster::recalculateCF()
+{
+	this->cf.calcLinearSum(this->isLeafNode, this->cluster, this->childCluster);
+	this->cf.calcSquareSum(this->isLeafNode, this->cluster, this->childCluster);
+}
