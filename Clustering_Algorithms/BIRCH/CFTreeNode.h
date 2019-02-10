@@ -31,6 +31,7 @@ private:
 
 public:
 	CFTreeNode();
+	CFTreeNode(Cluster startingCluster);
 	void insertPoint(Point addPoint);
 	void removeFromNode(int clusterIndex);
 	double calcDistance(Point pEins, Point pZwei);

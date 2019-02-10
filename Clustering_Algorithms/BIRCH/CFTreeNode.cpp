@@ -9,6 +9,11 @@ CFTreeNode::CFTreeNode()
 	this->changeLeafNode(true);
 }
 
+CFTreeNode::CFTreeNode(Cluster startingCluster)
+{
+	this->clustersInLeafNode.push_back(startingCluster);
+}
+
 Point CFTreeNode::getCentroid()
 {
 	return this->centroid;
@@ -107,7 +112,7 @@ CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 			clustersInLeafNode.push_back(Cluster(addPoint));
 			return;
 		}
-		// If the Leaf Node is full --> split
+		// If the Leaf Node is full --> split and create new node
 		else
 		{	
 			// choose farthest pair of entries
@@ -121,18 +126,54 @@ CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 					if (tmpDis > farDis)
 					{
 						farDis = tmpDis;
-						far1 = i;
-						far2 = j;
+						if (i < j)
+						{
+							far1 = i;
+							far2 = j;
+						}
+						else {
+							far1 = j;
+							far2 = i;
+						}
+						// far1 should be the smaller index because it will be removed after far2
 					}
 				}
 			}
 			// create new Leaf Node and assign the rest entries to each
 			// TDOD
-
-
-
-
-
+			std::vector<Cluster> tmpClusters;
+			CFTreeNode newNode = CFTreeNode(this->clustersInLeafNode[far2]);
+			tmpClusters.push_back(this->clustersInLeafNode[far1]);
+			this->removeFromNode(far2);
+			this->removeFromNode(far1);
+			int currentLength = this->clustersInLeafNode.size();
+			for (int i = currentLength - 1; i >= 0;  --i)
+			{
+				tmpClusters.push_back(this->clustersInLeafNode[i]);
+				this->clustersInLeafNode.pop_back();
+			}
+			this->clustersInLeafNode.push_back(tmpClusters.front());
+			tmpClusters.erase(tmpClusters.begin());
+		// at this point tmpCluster contains all data points except the farthest
+		// which are seperated between the 2 CFTreeNodes
+			newNode.update();
+			this->update();
+			currentLength = tmpClusters.size();
+			for (int i = currentLength - 1; i >=0; --i)
+			{
+				if (calcDistance(tmpClusters[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpClusters[i].getCentroid(), this->centroid))
+				{
+					newNode.clustersInLeafNode.push_back(tmpClusters[i]);
+					newNode.update();
+				}
+				else
+				{
+					this->clustersInLeafNode.push_back(tmpClusters[i]);
+					this->update();
+				}
+				tmpClusters.pop_back();
+			}
+			return newNode;
 		}
 	}
 	return;
