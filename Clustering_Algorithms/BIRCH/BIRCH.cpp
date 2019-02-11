@@ -34,7 +34,7 @@ void readCSV(std::string filename)
 
 void insertPoint(unsigned int index)
 {
-	rootNode.insertPoint(total[k]);
+	rootNode.insertPoint(total[index]);
 }
 
 /*

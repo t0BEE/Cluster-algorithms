@@ -1,5 +1,8 @@
 #include "CFTreeNode.h"
 
+// THOUGHTS --- Wie wird leaf node zu nonleaf node  --- Wie waechst baum
+
+
 // Constructor of class Cluster
 // Input: --
 // Output: --
@@ -24,12 +27,14 @@ Point CFTreeNode::getCentroid()
 // Input: Points
 // Output: --
 // Effect: cluster variable is changed / increased in size
-void CFTreeNode::insertPoint(Point addPoint)
+CFTreeNode CFTreeNode::insertPoint(Point addPoint)
 {
+	CFTreeNode newNode;
 	// for leaf nodes
 	if (this->isLeafNode)
 	{	
-		insertToLeaf(addPoint);
+		// if a split occurs a new CFTreeNode is returned
+		newNode = insertToLeaf(addPoint);
 	}
 	// go down the tree recursively to find a leaf node to place the point
 	else {
@@ -45,21 +50,101 @@ void CFTreeNode::insertPoint(Point addPoint)
 			}
 		}
 		// recursive call for the tree structure
-		childCluster[closestIndex].insertPoint(addPoint);
+		// if a split occurs a new CFTreeNode is returned
+		newNode = childCluster[closestIndex].insertPoint(addPoint);
 		this->update();
+		// It is not possible to retun NULL, so if no splitt occurs, the insertPoint function returns a node without clusters
+		if (newNode.childCluster.size() != NULL)
+		{
+			// Check if threshold is broken /  splitt than
+			this->childCluster.push_back(newNode);
+			if (this->childCluster[closestIndex].calcRadius() > threshold_Value)
+			{
+				// If threshold is broken --> split this too
 
-		/*
-		|
-		|
-		|
-		|
-		|
-		|
-		|
-		|
-		*/
+			}
+		}
 	}
+	// If the returned new Node is not empty --> add it to the node
+
+	// recycle newNode variable
+	return newNode;
 }
+
+CFTreeNode CFTreeNode::splitNonLeaf()
+{
+	// choose farthest pair of entries
+	int far1, far2;
+	double farDis = 0.0, tmpDis;
+	for (int i = 0; i < childCluster.size(); ++i)
+	{
+		for (int j = 0; j < childCluster.size(); ++j)
+		{
+			tmpDis = calcDistance(childCluster[i].getCentroid(), childCluster[j].getCentroid());
+			if (tmpDis > farDis)
+			{
+				farDis = tmpDis;
+				if (i < j)
+				{
+					far1 = i;
+					far2 = j;
+				}
+				else {
+					far1 = j;
+					far2 = i;
+				}
+				// far1 should be the smaller index because it will be removed after far2
+			}
+		}
+	}
+	// create new Node and assign the rest entries to each
+	std::vector<CFTreeNode> tmpTreeNode;
+	CFTreeNode newNode = CFTreeNode();
+	
+	// TODO :: CURRENT POINT OF WORK !!! create function to insert nodes in parent nodes
+	newNode.insertNode();
+
+
+
+
+
+
+
+	tmpTreeNode.push_back(this->childCluster[far1]);
+	this->removeFromNode(far2);
+	this->removeFromNode(far1);
+	int currentLength = this->childCluster.size();
+	for (int i = currentLength - 1; i >= 0; --i)
+	{
+		tmpTreeNode.push_back(this->childCluster[i]);
+		this->childCluster.pop_back();
+	} 
+
+	this->clustersInLeafNode.push_back(tmpClusters.front());
+	tmpClusters.erase(tmpClusters.begin());
+	// at this point tmpCluster contains all data points except the farthest
+	// which are seperated between the 2 CFTreeNodes
+	newNode.update();
+	this->update();
+	currentLength = tmpClusters.size();
+	for (int i = currentLength - 1; i >= 0; --i)
+	{
+		// Compare the distatnces of the centroids and assign clusters to closest
+		if (calcDistance(tmpClusters[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpClusters[i].getCentroid(), this->centroid))
+		{
+			newNode.clustersInLeafNode.push_back(tmpClusters[i]);
+			newNode.update();
+		}
+		else
+		{
+			this->clustersInLeafNode.push_back(tmpClusters[i]);
+			this->update();
+		}
+		tmpClusters.pop_back();
+	}
+	return newNode;
+}
+
 
 // The distance is calculated by Euclidean Distance
 // Input: 2 Points as References
@@ -75,18 +160,33 @@ double CFTreeNode::calcDistance(Point pEins, Point pZwei)
 	return sqrt(retValue);
 }
 
-
-void CFTreeNode::removeFromNode(int clusterIndex)
+// TODO
+CFTreeNode CFTreeNode::insertNode(CFTreeNode addNode)
 {
-	this->clustersInLeafNode.erase(clustersInLeafNode.begin() + clusterIndex);
+
+}
+
+
+
+
+void CFTreeNode::removeFromNode(int clusterNodeIndex)
+{
+	if (this->isLeafNode)
+	{
+		this->clustersInLeafNode.erase(clustersInLeafNode.begin() + clusterNodeIndex);
+	}
+	else
+	{
+		this->childCluster.erase(childCluster.begin() + clusterNodeIndex);
+	}
 }
 
 
 CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 {
-
 	double distance = DBL_MAX, tmpDis;
 	int closestIndex = 0;
+	// Get index of closest cluster ( meassured by point - centroid )
 	for (int i = 0; i < clustersInLeafNode.size(); ++i)
 	{
 		tmpDis = calcDistance(addPoint, clustersInLeafNode[i].getCentroid());
@@ -96,9 +196,14 @@ CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 			closestIndex = i;
 		}
 	}
+	// If no cluster in leaf create new one
 	if (clustersInLeafNode.size() == 0)
-	clustersInLeafNode.push_back(Cluster(addPoint));
+	{ 
+		clustersInLeafNode.push_back(Cluster(addPoint));
+	}
+	else {
 	this->clustersInLeafNode[closestIndex].addPoint(addPoint);
+	}
 	this->clustersInLeafNode[closestIndex].update();
 	// Check if threshold condition is still valid
 	if (this->clustersInLeafNode[closestIndex].getRadius() > threshold_Value)
@@ -106,7 +211,7 @@ CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 		// If not --> remove point again and place anywhere else
 		this->clustersInLeafNode[closestIndex].removePoint(addPoint);
 		this->clustersInLeafNode[closestIndex].update();
-		// If not all entries are used in node place the point in a new entry
+		// If not all entries are used in node, place the point in a new entry
 		if (this->clustersInLeafNode.size() < (L_ENTRIES - 1))
 		{ 
 			clustersInLeafNode.push_back(Cluster(addPoint));
@@ -115,72 +220,75 @@ CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 		// If the Leaf Node is full --> split and create new node
 		else
 		{	
-			// choose farthest pair of entries
-			int far1, far2;
-			double farDis = 0.0, tmpDis;
-			for (int i = 0; i < clustersInLeafNode.size(); ++i)
-			{
-				for (int j = 0; j < clustersInLeafNode.size(); ++j)
-				{
-					tmpDis = calcDistance(clustersInLeafNode[i].getCentroid(), clustersInLeafNode[j].getCentroid());
-					if (tmpDis > farDis)
-					{
-						farDis = tmpDis;
-						if (i < j)
-						{
-							far1 = i;
-							far2 = j;
-						}
-						else {
-							far1 = j;
-							far2 = i;
-						}
-						// far1 should be the smaller index because it will be removed after far2
-					}
-				}
-			}
-			// create new Leaf Node and assign the rest entries to each
-			// TDOD
-			std::vector<Cluster> tmpClusters;
-			CFTreeNode newNode = CFTreeNode(this->clustersInLeafNode[far2]);
-			tmpClusters.push_back(this->clustersInLeafNode[far1]);
-			this->removeFromNode(far2);
-			this->removeFromNode(far1);
-			int currentLength = this->clustersInLeafNode.size();
-			for (int i = currentLength - 1; i >= 0;  --i)
-			{
-				tmpClusters.push_back(this->clustersInLeafNode[i]);
-				this->clustersInLeafNode.pop_back();
-			}
-			this->clustersInLeafNode.push_back(tmpClusters.front());
-			tmpClusters.erase(tmpClusters.begin());
-		// at this point tmpCluster contains all data points except the farthest
-		// which are seperated between the 2 CFTreeNodes
-			newNode.update();
-			this->update();
-			currentLength = tmpClusters.size();
-			for (int i = currentLength - 1; i >=0; --i)
-			{
-				if (calcDistance(tmpClusters[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpClusters[i].getCentroid(), this->centroid))
-				{
-					newNode.clustersInLeafNode.push_back(tmpClusters[i]);
-					newNode.update();
-				}
-				else
-				{
-					this->clustersInLeafNode.push_back(tmpClusters[i]);
-					this->update();
-				}
-				tmpClusters.pop_back();
-			}
-			return newNode;
+			return splitLeaf();
 		}
 	}
-	return;
+	return CFTreeNode();
 	
 }
 
-
+CFTreeNode CFTreeNode::splitLeaf()
+{
+	// choose farthest pair of entries
+	int far1, far2;
+	double farDis = 0.0, tmpDis;
+	for (int i = 0; i < clustersInLeafNode.size(); ++i)
+	{
+		for (int j = 0; j < clustersInLeafNode.size(); ++j)
+		{
+			tmpDis = calcDistance(clustersInLeafNode[i].getCentroid(), clustersInLeafNode[j].getCentroid());
+			if (tmpDis > farDis)
+			{
+				farDis = tmpDis;
+				if (i < j)
+				{
+					far1 = i;
+					far2 = j;
+				}
+				else {
+					far1 = j;
+					far2 = i;
+				}
+				// far1 should be the smaller index because it will be removed after far2
+			}
+		}
+	}
+	// create new Leaf Node and assign the rest entries to each
+	std::vector<Cluster> tmpClusters;
+	CFTreeNode newNode = CFTreeNode(this->clustersInLeafNode[far2]);
+	tmpClusters.push_back(this->clustersInLeafNode[far1]);
+	this->removeFromNode(far2);
+	this->removeFromNode(far1);
+	int currentLength = this->clustersInLeafNode.size();
+	for (int i = currentLength - 1; i >= 0; --i)
+	{
+		tmpClusters.push_back(this->clustersInLeafNode[i]);
+		this->clustersInLeafNode.pop_back();
+	}
+	this->clustersInLeafNode.push_back(tmpClusters.front());
+	tmpClusters.erase(tmpClusters.begin());
+	// at this point tmpCluster contains all data points except the farthest
+	// which are seperated between the 2 CFTreeNodes
+	newNode.update();
+	this->update();
+	currentLength = tmpClusters.size();
+	for (int i = currentLength - 1; i >= 0; --i)
+	{
+		// Compare the distatnces of the centroids and assign clusters to closest
+		if (calcDistance(tmpClusters[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpClusters[i].getCentroid(), this->centroid))
+		{
+			newNode.clustersInLeafNode.push_back(tmpClusters[i]);
+			newNode.update();
+		}
+		else
+		{
+			this->clustersInLeafNode.push_back(tmpClusters[i]);
+			this->update();
+		}
+		tmpClusters.pop_back();
+	}
+	return newNode;
+}
 
 
 
@@ -218,7 +326,8 @@ void CFTreeNode::changeLeafNode(bool value)
 // Effect: value of SS & LS in a CF change
 void CFTreeNode::recalculateCF()
 {
-	this->cf.calcLinearSum(this->isLeafNode, this->cluster, this->childCluster);
+	// TODO new recursive approach needed
+	this->cf.calcLinearSum(this->isLeafNode, this->clustersInLeafNode, this->childCluster);
 	this->cf.calcSquareSum(this->isLeafNode, this->cluster, this->childCluster);
 }
 
@@ -227,6 +336,7 @@ void CFTreeNode::update()
 	calcCentroid();
 	calcDiameter();
 	calcRadius();
+	recalculateCF();
 }
 
 // Centroid is calculated by defining the average value for each dimension first

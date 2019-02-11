@@ -32,7 +32,8 @@ private:
 public:
 	CFTreeNode();
 	CFTreeNode(Cluster startingCluster);
-	void insertPoint(Point addPoint);
+	CFTreeNode insertPoint(Point addPoint);
+	CFTreeNode insertNode(CFTreeNode addNode);
 	void removeFromNode(int clusterIndex);
 	double calcDistance(Point pEins, Point pZwei);
 	ClusteringFeature getCF();
@@ -44,4 +45,6 @@ public:
 	void update();
 	double calcRadius();
 	double calcDiameter();
+	CFTreeNode splitLeaf();
+	CFTreeNode splitNonLeaf();
 };
