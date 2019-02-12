@@ -53,15 +53,15 @@ CFTreeNode CFTreeNode::insertPoint(Point addPoint)
 		// if a split occurs a new CFTreeNode is returned
 		newNode = childCluster[closestIndex].insertPoint(addPoint);
 		this->update();
-		// It is not possible to retun NULL, so if no splitt occurs, the insertPoint function returns a node without clusters
-		if (newNode.childCluster.size() != NULL)
+		// It is not possible to retun NULL, so if no split occurs, the insertPoint function returns a node without clusters
+		if (newNode.childCluster.size() != 0)
 		{
 			// Check if threshold is broken /  splitt than
 			this->childCluster.push_back(newNode);
 			if (this->childCluster[closestIndex].calcRadius() > threshold_Value)
 			{
 				// If threshold is broken --> split this too
-
+				newNode = childCluster[closestIndex].splitNonLeaf();
 			}
 		}
 	}
@@ -163,7 +163,78 @@ double CFTreeNode::calcDistance(Point pEins, Point pZwei)
 // TODO
 CFTreeNode CFTreeNode::insertNode(CFTreeNode addNode)
 {
+	// Check if non leaf node is full
+	if (this->childCluster.size() < B_ENTRIES)
+	{
+		this->childCluster.push_back(addNode);
+		return CFTreeNode();
+		// retrun empty node 
+	}
+	else {
+		// find the farthest pair of nodes
+		int far1, far2;
+		double farDis = 0.0, tmpDis;
+		for (int i = 0; i < this->childCluster.size(); ++i)
+		{
+			for (int j = 0; j < this->childCluster.size(); ++j)
+			{
+				tmpDis = calcDistance(this->childCluster[i].getCentroid(), this->childCluster[j].getCentroid());
+				if (tmpDis > farDis)
+				{
+					farDis = tmpDis;
+					if (i < j)
+					{
+						far1 = i;
+						far2 = j;
+					}
+					else {
+						far1 = j;
+						far2 = i;
+					}
+					// far1 should be the smaller index because it will be removed after far2
+					// otherwise the bigger number will be changed when erase the smaller one
+				}
+			}
+		}
+		// Create new Node and assign each entry to the closest
+		std::vector<CFTreeNode> tmpNodes; // this is a temporary vector to help sorting
+		CFTreeNode newNode = CFTreeNode();
+		newNode.childCluster.push_back(this->childCluster[far2]);
+		tmpNodes.push_back(this->childCluster[far1]);
+		this->removeFromNode(far2);
+		this->removeFromNode(far1);
+		int currentLength = this->childCluster.size();
+		for (int i = currentLength - 1; i >= 0; --i)
+		{
+			tmpNodes.push_back(this->childCluster[i]);
+			this->childCluster.pop_back();
+		}
+		// Put far1 to the childCluster of this node
+		this->childCluster.push_back(tmpNodes.front());		
+		tmpNodes.erase(tmpNodes.begin());
+		// at this point tmpCluster contains all data points except the farthest
+		// which are seperated between the 2 CFTreeNodes
+		newNode.update();
+		this->update();
+		currentLength = tmpNodes.size();
 
+		// REVIEW this part
+		for (int i = currentLength - 1; i >= 0; --i)
+		{
+			// Compare the distances of the centroids and assign entries to closest
+			if (calcDistance(tmpNodes[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpNodes[i].getCentroid(), this->getCentroid()))
+			{
+				newNode.childCluster.push_back(tmpNodes[i]);
+				newNode.update();
+			}
+			else
+			{
+				this->childCluster.push_back(tmpNodes[i]);
+				this->update();
+			}
+			tmpNodes.pop_back();
+		}
+	}
 }
 
 
@@ -250,11 +321,12 @@ CFTreeNode CFTreeNode::splitLeaf()
 					far2 = i;
 				}
 				// far1 should be the smaller index because it will be removed after far2
+				// otherwise the bigger number will be changed when erase the smaller one
 			}
 		}
 	}
 	// create new Leaf Node and assign the rest entries to each
-	std::vector<Cluster> tmpClusters;
+	std::vector<Cluster> tmpClusters; // this is a temporary vector to help sorting
 	CFTreeNode newNode = CFTreeNode(this->clustersInLeafNode[far2]);
 	tmpClusters.push_back(this->clustersInLeafNode[far1]);
 	this->removeFromNode(far2);
@@ -265,6 +337,7 @@ CFTreeNode CFTreeNode::splitLeaf()
 		tmpClusters.push_back(this->clustersInLeafNode[i]);
 		this->clustersInLeafNode.pop_back();
 	}
+	// Put far1 to the clustersInLeafNode of this node
 	this->clustersInLeafNode.push_back(tmpClusters.front());
 	tmpClusters.erase(tmpClusters.begin());
 	// at this point tmpCluster contains all data points except the farthest
