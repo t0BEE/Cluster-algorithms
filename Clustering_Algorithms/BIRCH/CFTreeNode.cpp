@@ -1,8 +1,5 @@
 #include "CFTreeNode.h"
 
-// THOUGHTS --- Wie wird leaf node zu nonleaf node  --- Wie waechst baum
-
-
 // Constructor of class Cluster
 // Input: --
 // Output: --
@@ -54,7 +51,7 @@ CFTreeNode CFTreeNode::insertPoint(Point addPoint)
 		newNode = childCluster[closestIndex].insertPoint(addPoint);
 		this->update();
 		// It is not possible to retun NULL, so if no split occurs, the insertPoint function returns a node without clusters
-		if (newNode.childCluster.size() != 0)
+		if (newNode.getNumberOfEntries() != 0)
 		{
 			// Check if threshold is broken /  splitt than
 			this->childCluster.push_back(newNode);
@@ -100,16 +97,7 @@ CFTreeNode CFTreeNode::splitNonLeaf()
 	// create new Node and assign the rest entries to each
 	std::vector<CFTreeNode> tmpTreeNode;
 	CFTreeNode newNode = CFTreeNode();
-	
-	// TODO :: CURRENT POINT OF WORK !!! create function to insert nodes in parent nodes
-	newNode.insertNode();
-
-
-
-
-
-
-
+	newNode.insertNode(this->childCluster[far2]);
 	tmpTreeNode.push_back(this->childCluster[far1]);
 	this->removeFromNode(far2);
 	this->removeFromNode(far1);
@@ -118,33 +106,31 @@ CFTreeNode CFTreeNode::splitNonLeaf()
 	{
 		tmpTreeNode.push_back(this->childCluster[i]);
 		this->childCluster.pop_back();
-	} 
-
-	this->clustersInLeafNode.push_back(tmpClusters.front());
-	tmpClusters.erase(tmpClusters.begin());
+	}
+	this->childCluster.push_back(tmpTreeNode.front());
+	tmpTreeNode.erase(tmpTreeNode.begin());
 	// at this point tmpCluster contains all data points except the farthest
 	// which are seperated between the 2 CFTreeNodes
 	newNode.update();
 	this->update();
-	currentLength = tmpClusters.size();
+	currentLength = tmpTreeNode.size();
 	for (int i = currentLength - 1; i >= 0; --i)
 	{
 		// Compare the distatnces of the centroids and assign clusters to closest
-		if (calcDistance(tmpClusters[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpClusters[i].getCentroid(), this->centroid))
+		if (calcDistance(tmpTreeNode[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpTreeNode[i].getCentroid(), this->centroid))
 		{
-			newNode.clustersInLeafNode.push_back(tmpClusters[i]);
+			newNode.childCluster.push_back(tmpTreeNode[i]);
 			newNode.update();
 		}
 		else
 		{
-			this->clustersInLeafNode.push_back(tmpClusters[i]);
+			this->childCluster.push_back(tmpTreeNode[i]);
 			this->update();
 		}
-		tmpClusters.pop_back();
+		tmpTreeNode.pop_back();
 	}
 	return newNode;
 }
-
 
 // The distance is calculated by Euclidean Distance
 // Input: 2 Points as References
@@ -160,9 +146,11 @@ double CFTreeNode::calcDistance(Point pEins, Point pZwei)
 	return sqrt(retValue);
 }
 
-// TODO
+// because childCluster is not public, this function needs to exist
 CFTreeNode CFTreeNode::insertNode(CFTreeNode addNode)
 {
+	this->childCluster.push_back(addNode);
+	/*
 	// Check if non leaf node is full
 	if (this->childCluster.size() < B_ENTRIES)
 	{
@@ -217,8 +205,6 @@ CFTreeNode CFTreeNode::insertNode(CFTreeNode addNode)
 		newNode.update();
 		this->update();
 		currentLength = tmpNodes.size();
-
-		// REVIEW this part
 		for (int i = currentLength - 1; i >= 0; --i)
 		{
 			// Compare the distances of the centroids and assign entries to closest
@@ -234,10 +220,9 @@ CFTreeNode CFTreeNode::insertNode(CFTreeNode addNode)
 			}
 			tmpNodes.pop_back();
 		}
-	}
+		return newNode;
+	}*/
 }
-
-
 
 
 void CFTreeNode::removeFromNode(int clusterNodeIndex)
@@ -399,9 +384,8 @@ void CFTreeNode::changeLeafNode(bool value)
 // Effect: value of SS & LS in a CF change
 void CFTreeNode::recalculateCF()
 {
-	// TODO new recursive approach needed
 	this->cf.calcLinearSum(this->isLeafNode, this->clustersInLeafNode, this->childCluster);
-	this->cf.calcSquareSum(this->isLeafNode, this->cluster, this->childCluster);
+	this->cf.calcSquareSum(this->isLeafNode, this->clustersInLeafNode, this->childCluster);
 }
 
 void CFTreeNode::update()
@@ -419,17 +403,34 @@ void CFTreeNode::update()
 // Effect: the centroid variable in cluster is changed
 void CFTreeNode::calcCentroid()
 {
-	double newCentroid[DIMENSIONS];
-	for (unsigned int i = 0; i < DIMENSIONS; ++i)
+	if ( this->isLeafNode)
 	{
-		newCentroid[i] = 0.0;
-		for (unsigned int j = 0; j < clustersInLeafNode.size(); ++j)
+		double newCentroid[DIMENSIONS];
+		for (unsigned int i = 0; i < DIMENSIONS; ++i)
 		{
-			newCentroid[i] += clustersInLeafNode[j].getCentroid().getCoordinate(i);
+			newCentroid[i] = 0.0;
+			for (unsigned int j = 0; j < clustersInLeafNode.size(); ++j)
+			{
+				newCentroid[i] += clustersInLeafNode[j].getCentroid().getCoordinate(i);
+			}
+			newCentroid[i] = newCentroid[i] / clustersInLeafNode.size();
 		}
-		newCentroid[i] = newCentroid[i] / clustersInLeafNode.size();
+		this->centroid.setPosition(newCentroid);
 	}
-	this->centroid.setPosition(newCentroid);
+	else
+	{
+		double newCentroid[DIMENSIONS];
+		for (unsigned int i = 0; i < DIMENSIONS; ++i)
+		{
+			newCentroid[i] = 0.0;
+			for (unsigned int j = 0; j < childCluster.size(); ++j)
+			{
+				newCentroid[i] += childCluster[j].getCentroid().getCoordinate(i);
+			}
+			newCentroid[i] = newCentroid[i] / childCluster.size();
+		}
+		this->centroid.setPosition(newCentroid);
+	}
 }
 
 // This function first recalculates the centroid and uses it to
@@ -465,4 +466,9 @@ double CFTreeNode::calcDiameter()
 	}
 	this->diameter = sqrt(varDiameter / (clustersInLeafNode.size()*(clustersInLeafNode.size() - 1)));
 	return this->diameter;
+}
+
+int CFTreeNode::getNumberOfEntries()
+{
+	return this->childCluster.size();
 }

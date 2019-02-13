@@ -8,10 +8,10 @@ ClusteringFeature::ClusteringFeature() {}
 // Input: --
 // Output: --
 // Effect: value of LS in a CF change
-void ClusteringFeature::calcLinearSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode*> childCluster)
+void ClusteringFeature::calcLinearSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode> childCluster)
 {
 	double varLS[DIMENSIONS];
-	double tmpVar[DIMENSIONS];
+	double tmpVar[DIMENSIONS]; // use as buffer to store the solutions inside
 	if (isLeaf)
 	{
 		for (int j = 0; j < DIMENSIONS; ++j)
@@ -35,7 +35,7 @@ void ClusteringFeature::calcLinearSum(bool isLeaf, std::vector<Cluster> cluster,
 		varLS[j] = 0.0;
 		for (int i = 0; i < childCluster.size(); ++i)
 		{
-			childCluster[i]->getCF().getLS(tmpVar);
+			childCluster[i].getCF().getLS(tmpVar);
 			varLS[j] += tmpVar[j];
 		}
 		this->linearSum[j] = varLS[j];
@@ -49,10 +49,10 @@ void ClusteringFeature::calcLinearSum(bool isLeaf, std::vector<Cluster> cluster,
 // Input: --
 // Output: --
 // Effect: value of SS in a CF change
-void ClusteringFeature::calcSquareSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode*> childCluster)
+void ClusteringFeature::calcSquareSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode> childCluster)
 {
 	double varSS[DIMENSIONS];
-	double tmpVar[DIMENSIONS];
+	double tmpVar[DIMENSIONS]; // use as buffer to store the solutions inside
 	if (isLeaf)
 	{
 		for (int j = 0; j < DIMENSIONS; ++j)
@@ -76,7 +76,7 @@ void ClusteringFeature::calcSquareSum(bool isLeaf, std::vector<Cluster> cluster,
 			varSS[j] = 0.0;
 			for (int i = 0; i < childCluster.size(); ++i)
 			{
-				childCluster[i]->getCF().getSS(tmpVar);
+				childCluster[i].getCF().getSS(tmpVar);
 				varSS[j] += tmpVar[j];
 			}
 			this->squareSum[j] = varSS[j];

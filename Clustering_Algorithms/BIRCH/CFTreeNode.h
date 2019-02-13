@@ -47,4 +47,5 @@ public:
 	double calcDiameter();
 	CFTreeNode splitLeaf();
 	CFTreeNode splitNonLeaf();
+	int getNumberOfEntries();
 };

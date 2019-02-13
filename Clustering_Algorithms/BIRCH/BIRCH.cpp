@@ -34,7 +34,16 @@ void readCSV(std::string filename)
 
 void insertPoint(unsigned int index)
 {
-	rootNode.insertPoint(total[index]);
+	CFTreeNode newNode;
+	newNode = rootNode.insertPoint(total[index]);
+	// If the root is split, the tree will grow in height
+	if (newNode.getNumberOfEntries() != 0)
+	{
+		CFTreeNode newRoot = CFTreeNode();
+		newRoot.insertNode(newNode);
+		newRoot.insertNode(rootNode);
+		rootNode = newRoot;
+	}
 }
 
 /*
@@ -68,5 +77,7 @@ int main()
 	{
 		insertPoint(k);
 	}
+
+	// Phase 2  --- TODO
 }
 
