@@ -237,7 +237,6 @@ void CFTreeNode::removeFromNode(int clusterNodeIndex)
 	}
 }
 
-
 CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 {
 	double distance = DBL_MAX, tmpDis;
@@ -276,7 +275,10 @@ CFTreeNode CFTreeNode::insertToLeaf(Point addPoint)
 		// If the Leaf Node is full --> split and create new node
 		else
 		{	
-			return splitLeaf();
+			CFTreeNode newNode = splitLeaf();
+			this->next = &newNode;
+			newNode.prev = this;
+			return newNode;
 		}
 	}
 	return CFTreeNode();
