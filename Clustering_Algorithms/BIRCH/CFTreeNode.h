@@ -19,12 +19,12 @@ private:
 	double diameter;
 
 	// Non Leaf Node Variables
-	std::vector<CFTreeNode> childCluster;
+		std::vector<CFTreeNode> childCluster;
 
 	// Leaf Node Variables
-	CFTreeNode* prev;
-	CFTreeNode* next;
-	std::vector<Cluster> clustersInLeafNode;
+		CFTreeNode* prev;
+		CFTreeNode* next;
+		std::vector<Cluster> clustersInLeafNode;
 
 	// return the new node in case of a split, otherwise return NULL
 	CFTreeNode insertToLeaf(Point addPoint);
@@ -48,4 +48,5 @@ public:
 	CFTreeNode splitLeaf();
 	CFTreeNode splitNonLeaf();
 	int getNumberOfEntries();
+	int getNumberOfClusterEntries();  // important to distinguish between leaf nodes and non-leaf
 };

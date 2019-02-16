@@ -51,15 +51,21 @@ CFTreeNode CFTreeNode::insertPoint(Point addPoint)
 		newNode = childCluster[closestIndex].insertPoint(addPoint);
 		this->update();
 		// It is not possible to retun NULL, so if no split occurs, the insertPoint function returns a node without clusters
-		if (newNode.getNumberOfEntries() != 0)
+		// Second part is necessary for leaf nodes
+		if ((newNode.getNumberOfEntries() != 0) || (newNode.getNumberOfClusterEntries() != 0)) 
 		{
-			// Check if threshold is broken /  splitt than
+			current_tree_size++;
+			if (newNode.getNumberOfEntries() != 0)
+				newNode.changeLeafNode(false);
+
+			// Check if threshold is broken /  split than
 			this->childCluster.push_back(newNode);
 			if (this->childCluster[closestIndex].calcRadius() > threshold_Value)
 			{
 				// If threshold is broken --> split this too
 				newNode = childCluster[closestIndex].splitNonLeaf();
 			}
+			// TODO :: else do the merging refinement
 		}
 	}
 	// If the returned new Node is not empty --> add it to the node
@@ -401,4 +407,9 @@ double CFTreeNode::calcDiameter()
 int CFTreeNode::getNumberOfEntries()
 {
 	return this->childCluster.size();
+}
+
+int CFTreeNode::getNumberOfClusterEntries()
+{
+	return this->clustersInLeafNode.size();
 }

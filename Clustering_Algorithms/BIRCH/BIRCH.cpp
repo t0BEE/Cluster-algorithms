@@ -40,10 +40,23 @@ void insertPoint(unsigned int index)
 	if (newNode.getNumberOfEntries() != 0)
 	{
 		CFTreeNode newRoot = CFTreeNode();
+		current_tree_size++;
 		newRoot.insertNode(newNode);
 		newRoot.insertNode(rootNode);
 		rootNode = newRoot;
 	}
+	// Run out of memory
+	if (current_tree_size > MAXIMUM_TREE_SIZE)
+	{
+		rebuild();
+	}
+}
+
+void rebuild()
+{
+	// change threshould value || the paper has no perfect solution --> TODO research
+	// paper: average of the distances between all nearest pairs of a leaf entries
+
 }
 
 /*
@@ -68,16 +81,28 @@ int main()
 {
     std::cout << "Start BIRCH!\n"; 
 	rootNode = CFTreeNode();
-
+	current_tree_size = 1;
 	// read CSV
 	readCSV("../../Inputfiles/Sample.csv");
 
-	// Phase 1
+	// Phase 1  --- TODO deeper look
 	for (int k = 0; k < total.size(); ++k)
 	{
 		insertPoint(k);
 	}
 
-	// Phase 2  --- TODO
+	// Phase 2  --- TODO (optional)
+
+
+	// Phase 3  --- TODO
+	// use an existing clustering algorithm --> k-means
+	// nodes have a fixed size --> which means that it can not hold natural clusters
+	// applied on a coarse summary of data
+	// maybe start k-means on different Non-leaf nodes --> parallel
+
+
+	// Phase 4  --- TODO (optional)
+	// refine the tree by redistributing the data points to the closest seed
+
 }
 
