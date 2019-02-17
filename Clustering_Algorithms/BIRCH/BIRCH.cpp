@@ -1,8 +1,12 @@
 
 #include "BIRCH.h"
 
+
+// TODO --- Thoughts #1 how is the tree balanced?
+
 std::vector<Point> total;
 CFTreeNode rootNode;
+CFTreeNode newTreeRoot;
 
 void readCSV(std::string filename)
 {
@@ -37,7 +41,7 @@ void insertPoint(unsigned int index)
 	CFTreeNode newNode;
 	newNode = rootNode.insertPoint(total[index]);
 	// If the root is split, the tree will grow in height
-	if (newNode.getNumberOfEntries() != 0)
+	if (newNode.getNumberOfChildEntries() != 0)
 	{
 		CFTreeNode newRoot = CFTreeNode();
 		current_tree_size++;
@@ -55,8 +59,54 @@ void insertPoint(unsigned int index)
 void rebuild()
 {
 	// change threshould value || the paper has no perfect solution --> TODO research
-	// paper: average of the distances between all nearest pairs of a leaf entries
+	// paper: average of the distances between nearest pairs of leaf entries in all leaf nodes
+	// find first leaf node
+	CFTreeNode tmpNode = rootNode;
+	std::vector<double> distances;
 
+	while (!tmpNode.getIsLeafNode())
+	{
+		tmpNode = tmpNode.getElement(0);
+	}
+	
+	while (tmpNode.next != NULL)
+	{
+		distances.push_back(tmpNode.getclosestDistanceOfEntries());
+		tmpNode = *tmpNode.next;
+	}
+	for (int i = 0; i < distances.size()-1; ++i)
+	{
+		distances.back() = distances.back() + distances[i];
+	}
+	threshold_Value = distances.back();
+
+	// TODO --- rebuild tree
+	newTreeRoot = rootNode;
+	// take the left most path and put it to the right of the new tree
+	// Let all entries run again through the new tree
+
+	pathCopy(newTreeRoot, rootNode);
+
+
+}
+
+void pathCopy(CFTreeNode newTree, CFTreeNode oldTree)
+{
+	for (int j = 0; j < oldTree.getNumberOfChildEntries(); ++j)
+	{
+		newTree.insertNode(oldTree.getElement(j));
+		if (oldTree.getElement(j).getIsLeafNode())
+		{
+			for (int i = 0; i < oldTree.getElement(j).getNumberOfClusterEntries(); ++i)
+			{
+				newTreeRoot.insertCluster(oldTree.getElement(j).getClusterElement(i));
+			}			
+		}
+		else
+		{
+			pathCopy(newTree.getElement[j], oldTree.getElement[j]);
+		}		
+	}
 }
 
 /*

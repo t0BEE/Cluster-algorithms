@@ -52,10 +52,10 @@ CFTreeNode CFTreeNode::insertPoint(Point addPoint)
 		this->update();
 		// It is not possible to retun NULL, so if no split occurs, the insertPoint function returns a node without clusters
 		// Second part is necessary for leaf nodes
-		if ((newNode.getNumberOfEntries() != 0) || (newNode.getNumberOfClusterEntries() != 0)) 
+		if ((newNode.getNumberOfChildEntries() != 0) || (newNode.getNumberOfClusterEntries() != 0)) 
 		{
 			current_tree_size++;
-			if (newNode.getNumberOfEntries() != 0)
+			if (newNode.getNumberOfChildEntries() != 0)
 				newNode.changeLeafNode(false);
 
 			// Check if threshold is broken /  split than
@@ -284,7 +284,11 @@ CFTreeNode CFTreeNode::splitLeaf()
 	return newNode;
 }
 
+// TODO
+CFTreeNode CFTreeNode::insertCluster(Cluster addCluster)
+{
 
+}
 
 // Get the CF
 // Input: --
@@ -404,7 +408,7 @@ double CFTreeNode::calcDiameter()
 	return this->diameter;
 }
 
-int CFTreeNode::getNumberOfEntries()
+int CFTreeNode::getNumberOfChildEntries()
 {
 	return this->childCluster.size();
 }
@@ -413,3 +417,34 @@ int CFTreeNode::getNumberOfClusterEntries()
 {
 	return this->clustersInLeafNode.size();
 }
+
+CFTreeNode CFTreeNode::getElement(int i)
+{
+	return this->childCluster[i];
+}
+
+Cluster CFTreeNode::getClusterElement(int i)
+{
+	return this->clustersInLeafNode[i];
+}
+
+double CFTreeNode::getclosestDistanceOfEntries()
+{
+	// find nearest pair of entries
+	double distanceHelp = DBL_MAX, dblHelp;
+
+	for (int i = 0; i < this->getNumberOfClusterEntries(); ++i)
+	{
+		for (int j = 0; j < this->getNumberOfClusterEntries(); ++j)
+		{
+			if (i != j)
+			{
+				dblHelp = calcDistance(this->clustersInLeafNode[i].getCentroid(), this->clustersInLeafNode[i].getCentroid());
+					if (dblHelp < distanceHelp)
+						distanceHelp = dblHelp;
+			}
+		}
+	}
+	return distanceHelp;
+}
+
