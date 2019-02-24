@@ -89,6 +89,8 @@ void rebuild()
 
 }
 
+
+// TODO :: think about the delay-split (default on) & Outlier Handling Option (default off) p.15
 /**
  * left most path of the old tree is pushed recursively as the right most tree in new tree
  * if it reaches a leaf node --> the entries are reentred from the top 
@@ -106,12 +108,32 @@ void pathCopy(CFTreeNode newTree, CFTreeNode oldTree)
 			for (int i = 0; i < oldTree.getElement(j).getNumberOfClusterEntries(); ++i)
 			{
 				newTreeRoot.insertCluster(oldTree.getElement(j).getClusterElement(i));
-			}			
+			}
 		}
 		else
 		{
 			pathCopy(newTree.getElement[j], oldTree.getElement[j]);
-		}		
+		}
+	}
+	// Check all leaf nodes if they are empty
+	if (newTree.getElement(0).getIsLeafNode())
+	{
+		for (int j = newTree.getNumberOfChildEntries() - 1; j >= 0; ++j)
+		{
+			// If the leaf is empty, delete it
+			if (newTree.getElement(j).getNumberOfClusterEntries() == 0)
+				newTree.removeFromNode(j);
+		}
+	}
+	// Check for non leaf nodes if they are empty
+	else
+	{
+		for (int j = newTree.getNumberOfChildEntries() - 1; j >= 0; ++j)
+		{
+			// If a non leaf node is empty, delete it
+			if (newTree.getElement(j).getNumberOfChildEntries() == 0)
+				newTree.removeFromNode(j);
+		}
 	}
 }
 
@@ -151,7 +173,7 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 }
 */
 
-int main()
+int main(int argc, char **argv)
 {
     std::cout << "Start BIRCH!\n"; 
 	rootNode = CFTreeNode();
@@ -159,24 +181,38 @@ int main()
 	// read CSV
 	readCSV("../../Inputfiles/Sample.csv");
 
-	// Phase 1  --- TODO deeper look
+	// Phase 1
 	for (int k = 0; k < total.size(); ++k)
 	{
 		insertPoint(k);
 	}
 
 	// Phase 2  --- TODO (optional)
-
+	/*
+	some clustering methods perform well in terms of speed and quality
+	close the gap between output of phase 1 and best performance of phase 3
+	*/
 
 	// Phase 3  --- TODO
 	// use an existing clustering algorithm --> k-means
 	// nodes have a fixed size --> which means that it can not hold natural clusters
 	// applied on a coarse summary of data
 	// maybe start k-means on different Non-leaf nodes --> parallel
+	int numberOfLeafNodes = 0;
+	CFTreeNode* tmp = &rootNode;
+	while (!(tmp->getIsLeafNode()))
+		tmp = &(tmp->getElement[0]);
+	
+	while (tmp->next)
+	{
+		numberOfLeafNodes++;
+		tmp = tmp->next;
+	}
+	kMeans::main();
 
 
 	// Phase 4  --- TODO (optional)
 	// refine the tree by redistributing the data points to the closest seed
-
+	// centroids of phase 3 are seeds
 }
 

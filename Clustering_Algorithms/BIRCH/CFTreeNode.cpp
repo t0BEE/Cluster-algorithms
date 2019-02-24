@@ -483,6 +483,7 @@ CFTreeNode CFTreeNode::insertCluster(Cluster addCluster)
 			}
 		}
 	}
+	this->update();
 	return newNode;
 }
 
