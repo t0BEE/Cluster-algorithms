@@ -3,6 +3,7 @@
 
 
 // TODO --- Thoughts #1 how is the tree balanced?
+//			--> pathCopy() --> insertCluster()
 
 std::vector<Point> total;
 CFTreeNode rootNode;
@@ -56,6 +57,7 @@ void insertPoint(unsigned int index)
 	}
 }
 
+// TODO:: Question-- When to update the node values?
 void rebuild()
 {
 	// change threshould value || the paper has no perfect solution --> TODO research
@@ -81,15 +83,21 @@ void rebuild()
 	threshold_Value = distances.back();
 
 	// TODO --- rebuild tree
+	// The tree is copied completely and the old tree deleted afterwards
+	// During this process the Clusters are reentered
 	newTreeRoot = rootNode;
-	// take the left most path and put it to the right of the new tree
-	// Let all entries run again through the new tree
-
 	pathCopy(newTreeRoot, rootNode);
-
+	deleteTree(rootNode);
 
 }
 
+/**
+ * left most path of the old tree is pushed recursively as the right most tree in new tree
+ * if it reaches a leaf node --> the entries are reentred from the top 
+ * Input: New tree node / old tree node (CFTreeNode)
+ * Output: ---
+ * Effect: a completely new tree is created
+*/
 void pathCopy(CFTreeNode newTree, CFTreeNode oldTree)
 {
 	for (int j = 0; j < oldTree.getNumberOfChildEntries(); ++j)
@@ -107,6 +115,24 @@ void pathCopy(CFTreeNode newTree, CFTreeNode oldTree)
 			pathCopy(newTree.getElement[j], oldTree.getElement[j]);
 		}		
 	}
+}
+
+/**
+ * Deletes the tree recursively
+ * Input: root node of the tree to delete (CFTreeNode)
+ * Output: ---
+ * Effect: 
+*/
+void deleteTree(CFTreeNode delRoot)
+{
+	if (!delRoot.getIsLeafNode())
+	{
+		for (int j = 0; j < delRoot.getNumberOfChildEntries(); ++j)
+		{
+			deleteTree(delRoot.getElement(j));
+		}
+	}
+	delete &delRoot;
 }
 
 /*

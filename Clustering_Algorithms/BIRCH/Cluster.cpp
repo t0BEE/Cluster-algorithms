@@ -5,9 +5,18 @@ Cluster::Cluster(Point initialPoint)
 	cluster.push_back(initialPoint);
 }
 
+Cluster::Cluster() {}
+
 void Cluster::addPoint(Point insert)
 {
 	this->cluster.push_back(insert);
+}
+void Cluster::addCluster(Cluster insert)
+{
+	for (int i = 0; i < insert.cluster.size(); ++i)
+	{
+		this->cluster.push_back(insert.cluster[i]);
+	}
 }
 
 void Cluster::removePoint(Point remove)

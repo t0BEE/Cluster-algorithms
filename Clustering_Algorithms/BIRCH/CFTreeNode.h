@@ -26,6 +26,7 @@ private:
 
 	// return the new node in case of a split, otherwise return NULL
 	CFTreeNode insertToLeaf(Point addPoint);
+	CFTreeNode insertToLeaf(Cluster addCluster);
 
 public:
 	// Leaf Node Variables
@@ -50,7 +51,7 @@ public:
 	CFTreeNode splitLeaf();
 	CFTreeNode splitNonLeaf();
 	int getNumberOfChildEntries();
-	int getNumberOfClusterEntries();  // important to distinguish between leaf nodes and non-leaf
+	int getNumberOfClusterEntries();  
 	CFTreeNode getElement(int i);
 	double getclosestDistanceOfEntries();
 	Cluster getClusterElement(int i);

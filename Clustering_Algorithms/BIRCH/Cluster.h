@@ -13,7 +13,9 @@ private:
 	Centroid centroid;
 public:
 	Cluster(Point initialPoint);
+	Cluster();
 	void addPoint(Point insert);
+	void addCluster(Cluster insert);
 	void removePoint(Point remove);
 	std::vector<Point> getPoints();
 
