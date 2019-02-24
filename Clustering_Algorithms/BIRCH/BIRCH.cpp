@@ -1,6 +1,6 @@
 
 #include "BIRCH.h"
-
+#include "kMeans.h"
 
 // TODO --- Thoughts #1 how is the tree balanced?
 //			--> pathCopy() --> insertCluster()
@@ -57,7 +57,7 @@ void insertPoint(unsigned int index)
 	}
 }
 
-// TODO:: Question-- When to update the node values?
+
 void rebuild()
 {
 	// change threshould value || the paper has no perfect solution --> TODO research
@@ -70,7 +70,6 @@ void rebuild()
 	{
 		tmpNode = tmpNode.getElement(0);
 	}
-	
 	while (tmpNode.next != NULL)
 	{
 		distances.push_back(tmpNode.getclosestDistanceOfEntries());
@@ -82,7 +81,6 @@ void rebuild()
 	}
 	threshold_Value = distances.back();
 
-	// TODO --- rebuild tree
 	// The tree is copied completely and the old tree deleted afterwards
 	// During this process the Clusters are reentered
 	newTreeRoot = rootNode;

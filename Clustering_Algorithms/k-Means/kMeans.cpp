@@ -124,7 +124,7 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 	fileOStream.close();
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	// Init phase ----------------------------- 
 	std::ofstream csvOutputfile;
