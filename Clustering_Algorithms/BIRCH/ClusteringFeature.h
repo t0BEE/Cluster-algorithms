@@ -19,7 +19,8 @@ public:
 	int getNumberOfPoints();
 	void calcCentroid(double* buffer);
 	bool absorbCF(ClusteringFeature absorbCF);
-
+	void addToLS(double* buffer);
+	void addToSS(double* buffer);
 	//void calcLinearSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode> childCluster);
 	//void calcSquareSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode> childCluster);
 };

@@ -1,86 +1,11 @@
 #include "ClusteringFeature.h"
 
-ClusteringFeature::ClusteringFeature() {}
-
-// Recalculate the Linear Sum of the CF
-// If the CF is not a leaf node the values can be summed up
-// from the child nodes to speed up the process
-// Input: --
-// Output: --
-// Effect: value of LS in a CF change
-void ClusteringFeature::calcLinearSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode> childCluster)
+ClusteringFeature::ClusteringFeature() 
 {
-	double varLS[DIMENSIONS];
-	double tmpVar[DIMENSIONS]; // use as buffer to store the solutions inside
-	if (isLeaf)
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
-		for (int j = 0; j < DIMENSIONS; ++j)
-		{
-			varLS[j] = 0.0;
-			for (int i = 0; i < cluster.size(); ++i)
-			{
-				std::vector<Point> vaCluster = cluster[i].getPoints();
-				for (int k = 0; k < vaCluster.size(); ++k)
-				{
-				varLS[j] += vaCluster[k].getCoordinate(j);
-				}
-			}
-			this->linearSum[j] = varLS[j];
-		}
-	}
-	else
-	{
-	for (int j = 0; j < DIMENSIONS; ++j)
-	{
-		varLS[j] = 0.0;
-		for (int i = 0; i < childCluster.size(); ++i)
-		{
-			childCluster[i].getCF().getLS(tmpVar);
-			varLS[j] += tmpVar[j];
-		}
-		this->linearSum[j] = varLS[j];
-	}
-	}
-}
-
-// Recalculate the Square Sum of the CF
-// If the CF is not a leaf node the values can be summed up
-// from the child nodes to speed up the process
-// Input: --
-// Output: --
-// Effect: value of SS in a CF change
-void ClusteringFeature::calcSquareSum(bool isLeaf, std::vector<Cluster> cluster, std::vector<CFTreeNode> childCluster)
-{
-	double varSS[DIMENSIONS];
-	double tmpVar[DIMENSIONS]; // use as buffer to store the solutions inside
-	if (isLeaf)
-	{
-		for (int j = 0; j < DIMENSIONS; ++j)
-		{
-			varSS[j] = 0.0;
-			for (int i = 0; i < cluster.size(); ++i)
-			{
-				std::vector<Point> vaCluster = cluster[i].getPoints();
-				for (int k = 0; k < vaCluster.size(); ++k)
-				{
-					varSS[j] += pow(vaCluster[k].getCoordinate(j), 2.0);
-				}
-			}
-			this->linearSum[j] = varSS[j];
-		}
-	}
-	else
-	{
-		for (int j = 0; j < DIMENSIONS; ++j)
-		{
-			varSS[j] = 0.0;
-			for (int i = 0; i < childCluster.size(); ++i)
-			{
-				childCluster[i].getCF().getSS(tmpVar);
-				varSS[j] += tmpVar[j];
-			}
-			this->squareSum[j] = varSS[j];
-		}
+		this->linearSum[i] = 0;
+		this->squareSum[i] = 0;
 	}
 }
 
@@ -136,7 +61,7 @@ double ClusteringFeature::calcRadius(ClusteringFeature cfToAdd)
 		tmpSS[i] = this->squareSum[i] + inputSS[i];
 	}
 	for (int i = 0; i < DIMENSIONS; ++i)
-	{
+	{ // check for this calculation
 		radius += tmpSS[i] - (2 * tmpLS[i] * tmpLS[i] / totalNrPoints) + (tmpLS[i]);
 		radius = sqrt(radius / totalNrPoints);
 	}
@@ -151,14 +76,33 @@ bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)
 	else
 	{
 		// Maybe already set in calcRadius
+		// update values
 		double inputLS[DIMENSIONS], inputSS[DIMENSIONS];
 		absorbCF.getLS(inputLS);
 		absorbCF.getSS(inputSS);
 		for (int i = 0; i < DIMENSIONS; ++i)
 		{
-			linearSum[i] = this->linearSum[i] + inputLS[i];
-			squareSum[i] = this->squareSum[i] + inputSS[i];
+			this->linearSum[i] = this->linearSum[i] + inputLS[i];
+			this->squareSum[i] = this->squareSum[i] + inputSS[i];
 		}
+		this->numberOfPoints++;
 		return true;
+	}
+}
+
+void ClusteringFeature::addToLS(double* buffer)
+{
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		this->linearSum[i] += buffer[i];
+	}
+}
+
+
+void ClusteringFeature::addToSS(double* buffer) 
+{
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		this->squareSum[i] += buffer[i];
 	}
 }

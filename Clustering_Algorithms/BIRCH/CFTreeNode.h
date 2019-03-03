@@ -18,7 +18,7 @@ private:
 
 
 	// return the new node in case of a split, otherwise return NULL
-	CFTreeNode insertToLeaf(ClusteringFeature addCF);
+	CFTreeNode* insertToLeaf(ClusteringFeature addCF);
 
 
 public:
@@ -28,10 +28,11 @@ public:
 	CFTreeNode();
 	void getCentroid(double* buffer);
 	bool isLeafNode();
+	void splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
 
 	// Work in Progress
-	CFTreeNode insert(ClusteringFeature addCF);
-	CFTreeNode insertToLeaf(ClusteringFeature addCF);
+	CFTreeNode* insert(ClusteringFeature addCF);
+	CFTreeNode* splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
 
 	// TODO
 	CFTreeNode insertNode(CFTreeNode addNode);
@@ -45,8 +46,8 @@ public:
 	void update();
 	double calcRadius();
 	double calcDiameter();
-	CFTreeNode splitLeaf();
-	CFTreeNode splitNonLeaf();
+
+	
 	int getNumberOfChildEntries();
 	int getNumberOfClusterEntries();  
 	CFTreeNode getElement(int i);

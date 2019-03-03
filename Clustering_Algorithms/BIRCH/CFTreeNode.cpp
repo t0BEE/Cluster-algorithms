@@ -53,14 +53,14 @@ bool CFTreeNode::isLeafNode()
  * Output: New Node, empty if no split occured (CFTreeNode)
  * Effect: cluster variable is changed / increased in size
  */
-CFTreeNode CFTreeNode::insert(ClusteringFeature addCF)
+CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 {
-	CFTreeNode newNode;
+	CFTreeNode* newNode;
 	// for leaf nodes
 	if (this->isLeafNode())
 	{	
 		// if a split occurs a new CFTreeNode is returned
-		newNode = insertToLeaf(addCF);
+		return insertToLeaf(addCF);
 	}
 	// go down the tree recursively to find a leaf node to place the point
 	else {
@@ -80,19 +80,37 @@ CFTreeNode CFTreeNode::insert(ClusteringFeature addCF)
 			}
 		}
 		// recursive call for the tree structure
-		// if a split occurs a new CFTreeNode is returned
-		newNode = childNodes[closestIndex]->insert(addCF);
-		this->update();
-		// It is not possible to retun NULL, so if no split occurs, the insertPoint function returns a node without clusters
-		// GetNumberOfClusterEntries is necessary to identify leafNodes
-		if ((newNode.getNumberOfChildEntries() != 0) || (newNode.getNumberOfClusterEntries() != 0)) 
-		{
+		newNode = this->childNodes[closestIndex]->insert(addCF);
+		// update the path of the inserted node
+		addCF.getLS(tmpInsertCentroid);
+		addCF.getSS(tmpCentroid);
+		this->childCF[closestIndex].addToLS(tmpInsertCentroid);
+		this->childCF[closestIndex].addToSS(tmpCentroid);
+
+		// if a split occurs a new CFTreeNode is returned with pointer otherwise nullptr
+		// TODO:: what about the CF values??
+		if (newNode != nullptr)
+		{ // a split occured
 			current_tree_size++;
-			if (newNode.getNumberOfChildEntries() != 0)
-				newNode.changeLeafNode(false);
-			if (this->childCluster.size() <= B_ENTRIES)
-			{
-				this->childCluster.push_back(newNode);
+			// try to insert new node here
+			if (this->childNodes.size() < B_ENTRIES)
+			{ // some space is left
+
+				
+				this->childNodes.push_back(newNode);
+				this->childCF.push_back();
+				return nullptr;
+				// TODO Is it necessary to check for the threshold ???
+			}
+			else
+			{ // split the non leaf because no space is left
+				newNode = this->splitNonLeaf(this, newNode);
+			}
+
+		}
+
+
+				/*
 				// Check if threshold is broken / split than
 				if (this->calcRadius() > threshold_Value)
 				{
@@ -103,16 +121,63 @@ CFTreeNode CFTreeNode::insert(ClusteringFeature addCF)
 				{ // TODO :: else do the merging refinement
 					newNode = CFTreeNode();
 				}
+				*/
+	}
+	return newNode;
+}
+
+
+/**
+ * Insert a point to a leaf cluster
+ * Input: point to add (Point)
+ * Output: Node which is non empty if the leaf is full and a split occurs (CFTreeNode)
+ * Effect: --
+*/
+CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
+{
+	double distance = DBL_MAX, tmpDis;
+	int closestIndex = 0;
+	double tmpInsert[DIMENSIONS], tmp[DIMENSIONS];
+	// If there is no cluster in leaf node, create a new one
+	if (childCF.size() == 0)
+	{
+		childCF.push_back(addCF);
+	}
+	else {
+		// Get index of closest cluster ( meassured by centroid of cf to insert - other centroids )
+		for (int i = 0; i < childCF.size(); ++i)
+		{
+			tmpDis = calcDistance(addCF.calcCentroid(tmpInsert), childCF[i].calcCentroid(tmp));
+			if (tmpDis < distance)
+			{
+				distance = tmpDis;
+				closestIndex = i;
+			}
+		}
+		if (this->childCF[closestIndex].absorbCF(addCF))
+		{ // absorbation successfully, the threshold condition is not broken 
+
+		}
+		else
+		{ // addCF could not be absorbed
+			// check if there is space left in the leaf node to create a new entry
+			if (this->childCF.size() < L_ENTRIES)
+			{
+				this->childCF.push_back(addCF);
 			}
 			else
-			{
-				// Split because no space is left
-				this->childCluster.push_back(newNode);
-				newNode = this->splitNonLeaf();
+			{	// split the leaf and create new node
+				CFTreeNode* newNode = new CFTreeNode();
+				// before splitting push_back the new CF to oldNode
+				this->childCF.push_back(addCF);
+				splitLeaf(this, newNode);
+				this->next = newNode;
+				newNode->prev = this;
+				return newNode;
 			}
 		}
 	}
-	return newNode;
+	return nullptr;
 }
 
 /**
@@ -122,16 +187,19 @@ CFTreeNode CFTreeNode::insert(ClusteringFeature addCF)
  * Output: New Leaf Node (CFTreeNode)
  * Effect: New Node created and Points are torn between both
 */
-CFTreeNode CFTreeNode::splitNonLeaf()
+CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 {
 	// choose farthest pair of entries
 	int far1, far2;
 	double farDis = 0.0, tmpDis;
-	for (int i = 0; i < childCluster.size(); ++i)
+	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
+	for (int i = 0; i < oldNode->childCF.size(); ++i)
 	{
-		for (int j = 0; j < childCluster.size(); ++j)
+		for (int j = 0; j < oldNode->childCF.size(); ++j)
 		{
-			tmpDis = calcDistance(childCluster[i].getCentroid(), childCluster[j].getCentroid());
+			oldNode->childCF[i].calcCentroid(tmpCentroid1);
+			oldNode->childCF[j].calcCentroid(tmpCentroid2);
+			tmpDis = calcDistance(tmpCentroid1, tmpCentroid2);
 			if (tmpDis > farDis)
 			{
 				farDis = tmpDis;
@@ -145,9 +213,14 @@ CFTreeNode CFTreeNode::splitNonLeaf()
 					far2 = i;
 				}
 				// far1 should be the smaller index because it will be removed after far2
+				// otherwise the bigger index will be changed when erase the smaller one
 			}
 		}
 	}
+
+
+
+	// TODO
 	// create new Node and assign the rest entries to each
 	std::vector<CFTreeNode> tmpTreeNode;
 	CFTreeNode newNode = CFTreeNode();
@@ -196,183 +269,25 @@ CFTreeNode CFTreeNode::splitNonLeaf()
 
 
 /**
- * Add a child node to a node
- * Because childCluster is not public, this function needs to exist
- * Input: Node to add to childCluster (CFTreeNode)
- * Output: --
- * Effect: Increase size of childCluster
-*/
-CFTreeNode CFTreeNode::insertNode(CFTreeNode addNode)
-{
-	if (this->childCluster.size() <= B_ENTRIES)
-	{
-		this->childCluster.push_back(addNode);
-	}
-	else
-	{
-		return this->splitNonLeaf();
-	}	
-}
-
-/**
- * Remove a child node from a Node
- * If Leaf Node --> remove Cluster
- * If Non Leaf Node --> remove child Node
- * Input: Index to remove (int)
- * Output: --
- * Effect: --
-*/
-void CFTreeNode::removeFromNode(int clusterNodeIndex)
-{
-	if (this->isLeafNode)
-	{
-		this->clustersInLeafNode.erase(clustersInLeafNode.begin() + clusterNodeIndex);
-	}
-	else
-	{
-		this->childCluster.erase(childCluster.begin() + clusterNodeIndex);
-	}
-}
-
-/**
- * Insert a point to a leaf cluster
- * Input: point to add (Point)
- * Output: Node which is non empty if the leaf is full and a split occurs (CFTreeNode)
- * Effect: --
-*/
-CFTreeNode CFTreeNode::insertToLeaf(ClusteringFeature addCF)
-{
-	double distance = DBL_MAX, tmpDis;
-	int closestIndex = 0;
-	double tmpInsert[DIMENSIONS], tmp[DIMENSIONS];
-	// If there is no cluster in leaf node, create a new one
-	if (childCF.size() == 0)
-	{
-		childCF.push_back(addCF);
-	}
-	else {
-		// Get index of closest cluster ( meassured by centroid of cf to insert - other centroids )
-		for (int i = 0; i < childCF.size(); ++i)
-		{
-			tmpDis = calcDistance(addCF.calcCentroid(tmpInsert), childCF[i].calcCentroid(tmp));
-			if (tmpDis < distance)
-			{
-				distance = tmpDis;
-				closestIndex = i;
-			}
-		}
-		if (this->childCF[closestIndex].absorbCF(addCF))
-		{ // absorbation successfully, the threshold condition is not broken 
-
-		}
-
-
-
-
-	}
-	this->clustersInLeafNode[closestIndex].update();
-	// Check if threshold condition is still valid
-	if (this->clustersInLeafNode[closestIndex].getRadius() > threshold_Value)
-	{
-		// If not --> remove point again and place anywhere else
-		this->clustersInLeafNode[closestIndex].removePoint(addPoint);
-		this->clustersInLeafNode[closestIndex].update();
-		// If not all entries are used in node, place the point in a new entry
-		if (this->clustersInLeafNode.size() < (L_ENTRIES - 1))
-		{ 
-			clustersInLeafNode.push_back(Cluster(addPoint));
-			return;
-		}
-		// If the Leaf Node is full --> split and create new node
-		else
-		{	
-			CFTreeNode newNode = this->splitLeaf();
-			this->next = &newNode;
-			newNode.prev = this;
-			return newNode;
-		}
-	}
-	return CFTreeNode();	
-}
-
-
-/**
- * Insert a cluster to a leaf node
- * Input: cluster to add (cluster)
- * Output: Node which is non empty if the leaf is full and a split occurs (CFTreeNode)
- * Effect: --
-*/
-CFTreeNode CFTreeNode::insertToLeaf(Cluster addCluster)
-{
-	double distance = DBL_MAX, tmpDis;
-	int closestIndex = 0;
-	Cluster thresholdCluster = Cluster();
-	// Get index of closest cluster ( meassured by point - centroid )
-	for (int i = 0; i < clustersInLeafNode.size(); ++i)
-	{
-		tmpDis = calcDistance(addCluster.getCentroid(), clustersInLeafNode[i].getCentroid());
-		if (tmpDis < distance)
-		{
-			distance = tmpDis;
-			closestIndex = i;
-		}
-	}
-	// If there is no cluster in leaf node, create a new one
-	if (clustersInLeafNode.size() == 0)
-	{
-		clustersInLeafNode.push_back(addCluster);
-	}
-	else {
-		thresholdCluster.addCluster(this->clustersInLeafNode[closestIndex]);
-		thresholdCluster.addCluster(addCluster);
-		
-	}
-	
-	thresholdCluster.update();
-	// Check if threshold condition is still valid
-	if (thresholdCluster.getRadius() > threshold_Value)
-	{
-		// If not all entries are used in node, place the point in a new entry
-		if (this->clustersInLeafNode.size() < (L_ENTRIES - 1))
-		{
-			clustersInLeafNode.push_back(addCluster);
-			return;
-		}
-		// If the Leaf Node is full --> split and create new node
-		else
-		{
-			CFTreeNode newNode = this->splitLeaf();
-			this->next = &newNode;
-			newNode.prev = this;
-			return newNode;
-		}
-	}
-	else
-	{
-		// If the radius is smaller than the threshold value
-		this->clustersInLeafNode[closestIndex].addCluster(addCluster);
-		this->clustersInLeafNode[closestIndex].update();
-	}
-	return CFTreeNode();
-}
-
-/**
  * Creates a new Leaf Node and assignes the farthest Clusters to new and old
  * The rest will be assigned to the closest of both
  * Input: --
  * Output: New Leaf Node (CFTreeNode)
  * Effect: New leaf node created
 */
-CFTreeNode CFTreeNode::splitLeaf()
+void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 {
 	// choose farthest pair of entries
 	int far1, far2;
 	double farDis = 0.0, tmpDis;
-	for (int i = 0; i < clustersInLeafNode.size(); ++i)
+	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
+	for (int i = 0; i < oldNode->childCF.size(); ++i)
 	{
-		for (int j = 0; j < clustersInLeafNode.size(); ++j)
+		for (int j = 0; j < oldNode->childCF.size(); ++j)
 		{
-			tmpDis = calcDistance(clustersInLeafNode[i].getCentroid(), clustersInLeafNode[j].getCentroid());
+			oldNode->childCF[i].calcCentroid(tmpCentroid1);
+			oldNode->childCF[j].calcCentroid(tmpCentroid2);
+			tmpDis = calcDistance(tmpCentroid1, tmpCentroid2);
 			if (tmpDis > farDis)
 			{
 				farDis = tmpDis;
@@ -386,46 +301,45 @@ CFTreeNode CFTreeNode::splitLeaf()
 					far2 = i;
 				}
 				// far1 should be the smaller index because it will be removed after far2
-				// otherwise the bigger number will be changed when erase the smaller one
+				// otherwise the bigger index will be changed when erase the smaller one
 			}
 		}
 	}
-	// create new Leaf Node and assign the rest entries to each
-	std::vector<Cluster> tmpClusters; // this is a temporary vector to help sorting
-	CFTreeNode newNode = CFTreeNode(this->clustersInLeafNode[far2]);
-	tmpClusters.push_back(this->clustersInLeafNode[far1]);
-	this->removeFromNode(far2);
-	this->removeFromNode(far1);
-	int currentLength = this->clustersInLeafNode.size();
+	// create temporary vector of CFs and assign the rest of CFs to it
+	std::vector<ClusteringFeature> tmpCFs;
+	newNode->childCF.push_back(oldNode->childCF[far2]);
+	// move far1 to the beginning of tmpCFs to access it in a later moment
+	// and copy all other CFs to tmpCFs
+	tmpCFs.push_back(oldNode->childCF[far1]);
+	oldNode->childCF.erase(childCF.begin() + far2);
+	oldNode->childCF.erase(childCF.begin() + far1);
+	int currentLength = oldNode->childCF.size();
 	for (int i = currentLength - 1; i >= 0; --i)
 	{
-		tmpClusters.push_back(this->clustersInLeafNode[i]);
-		this->clustersInLeafNode.pop_back();
+		tmpCFs.push_back(oldNode->childCF[i]);
+		oldNode->childCF.pop_back();
 	}
-	// Put far1 to the clustersInLeafNode of this node
-	this->clustersInLeafNode.push_back(tmpClusters.front());
-	tmpClusters.erase(tmpClusters.begin());
-	// at this point tmpCluster contains all data points except the farthest
-	// which are seperated between the 2 CFTreeNodes
-	newNode.update();
-	this->update();
-	currentLength = tmpClusters.size();
+	// move the first element in tmpCFs (far1) to the oldNode again
+	oldNode->childCF.push_back(tmpCFs.front());
+	tmpCFs.erase(tmpCFs.begin());
+	// at this point tmpCFs contains all CF except of the farthest
+	// now assign!
+	currentLength = tmpCFs.size();
+	oldNode->childCF[0].calcCentroid(tmpCentroid1);
+	newNode->childCF[0].calcCentroid(tmpCentroid2);
 	for (int i = currentLength - 1; i >= 0; --i)
-	{
-		// Compare the distatnces of the centroids and assign clusters to closest
-		if (calcDistance(tmpClusters[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpClusters[i].getCentroid(), this->centroid))
+	{	// Compare distances of the centroids and assign clusters to the closest
+		tmpCFs[i].calcCentroid(tmpCentroidInsert);
+		if (calcDistance(tmpCentroid1, tmpCentroidInsert) <= calcDistance(tmpCentroid2, tmpCentroidInsert))
 		{
-			newNode.clustersInLeafNode.push_back(tmpClusters[i]);
-			newNode.update();
+			oldNode->childCF.push_back(tmpCFs[i]);
 		}
 		else
 		{
-			this->clustersInLeafNode.push_back(tmpClusters[i]);
-			this->update();
+			newNode->childCF.push_back(tmpCFs[i]);
 		}
-		tmpClusters.pop_back();
+		tmpCFs.pop_back();
 	}
-	return newNode;
 }
 
 /**
