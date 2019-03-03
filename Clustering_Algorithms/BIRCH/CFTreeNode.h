@@ -1,50 +1,47 @@
 #pragma once
 
-#include "Point.h"
 #include "Parameter.h"
 #include "ClusteringFeature.h"
-#include "CLuster.h"
 #include <vector>
 #include <math.h>
 
 class CFTreeNode
 {
 private:
-	// if the cluster is a Leaf Node it contains Points in the cluster vector
-	// if it is a Non Leaf Node the cluster vector is empty and the childCluster vector contains data
-	ClusteringFeature cf;
-	bool isLeafNode;
-	Centroid centroid;
-	double radius;
-	double diameter;
+	// if the cluster is a Leaf Node it contains no childNodes but pointer to 
+	// next and previous Nodes to enable a fast scanning
+
+	std::vector<ClusteringFeature> childCF;
 
 	// Non Leaf Node Variables
-		std::vector<CFTreeNode> childCluster;
+		std::vector<CFTreeNode*> childNodes;
 
-	// Leaf Node Variables
-		std::vector<Cluster> clustersInLeafNode;
 
 	// return the new node in case of a split, otherwise return NULL
-	CFTreeNode insertToLeaf(Point addPoint);
-	CFTreeNode insertToLeaf(Cluster addCluster);
+	CFTreeNode insertToLeaf(ClusteringFeature addCF);
+
 
 public:
 	// Leaf Node Variables
 		CFTreeNode* prev = NULL;
 		CFTreeNode* next = NULL;
 	CFTreeNode();
-	CFTreeNode(Cluster startingCluster);
-	CFTreeNode insertPoint(Point addPoint);
+	void getCentroid(double* buffer);
+	bool isLeafNode();
+
+	// Work in Progress
+	CFTreeNode insert(ClusteringFeature addCF);
+	CFTreeNode insertToLeaf(ClusteringFeature addCF);
+
+	// TODO
 	CFTreeNode insertNode(CFTreeNode addNode);
-	CFTreeNode insertCluster(Cluster addCluster);
 	void removeFromNode(int clusterIndex);
 	double calcDistance(Point pEins, Point pZwei);
-	ClusteringFeature getCF();
-	bool getIsLeafNode();	
+	//ClusteringFeature getCF();
 	void changeLeafNode(bool value);
 	void recalculateCF();
 	void calcCentroid();
-	Point getCentroid();
+
 	void update();
 	double calcRadius();
 	double calcDiameter();
