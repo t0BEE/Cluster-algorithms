@@ -5,7 +5,6 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
-#include "Point.h"
 #include "Parameter.h"
 #include "CFTreeNode.h"
 

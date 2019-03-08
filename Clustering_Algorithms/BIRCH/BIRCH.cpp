@@ -200,8 +200,8 @@ int main(int argc, char **argv)
 	// maybe start k-means on different Non-leaf nodes --> parallel
 	int numberOfLeafNodes = 0;
 	CFTreeNode* tmp = &rootNode;
-	while (!(tmp->getIsLeafNode()))
-		tmp = &(tmp->getElement[0]);
+	while (!(tmp->isLeafNode()))
+		tmp = tmp->getFirstElement();
 	
 	while (tmp->next)
 	{
