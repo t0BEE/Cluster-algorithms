@@ -29,28 +29,17 @@ public:
 	void getCentroid(double* buffer);
 	bool isLeafNode();
 	void splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
-
-	// Work in Progress
+	ClusteringFeature getCF();
 	CFTreeNode* insert(ClusteringFeature addCF);
 	CFTreeNode* splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
+	CFTreeNode* getFirstElement();
 
-	// TODO
-	CFTreeNode insertNode(CFTreeNode addNode);
-	void removeFromNode(int clusterIndex);
-	double calcDistance(Point pEins, Point pZwei);
-	//ClusteringFeature getCF();
-	void changeLeafNode(bool value);
-	void recalculateCF();
-	void calcCentroid();
-
-	void update();
-	double calcRadius();
-	double calcDiameter();
+	// Work in Progress
 
 	
-	int getNumberOfChildEntries();
-	int getNumberOfClusterEntries();  
-	CFTreeNode getElement(int i);
+
+	// TODO
+ 
+
 	double getclosestDistanceOfEntries();
-	Cluster getClusterElement(int i);
 };

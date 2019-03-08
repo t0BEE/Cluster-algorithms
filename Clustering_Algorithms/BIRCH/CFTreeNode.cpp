@@ -6,10 +6,7 @@
  * Output: --
  * Effect: New Cluster instance created and set to Leaf Node
  */
-CFTreeNode::CFTreeNode() 
-{
-	this->changeLeafNode(true);
-}
+CFTreeNode::CFTreeNode() {}
 
 /**
  * Return the Centroid
@@ -88,19 +85,15 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 		this->childCF[closestIndex].addToSS(tmpCentroid);
 
 		// if a split occurs a new CFTreeNode is returned with pointer otherwise nullptr
-		// TODO:: what about the CF values??
 		if (newNode != nullptr)
 		{ // a split occured
 			current_tree_size++;
 			// try to insert new node here
 			if (this->childNodes.size() < B_ENTRIES)
-			{ // some space is left
-
-				
+			{ // some space is left		
 				this->childNodes.push_back(newNode);
-				this->childCF.push_back();
+				this->childCF.push_back(newNode->getCF());
 				return nullptr;
-				// TODO Is it necessary to check for the threshold ???
 			}
 			else
 			{ // split the non leaf because no space is left
@@ -108,20 +101,6 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 			}
 
 		}
-
-
-				/*
-				// Check if threshold is broken / split than
-				if (this->calcRadius() > threshold_Value)
-				{
-					// If threshold is broken --> split this too
-					newNode = this->splitNonLeaf();
-				}
-				else
-				{ // TODO :: else do the merging refinement
-					newNode = CFTreeNode();
-				}
-				*/
 	}
 	return newNode;
 }
@@ -146,8 +125,10 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 	else {
 		// Get index of closest cluster ( meassured by centroid of cf to insert - other centroids )
 		for (int i = 0; i < childCF.size(); ++i)
-		{
-			tmpDis = calcDistance(addCF.calcCentroid(tmpInsert), childCF[i].calcCentroid(tmp));
+		{	
+			addCF.calcCentroid(tmpInsert);
+			childCF[i].calcCentroid(tmp);
+			tmpDis = calcDistance(tmpInsert, tmp);
 			if (tmpDis < distance)
 			{
 				distance = tmpDis;
@@ -171,6 +152,11 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 				// before splitting push_back the new CF to oldNode
 				this->childCF.push_back(addCF);
 				splitLeaf(this, newNode);
+				if (this->next)
+				{
+					this->next->prev = newNode;
+					newNode->next = this->next;
+				}
 				this->next = newNode;
 				newNode->prev = this;
 				return newNode;
@@ -189,16 +175,33 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 */
 CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 {
+
+	std::vector<ClusteringFeature> tmpCF;
+	std::vector<CFTreeNode*> tmpTreeNode;
+
+	// move all elements to tmp Vectors
+	for (int i = oldNode->childCF.size() - 1; i >= 0; --i)
+	{
+		tmpCF.push_back(oldNode->childCF[i]);
+		oldNode->childCF.pop_back();
+		tmpTreeNode.push_back(oldNode->childNodes[i]);
+		oldNode->childNodes.pop_back();
+	}
+	// add newNode to it
+	tmpCF.push_back(newNode->getCF());
+	tmpTreeNode.push_back(newNode);
+
+
 	// choose farthest pair of entries
 	int far1, far2;
 	double farDis = 0.0, tmpDis;
 	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
-	for (int i = 0; i < oldNode->childCF.size(); ++i)
+	for (int i = 0; i < tmpCF.size(); ++i)
 	{
-		for (int j = 0; j < oldNode->childCF.size(); ++j)
+		for (int j = 0; j < tmpCF.size(); ++j)
 		{
-			oldNode->childCF[i].calcCentroid(tmpCentroid1);
-			oldNode->childCF[j].calcCentroid(tmpCentroid2);
+			tmpCF[i].calcCentroid(tmpCentroid1);
+			tmpCF[j].calcCentroid(tmpCentroid2);
 			tmpDis = calcDistance(tmpCentroid1, tmpCentroid2);
 			if (tmpDis > farDis)
 			{
@@ -218,53 +221,42 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 		}
 	}
 
+	CFTreeNode* newerNode = new CFTreeNode();
 
+	newerNode->childCF.push_back(tmpCF[far2]);
+	newerNode->childNodes.push_back(tmpTreeNode[far2]);
 
-	// TODO
-	// create new Node and assign the rest entries to each
-	std::vector<CFTreeNode> tmpTreeNode;
-	CFTreeNode newNode = CFTreeNode();
-	newNode.insertNode(this->childCluster[far2]);
-	tmpTreeNode.push_back(this->childCluster[far1]);
-	this->removeFromNode(far2);
-	this->removeFromNode(far1);
-	int currentLength = this->childCluster.size();
+	oldNode->childCF.push_back(tmpCF[far1]);
+	oldNode->childNodes.push_back(tmpTreeNode[far1]);
+
+	tmpCF.erase(childCF.begin() + far2);
+	tmpCF.erase(childCF.begin() + far1);
+	tmpTreeNode.erase(childNodes.begin() + far2);
+	tmpTreeNode.erase(childNodes.begin() + far1);
+
+	// at this point tmpCFs contains all CF except of the farthest
+	// now assign!
+	int currentLength = tmpCF.size();
+	oldNode->childCF[0].calcCentroid(tmpCentroid1);
+	newerNode->childCF[0].calcCentroid(tmpCentroid2);
+
 	for (int i = currentLength - 1; i >= 0; --i)
-	{
-		tmpTreeNode.push_back(this->childCluster[i]);
-		this->childCluster.pop_back();
-	}
-	this->childCluster.push_back(tmpTreeNode.front());
-	tmpTreeNode.erase(tmpTreeNode.begin());
-	// at this point tmpCluster contains all data points except the farthest
-	// which are seperated between the 2 CFTreeNodes
-	newNode.update();
-	this->update();
-	currentLength = tmpTreeNode.size();
-	for (int i = currentLength - 1; i >= 0; --i)
-	{
-		if (newNode.childCluster.size() == B_ENTRIES)
+	{	// Compare distances of the centroids and assign clusters to the closest
+		tmpCF[i].calcCentroid(tmpCentroidInsert);
+		if (calcDistance(tmpCentroid1, tmpCentroidInsert) <= calcDistance(tmpCentroid2, tmpCentroidInsert))
 		{
-			this->childCluster.push_back(tmpTreeNode[i]);
-			this->update();
+			oldNode->childCF.push_back(tmpCF[i]);
+			oldNode->childNodes.push_back(tmpTreeNode[i]);
 		}
 		else
 		{
-			// Compare the distatnces of the centroids and assign clusters to closest
-			if ((this->childCluster.size() == B_ENTRIES) || (calcDistance(tmpTreeNode[i].getCentroid(), newNode.getCentroid()) <= calcDistance(tmpTreeNode[i].getCentroid(), this->centroid) && (newNode.childCluster.size() <= B_ENTRIES)))
-			{
-				newNode.childCluster.push_back(tmpTreeNode[i]);
-				newNode.update();
-			}
-			else
-			{
-				this->childCluster.push_back(tmpTreeNode[i]);
-				this->update();
-			}
+			newerNode->childCF.push_back(tmpCF[i]);
+			newerNode->childNodes.push_back(tmpTreeNode[i]);
 		}
+		tmpCF.pop_back();
 		tmpTreeNode.pop_back();
 	}
-	return newNode;
+	return newerNode;
 }
 
 
@@ -342,73 +334,6 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	}
 }
 
-/**
- * Insert a cluster to the tree
- * It is very similar to adding points
- * In case of split the retunr value is a non empty tree node
- * Input: Cluster to add (Cluster)
- * Output: New Leaf Node (CFTreeNode)
- * Effect: --
-*/
-CFTreeNode CFTreeNode::insertCluster(Cluster addCluster)
-{
-	CFTreeNode newNode;
-	// for leaf nodes
-	if (this->isLeafNode)
-	{
-		// if a split occurs a new CFTreeNode is returned
-		newNode = insertToLeaf(addCluster);
-	}
-	// go down the tree recursively to find a leaf node to place the point
-	else {
-		double distance = DBL_MAX, tmpDis;
-		int closestIndex;
-		for (int i = 0; i < childCluster.size(); ++i)
-		{
-			tmpDis = calcDistance(addCluster.getCentroid(), childCluster[i].getCentroid());
-			if (tmpDis < distance)
-			{
-				distance = tmpDis;
-				closestIndex = i;
-			}
-		}
-		// recursive call for the tree structure
-		// if a split occurs a new CFTreeNode is returned
-		newNode = childCluster[closestIndex].insertCluster(addCluster);
-		this->update();
-		// It is not possible to retun NULL, so if no split occurs, the insertPoint function returns a node without clusters
-		// GetNumberOfClusterEntries is necessary to identify leafNodes
-		if ((newNode.getNumberOfChildEntries() != 0) || (newNode.getNumberOfClusterEntries() != 0))
-		{
-			current_tree_size++;
-			if (newNode.getNumberOfChildEntries() != 0)
-				newNode.changeLeafNode(false);
-			if (this->childCluster.size() <= B_ENTRIES)
-			{
-				this->childCluster.push_back(newNode);
-				// Check if threshold is broken / split than
-				if (this->calcRadius() > threshold_Value)
-				{
-					// If threshold is broken --> split this too
-					newNode = this->splitNonLeaf();
-				}
-				else
-				{ // TODO :: else do the merging refinement
-					newNode = CFTreeNode();
-				}
-			}
-			else
-			{
-				// Split because no space is left
-				this->childCluster.push_back(newNode);
-				newNode = this->splitNonLeaf();
-			}
-		}
-	}
-	this->update();
-	return newNode;
-}
-
 
 /**
  * Get the CF
@@ -418,141 +343,26 @@ CFTreeNode CFTreeNode::insertCluster(Cluster addCluster)
 */
 ClusteringFeature CFTreeNode::getCF()
 {
-	return this->cf;
-}
-
-/**
- * Is the cluster a leaf node ?
- * Input: --
- * Output: leaf node ? (boolean)
- * Effect: --
-*/
-bool CFTreeNode::getIsLeafNode()
-{
-	return this->isLeafNode;
-}
-
-/**
- * Toggeling the value of leafNode in the cluster feature
- * Input: boolean of new value (boolean)
- * Output: --
- * Effect: the value of leafNode changes
-*/
-void CFTreeNode::changeLeafNode(bool value)
-{
-		this->isLeafNode = value;
-}
-
-/**
- * Recalculate the Linear Sum & Square Sum of the CF to refresh
- * This function is public
- * Input: --
- * Output: --
- * Effect: value of SS & LS in a CF change
-*/
-void CFTreeNode::recalculateCF()
-{
-	this->cf.calcLinearSum(this->isLeafNode, this->clustersInLeafNode, this->childCluster);
-	this->cf.calcSquareSum(this->isLeafNode, this->clustersInLeafNode, this->childCluster);
-}
-
-/**
- * Update the Node
- * Input: --
- * Output: --
- * Effect: update Centroid, Diameter, Radius and CF
-*/
-void CFTreeNode::update()
-{
-	calcCentroid();
-	calcDiameter();
-	calcRadius();
-	recalculateCF();
-}
-
-
-/**
- * This function first recalculates the centroid and uses it to
- * measure the average distance between it and all points in the cluster
- * Input: --
- * Output: radius (double)
- * Effect: the radius variable in cluster is changed
-*/
-double CFTreeNode::calcRadius()
-{
-	this->calcCentroid();
-	double varRadius = 0.0;
-	for (int i = 0; i < clustersInLeafNode.size(); ++i)
+	ClusteringFeature* newCF =  new ClusteringFeature();
+	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
+	
+	for (int i = 0; i < childCF.size(); i++)
 	{
-		varRadius += pow(calcDistance(clustersInLeafNode[i].getCentroid(), this->centroid), 2.0);
+		this->childCF[i].getLS(tmpLS);
+		this->childCF[i].getSS(tmpSS);
+		newCF->addToLS(tmpLS);
+		newCF->addToSS(tmpSS);
 	}
-	this->radius = sqrt(varRadius / clustersInLeafNode.size());
-	return this->radius;
+	return *newCF;
 }
 
-/**
- * This function calculates the average distance between all points in the cluster
- * Input: --
- * Output: diameter (double)
- * Effect: the diameter variable in cluster is changed
-*/
-double CFTreeNode::calcDiameter()
+CFTreeNode* CFTreeNode::getFirstElement()
 {
-	double varDiameter = 0.0;
-	for (int i = 0; i < clustersInLeafNode.size(); ++i)
-	{
-		for (int j = 0; j < clustersInLeafNode.size(); ++j)
-		{
-			varDiameter += pow(calcDistance(clustersInLeafNode[i].getCentroid(), clustersInLeafNode[j].getCentroid), 2.0);
-		}
-	}
-	this->diameter = sqrt(varDiameter / (clustersInLeafNode.size()*(clustersInLeafNode.size() - 1)));
-	return this->diameter;
+	return this->childNodes[0];
 }
 
-/**
- * Get number of child nodes for non leaf nodes
- * Input: --
- * Output: amount of child nodes (int)
- * Effect: --
-*/
-int CFTreeNode::getNumberOfChildEntries()
-{
-	return this->childCluster.size();
-}
 
-/**
- * Get number of child nodes for non leaf nodes
- * Input: --
- * Output: amount of child nodes (int)
- * Effect: --
-*/
-int CFTreeNode::getNumberOfClusterEntries()
-{
-	return this->clustersInLeafNode.size();
-}
 
-/**
- * Get the child node at index i
- * Input: Index (int)
- * Output: Node at index (CFTreeNode)
- * Effect: --
-*/
-CFTreeNode CFTreeNode::getElement(int i)
-{
-	return this->childCluster[i];
-}
-
-/**
- * Get the cluster at index i
- * Input: Index (int)
- * Output: CLuster at index (Cluster)
- * Effect: --
-*/
-Cluster CFTreeNode::getClusterElement(int i)
-{
-	return this->clustersInLeafNode[i];
-}
 
 /**
  * Get the closest distance of Cluster centroids in a leaf node 
