@@ -78,13 +78,8 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 		}
 		// recursive call for the tree structure
 		newNode = this->childNodes[closestIndex]->insert(addCF);
-		// update the path of the inserted node
-		addCF.getLS(tmpInsertCentroid);
-		addCF.getSS(tmpCentroid);
-		this->childCF[closestIndex].addToLS(tmpInsertCentroid);
-		this->childCF[closestIndex].addToSS(tmpCentroid);
 
-		// if a split occurs a new CFTreeNode is returned with pointer otherwise nullptr
+		// if a split occurs a new CFTreeNode is returned by pointer otherwise nullptr
 		if (newNode != nullptr)
 		{ // a split occured
 			current_tree_size++;
@@ -101,6 +96,10 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 			}
 
 		}
+
+		// update the path
+		this->childCF.erase(childCF.begin() + closestIndex);
+		this->childCF.insert(childCF.begin() + closestIndex, this->childNodes[closestIndex]->getCF());
 	}
 	return newNode;
 }
@@ -136,9 +135,7 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 			}
 		}
 		if (this->childCF[closestIndex].absorbCF(addCF))
-		{ // absorbation successfully, the threshold condition is not broken 
-
-		}
+		{ }// absorbation successfully, the threshold condition is not broken 
 		else
 		{ // addCF could not be absorbed
 			// check if there is space left in the leaf node to create a new entry
@@ -373,14 +370,16 @@ CFTreeNode* CFTreeNode::getFirstElement()
 double CFTreeNode::getclosestDistanceOfEntries()
 {
 	// find nearest pair of entries
-	double distanceHelp = DBL_MAX, dblHelp;
-	for (int i = 0; i < this->getNumberOfClusterEntries(); ++i)
+	double distanceHelp = DBL_MAX, dblHelp, tmpCentr1[DIMENSIONS], tmpCentr2[DIMENSIONS];
+	for (int i = 0; i < this->childCF.size(); ++i)
 	{
-		for (int j = 0; j < this->getNumberOfClusterEntries(); ++j)
+		for (int j = 0; j < this->childCF.size(); ++j)
 		{
 			if (i != j)
 			{
-				dblHelp = calcDistance(this->clustersInLeafNode[i].getCentroid(), this->clustersInLeafNode[i].getCentroid());
+				this->childCF[i].calcCentroid(tmpCentr1);
+				this->childCF[j].calcCentroid(tmpCentr2);
+				dblHelp = calcDistance(tmpCentr1, tmpCentr2);
 					if (dblHelp < distanceHelp)
 						distanceHelp = dblHelp;
 			}
@@ -388,4 +387,3 @@ double CFTreeNode::getclosestDistanceOfEntries()
 	}
 	return distanceHelp;
 }
-

@@ -9,6 +9,15 @@ ClusteringFeature::ClusteringFeature()
 	}
 }
 
+ClusteringFeature::ClusteringFeature(int nrPoints, double* LS, double* SS)
+{
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		this->linearSum[i] = LS[i];
+		this->squareSum[i] = SS[i];
+	}
+	this->numberOfPoints = nrPoints;
+}
 
 // Get the Linear Sum of the Clustering Feature
 // Input: pointer to transfer the values

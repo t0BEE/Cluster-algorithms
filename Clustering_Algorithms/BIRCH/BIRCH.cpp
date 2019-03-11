@@ -6,8 +6,8 @@
 //			--> pathCopy() --> insertCluster()
 
 std::vector<Point> total;
-CFTreeNode rootNode;
-CFTreeNode newTreeRoot;
+CFTreeNode* rootNode;
+CFTreeNode* newTreeRoot;
 
 void readCSV(std::string filename)
 {
@@ -37,18 +37,29 @@ void readCSV(std::string filename)
 	}
 }
 
-void insertPoint(unsigned int index)
+void insertCF(ClusteringFeature addCF)
 {
-	CFTreeNode newNode;
-	newNode = rootNode.insertPoint(total[index]);
+	CFTreeNode* newNode;
+	newNode = rootNode->insert(addCF);
 	// If the root is split, the tree will grow in height
-	if (newNode.getNumberOfChildEntries() != 0)
+	if (newNode != nullptr)
 	{
-		CFTreeNode newRoot = CFTreeNode();
 		current_tree_size++;
-		newRoot.insertNode(newNode);
-		newRoot.insertNode(rootNode);
-		rootNode = newRoot;
+		if (rootNode->childNodes.size() < B_ENTRIES)
+		{ // some space is left		
+			rootNode->childNodes.push_back(newNode);
+			rootNode->childCF.push_back(newNode->getCF());
+		}
+		else
+		{ // split the root leaf because no space is left
+			newNode = rootNode->splitNonLeaf(rootNode, newNode);
+			CFTreeNode* newRoot = new CFTreeNode();
+			newRoot->childNodes.push_back(rootNode);
+			newRoot->childNodes.push_back(newNode);
+			newRoot->childCF.push_back(rootNode->getCF());
+			newRoot->childCF.push_back(newNode->getCF());
+			rootNode = newRoot;
+		}
 	}
 	// Run out of memory
 	if (current_tree_size > MAXIMUM_TREE_SIZE)
@@ -176,15 +187,23 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 int main(int argc, char **argv)
 {
     std::cout << "Start BIRCH!\n"; 
-	rootNode = CFTreeNode();
+	rootNode = new CFTreeNode();
+	ClusteringFeature newCF;
 	current_tree_size = 1;
 	// read CSV
 	readCSV("../../Inputfiles/Sample.csv");
 
 	// Phase 1
+	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
 	for (int k = 0; k < total.size(); ++k)
 	{
-		insertPoint(k);
+		total[k].getCoordinates(tmpLS);
+		for (int i = 0; i < DIMENSIONS; ++i)
+		{
+			tmpSS[i] = pow(tmpLS[i], 2);
+		}
+		newCF = ClusteringFeature(1, tmpLS, tmpSS);
+		insertCF(newCF);
 	}
 
 	// Phase 2  --- TODO (optional)
