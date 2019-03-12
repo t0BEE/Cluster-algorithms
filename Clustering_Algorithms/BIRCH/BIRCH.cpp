@@ -74,26 +74,33 @@ void rebuild()
 	// change threshould value || the paper has no perfect solution --> TODO research
 	// paper: average of the distances between nearest pairs of leaf entries in all leaf nodes
 	// find first leaf node
-	CFTreeNode tmpNode = rootNode;
+	CFTreeNode* tmpNode = rootNode;
 	std::vector<double> distances;
 
-	while (!tmpNode.getIsLeafNode())
+	while (!tmpNode->isLeafNode())
 	{
-		tmpNode = tmpNode.getElement(0);
+		tmpNode = tmpNode->getFirstElement();
 	}
-	while (tmpNode.next != NULL)
+	while (tmpNode->next != NULL)
 	{
-		distances.push_back(tmpNode.getclosestDistanceOfEntries());
-		tmpNode = *tmpNode.next;
+		distances.push_back(tmpNode->getclosestDistanceOfEntries());
+		tmpNode = tmpNode->next;
 	}
 	for (int i = 0; i < distances.size()-1; ++i)
 	{
 		distances.back() = distances.back() + distances[i];
 	}
-	threshold_Value = distances.back();
+	threshold_Value = distances.back() / distances.size();
+
+	for (int i = 0; i < distances.size(); ++i)
+	{
+		distances.pop_back();
+	}
 
 	// The tree is copied completely and the old tree deleted afterwards
 	// During this process the Clusters are reentered
+	
+	//TODO: Copy the root , not just the address
 	newTreeRoot = rootNode;
 	pathCopy(newTreeRoot, rootNode);
 	deleteTree(rootNode);

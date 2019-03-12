@@ -8,6 +8,18 @@
  */
 CFTreeNode::CFTreeNode() {}
 
+CFTreeNode::CFTreeNode(const CFTreeNode& copy) 
+{
+	for (int i = 0; i < copy.childCF.size(); ++i)
+	{
+		this->childCF.push_back(copy.childCF[i]);
+	}
+	for (int i = 0; i < copy.childNodes.size(); ++i)
+	{
+		this->childNodes.push_back(copy.childNodes[i]);
+	}
+}
+
 /**
  * Return the Centroid
  * Input: --

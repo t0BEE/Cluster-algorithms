@@ -23,6 +23,7 @@ public:
 		CFTreeNode* next = NULL;
 
 	CFTreeNode();
+	CFTreeNode(const CFTreeNode& copy);
 	void getCentroid(double* buffer);
 	bool isLeafNode();
 	void splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
