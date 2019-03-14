@@ -8,6 +8,7 @@
  */
 CFTreeNode::CFTreeNode() {}
 
+/*
 CFTreeNode::CFTreeNode(const CFTreeNode& copy) 
 {
 	for (int i = 0; i < copy.childCF.size(); ++i)
@@ -18,7 +19,7 @@ CFTreeNode::CFTreeNode(const CFTreeNode& copy)
 	{
 		this->childNodes.push_back(copy.childNodes[i]);
 	}
-}
+}*
 
 /**
  * Return the Centroid
@@ -399,3 +400,12 @@ double CFTreeNode::getclosestDistanceOfEntries()
 	}
 	return distanceHelp;
 }
+
+
+
+void CFTreeNode::insertNode(ClusteringFeature cfInsert, CFTreeNode* nodeInsert)
+{
+	this->childCF.push_back(cfInsert);
+	this->childNodes.push_back(nodeInsert);
+}
+

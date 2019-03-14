@@ -101,8 +101,10 @@ void rebuild()
 	// During this process the Clusters are reentered
 	
 	//TODO: Copy the root , not just the address
-	newTreeRoot = rootNode;
+	newTreeRoot = new CFTreeNode();
+
 	pathCopy(newTreeRoot, rootNode);
+
 	deleteTree(rootNode);
 
 }
@@ -116,44 +118,37 @@ void rebuild()
  * Output: ---
  * Effect: a completely new tree is created
 */
-void pathCopy(CFTreeNode newTree, CFTreeNode oldTree)
+void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 {
-	for (int j = 0; j < oldTree.getNumberOfChildEntries(); ++j)
+	for (int j = 0; j < oldTree->childCF.size(); ++j)
 	{
-		newTree.insertNode(oldTree.getElement(j));
-		if (oldTree.getElement(j).getIsLeafNode())
+		newTree->insertNode(oldTree->childCF[j], oldTree->childNodes[j]);
+		if (oldTree->isLeafNode())
 		{
-			for (int i = 0; i < oldTree.getElement(j).getNumberOfClusterEntries(); ++i)
+			for (int i = 0; i < oldTree->childCF.size(); ++i)
 			{
-				newTreeRoot.insertCluster(oldTree.getElement(j).getClusterElement(i));
+				newTreeRoot->insert(oldTree->childCF[i]);
 			}
 		}
 		else
 		{
-			pathCopy(newTree.getElement[j], oldTree.getElement[j]);
+			pathCopy(newTree->childNodes[j], oldTree->childNodes[j]);
 		}
 	}
-	// Check all leaf nodes if they are empty
-	if (newTree.getElement(0).getIsLeafNode())
+
+	// clean tree
+	for (int j = 0; j < newTree->childCF.size(); ++j)
 	{
-		for (int j = newTree.getNumberOfChildEntries() - 1; j >= 0; ++j)
+		if (newTree->childCF[j].getNumberOfPoints() == 0)
 		{
-			// If the leaf is empty, delete it
-			if (newTree.getElement(j).getNumberOfClusterEntries() == 0)
-				newTree.removeFromNode(j);
+			delete newTree->childNodes[j];
+			newTree->childNodes.erase(newTree->childNodes.begin() + j);
+			newTree->childCF.erase(newTree->childCF.begin() + j);
 		}
 	}
-	// Check for non leaf nodes if they are empty
-	else
-	{
-		for (int j = newTree.getNumberOfChildEntries() - 1; j >= 0; ++j)
-		{
-			// If a non leaf node is empty, delete it
-			if (newTree.getElement(j).getNumberOfChildEntries() == 0)
-				newTree.removeFromNode(j);
-		}
-	}
+
 }
+
 
 /**
  * Deletes the tree recursively
@@ -191,7 +186,7 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 }
 */
 
-int main(int argc, char **argv)
+int main()
 {
     std::cout << "Start BIRCH!\n"; 
 	rootNode = new CFTreeNode();

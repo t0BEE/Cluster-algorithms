@@ -16,3 +16,4 @@ void writeCSVFile(std::ofstream&, std::string);
 void insertPoint(unsigned int index);
 void rebuild();
 void deleteTree(CFTreeNode delRoot);
+void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree);

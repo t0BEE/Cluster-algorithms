@@ -23,7 +23,7 @@ public:
 		CFTreeNode* next = NULL;
 
 	CFTreeNode();
-	CFTreeNode(const CFTreeNode& copy);
+	//CFTreeNode(const CFTreeNode& copy);
 	void getCentroid(double* buffer);
 	bool isLeafNode();
 	void splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
@@ -32,4 +32,5 @@ public:
 	CFTreeNode* splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
 	CFTreeNode* getFirstElement();
 	double getclosestDistanceOfEntries();
+	void insertNode(ClusteringFeature cfInsert, CFTreeNode* nodeInsert);
 };
