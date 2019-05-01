@@ -100,7 +100,6 @@ void rebuild()
 	// The tree is copied completely and the old tree deleted afterwards
 	// During this process the Clusters are reentered
 	
-	//TODO: Copy the root , not just the address
 	newTreeRoot = new CFTreeNode();
 
 	pathCopy(newTreeRoot, rootNode);
@@ -156,16 +155,16 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
  * Output: ---
  * Effect: 
 */
-void deleteTree(CFTreeNode delRoot)
+void deleteTree(CFTreeNode* delRoot)
 {
-	if (!delRoot.getIsLeafNode())
+	if (!(delRoot->isLeafNode()))
 	{
-		for (int j = 0; j < delRoot.getNumberOfChildEntries(); ++j)
+		for (int j = 0; j < delRoot->childNodes.size(); ++j)
 		{
-			deleteTree(delRoot.getElement(j));
+			deleteTree(delRoot->childNodes[j]);
 		}
 	}
-	delete &delRoot;
+	delete delRoot;
 }
 
 /*
