@@ -21,7 +21,7 @@ void assignPoints()
 		double distance = DBL_MAX, tmpDis;
 		for (unsigned int k = 0; k < clusters.size(); ++k)
 		{
-			tmpDis = calcDistance(clusters[k].getCentroid(), total[i]);
+			tmpDis = calcPointDistance(clusters[k].getCentroid(), total[i]);
 			if (tmpDis < distance)
 			{
 				distance = tmpDis;
@@ -79,21 +79,6 @@ void readCSV(std::string filename)
 		{ }
 		// erste Zeile schmeißt Exception! ("x","y")
 	}
-}
-
-// Calculate the distance between 2 points
-// Manhatten distance
-// Input: 2 Points
-// Output: double value of distance
-// Effect: --
-double calcDistance(Point one, Point two)
-{
-	double distance = 0;
-	for (int i = 0; i < DIMENSIONS; ++i)
-	{
-		distance += abs(one.getCoordinate(i) - two.getCoordinate(i));
-	}
-	return distance;
 }
 
 // Write results in csv file

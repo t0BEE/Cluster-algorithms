@@ -1,4 +1,3 @@
-
 #include "BIRCH.h"
 #include "kMeans.h"
 
@@ -104,7 +103,7 @@ void rebuild()
 
 	pathCopy(newTreeRoot, rootNode);
 
-	deleteTree(rootNode);
+	deleteTree(*rootNode);
 
 }
 
@@ -219,7 +218,7 @@ int main()
 	// applied on a coarse summary of data
 	// maybe start k-means on different Non-leaf nodes --> parallel
 	int numberOfLeafNodes = 0;
-	CFTreeNode* tmp = &rootNode;
+	CFTreeNode* tmp = rootNode;
 	while (!(tmp->isLeafNode()))
 		tmp = tmp->getFirstElement();
 	

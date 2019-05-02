@@ -1,6 +1,4 @@
 #include "kCluster.h"
-#include "kMeans.h"
-
 
 // Constructor of class Cluster
 // Input: Integer for cluster number, a point as starting centroid
@@ -45,7 +43,7 @@ void Cluster::removePoint(Point remove)
 {
 	for (unsigned int i = 0; i < pointList.size(); ++i)
 	{
-		if (abs(calcDistance(remove, pointList[i])) < 0.005)
+		if (abs(calcPointDistance(remove, pointList[i])) < 0.005)
 		{
 			pointList.erase(pointList.begin() + i);
 			break;

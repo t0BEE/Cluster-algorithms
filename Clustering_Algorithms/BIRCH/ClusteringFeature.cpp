@@ -74,6 +74,7 @@ double ClusteringFeature::calcRadius(ClusteringFeature cfToAdd)
 		radius += tmpSS[i] - (2 * tmpLS[i] * tmpLS[i] / totalNrPoints) + (tmpLS[i]);
 		radius = sqrt(radius / totalNrPoints);
 	}
+	return radius;
 }
 
 bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)

@@ -59,6 +59,7 @@ double Point::getCoordinate(int dimension)
 	return this->coordinates[dimension];
 }
 
+
 // Set the position of a centroid
 // Input: double array with coordinates
 // Output: --
@@ -71,3 +72,17 @@ void Centroid::setPosition(double position[DIMENSIONS])
 	}
 }
 
+// Calculate the distance between 2 points
+// Manhatten distance
+// Input: 2 Points
+// Output: double value of distance
+// Effect: --
+double calcPointDistance(Point one, Point two)
+{
+	double distance = 0;
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		distance += abs(one.getCoordinate(i) - two.getCoordinate(i));
+	}
+	return distance;
+}

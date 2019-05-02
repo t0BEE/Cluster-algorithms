@@ -21,3 +21,5 @@ class Centroid: public Point
 public:
 	void setPosition(double position[DIMENSIONS]);
 };
+
+double calcPointDistance(Point one, Point two);

@@ -6,6 +6,9 @@
 #define PAGE_SIZE 1024			// P
 #define DISK					// R = 0.2 * M
 #define MAXIMUM_TREE_SIZE 1024	// MEMORY / PAGE_SIZE
+
+#include <math.h>
+
 static double threshold_Value = 0.0;	// T
 static double const_map_dimension = sizeof(double) * 3;			// C
 static double cf_entry_size = const_map_dimension * DIMENSIONS;	// C * d

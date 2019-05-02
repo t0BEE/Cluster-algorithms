@@ -1,7 +1,5 @@
 #pragma once
-#include "kPoint.h"
 #include "kCluster.h"
-#include "kParameter.h"
 #include <iostream>
 #include <vector>
 #include <cfloat>
@@ -17,7 +15,6 @@ namespace kMeans {
 	void assignPoints();
 	void readCSV(std::string filename);
 	void calcCentroids();
-	double calcDistance(Point, Point);
 	void writeCSVFile(std::ofstream&, std::string);
 }
 

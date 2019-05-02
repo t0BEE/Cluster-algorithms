@@ -177,7 +177,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	std::vector<CFTreeNode*> tmpTreeNode;
 
 	// move all elements to tmp Vectors
-	for (int i = oldNode->childCF.size() - 1; i >= 0; --i)
+	for (int i = (int) oldNode->childCF.size() - 1; i >= 0; --i)
 	{
 		tmpCF.push_back(oldNode->childCF[i]);
 		oldNode->childCF.pop_back();
@@ -233,7 +233,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 
 	// at this point tmpCFs contains all CF except of the farthest
 	// now assign!
-	int currentLength = tmpCF.size();
+	int currentLength = (int) tmpCF.size();
 	oldNode->childCF[0].calcCentroid(tmpCentroid1);
 	newerNode->childCF[0].calcCentroid(tmpCentroid2);
 
@@ -302,7 +302,7 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	tmpCFs.push_back(oldNode->childCF[far1]);
 	oldNode->childCF.erase(childCF.begin() + far2);
 	oldNode->childCF.erase(childCF.begin() + far1);
-	int currentLength = oldNode->childCF.size();
+	int currentLength = (int) oldNode->childCF.size();
 	for (int i = currentLength - 1; i >= 0; --i)
 	{
 		tmpCFs.push_back(oldNode->childCF[i]);
@@ -313,7 +313,7 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	tmpCFs.erase(tmpCFs.begin());
 	// at this point tmpCFs contains all CF except of the farthest
 	// now assign!
-	currentLength = tmpCFs.size();
+	currentLength = (int) tmpCFs.size();
 	oldNode->childCF[0].calcCentroid(tmpCentroid1);
 	newNode->childCF[0].calcCentroid(tmpCentroid2);
 	for (int i = currentLength - 1; i >= 0; --i)
