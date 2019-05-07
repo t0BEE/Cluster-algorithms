@@ -46,13 +46,23 @@ void insertCF(ClusteringFeature addCF)
 	if (newNode != nullptr)
 	{
 		current_tree_size++;
-		if (rootNode->childNodes.size() < B_ENTRIES)
+		if (rootNode->childNodes.size() == 0)
+		{ // if rot was a leafNode it has to be split, too
+			CFTreeNode* tmpNode;
+			tmpNode = rootNode;
+			rootNode = new CFTreeNode();
+			rootNode->childNodes.push_back(tmpNode);
+			rootNode->childCF.push_back(tmpNode->getCF());
+			rootNode->childNodes.push_back(newNode);
+			rootNode->childCF.push_back(newNode->getCF());
+		}
+		else if (rootNode->childNodes.size() < B_ENTRIES)
 		{ // some space is left		
 			rootNode->childNodes.push_back(newNode);
 			rootNode->childCF.push_back(newNode->getCF());
 		}
 		else
-		{ // split the root leaf because no space is left
+		{ // split the root node because no space is left
 			newNode = rootNode->splitNonLeaf(rootNode, newNode);
 			CFTreeNode* newRoot = new CFTreeNode();
 			newRoot->childNodes.push_back(rootNode);

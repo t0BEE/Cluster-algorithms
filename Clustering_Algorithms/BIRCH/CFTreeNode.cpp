@@ -61,6 +61,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 	}
 	// go down the tree recursively to find a leaf node to place the point
 	else {
+
 		double distance = DBL_MAX, tmpDis;
 		double tmpInsertCentroid[DIMENSIONS], tmpCentroid[DIMENSIONS];
 		int closestIndex;
@@ -76,6 +77,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 				closestIndex = i;
 			}
 		}
+
 		// recursive call for the tree structure
 		newNode = this->childNodes[closestIndex]->insert(addCF);
 
@@ -357,8 +359,6 @@ CFTreeNode* CFTreeNode::getFirstElement()
 {
 	return this->childNodes[0];
 }
-
-
 
 
 /**
