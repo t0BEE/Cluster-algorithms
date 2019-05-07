@@ -18,7 +18,11 @@ void CFTreeNode::getCentroid(double* buffer)
 {
 	double coordinates[DIMENSIONS], tmp[DIMENSIONS];
 	int totalNrPoints=0;
-	for (int i = 0; i < this->childNodes.size(); ++i)
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		coordinates[i] = 0;
+	}
+	for (int i = 0; i < this->childCF.size(); ++i)
 	{
 		this->childCF[i].getLS(tmp);
 		addTwoPoints(coordinates, tmp);
@@ -228,10 +232,10 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	oldNode->childCF.push_back(tmpCF[far1]);
 	oldNode->childNodes.push_back(tmpTreeNode[far1]);
 
-	tmpCF.erase(childCF.begin() + far2);
-	tmpCF.erase(childCF.begin() + far1);
-	tmpTreeNode.erase(childNodes.begin() + far2);
-	tmpTreeNode.erase(childNodes.begin() + far1);
+	tmpCF.erase(tmpCF.begin() + far2);
+	tmpCF.erase(tmpCF.begin() + far1);
+	tmpTreeNode.erase(tmpTreeNode.begin() + far2);
+	tmpTreeNode.erase(tmpTreeNode.begin() + far1);
 
 	// at this point tmpCFs contains all CF except of the farthest
 	// now assign!
@@ -352,6 +356,7 @@ ClusteringFeature CFTreeNode::getCF()
 		newCF->addToLS(tmpLS);
 		newCF->addToSS(tmpSS);
 	}
+	newCF->setNumberOfPoints((int) childCF.size());
 	return *newCF;
 }
 

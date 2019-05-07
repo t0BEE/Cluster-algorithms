@@ -103,11 +103,15 @@ void ClusteringFeature::addToLS(double* buffer)
 	}
 }
 
-
 void ClusteringFeature::addToSS(double* buffer) 
 {
 	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		this->squareSum[i] += buffer[i];
 	}
+}
+
+void ClusteringFeature::setNumberOfPoints(int number)
+{
+	this->numberOfPoints = number;
 }
