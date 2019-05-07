@@ -9,6 +9,7 @@ using namespace kMeans;
 std::vector<Point_B> total;
 CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
+static int tree_height;
 
 void readBIRCHCSV(std::string filename)
 {
@@ -45,6 +46,7 @@ void insertCF(ClusteringFeature addCF)
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
 	{
+		tree_height++;
 		current_tree_size++;
 		if (rootNode->childNodes.size() == 0)
 		{ // if rot was a leafNode it has to be split, too
@@ -202,6 +204,7 @@ int main()
 	rootNode = new CFTreeNode();
 	ClusteringFeature newCF;
 	current_tree_size = 1;
+	tree_height = 1;
 	// read CSV
 	readBIRCHCSV("../../Inputfiles/Sample.csv");
 	// Phase 1
