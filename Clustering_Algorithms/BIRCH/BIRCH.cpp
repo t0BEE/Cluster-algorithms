@@ -1,14 +1,16 @@
 #include "BIRCH.h"
-#include "kMeans.h"
+#include "../k-Means/kMeans.h"
 
 // TODO --- Thoughts #1 how is the tree balanced?
 //			--> pathCopy() --> insertCluster()
 
-std::vector<Point> total;
+using namespace kMeans;
+
+std::vector<Point_B> total;
 CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
 
-void readCSV(std::string filename)
+void readBIRCHCSV(std::string filename)
 {
 
 	std::ifstream input(filename);
@@ -27,7 +29,7 @@ void readCSV(std::string filename)
 		}
 		try
 		{
-			total.push_back(Point(dData));
+			total.push_back(Point_B(dData));
 		}
 		catch (std::exception)
 		{
@@ -67,45 +69,6 @@ void insertCF(ClusteringFeature addCF)
 	}
 }
 
-
-void rebuild()
-{
-	// change threshould value || the paper has no perfect solution --> TODO research
-	// paper: average of the distances between nearest pairs of leaf entries in all leaf nodes
-	// find first leaf node
-	CFTreeNode* tmpNode = rootNode;
-	std::vector<double> distances;
-
-	while (!tmpNode->isLeafNode())
-	{
-		tmpNode = tmpNode->getFirstElement();
-	}
-	while (tmpNode->next != NULL)
-	{
-		distances.push_back(tmpNode->getclosestDistanceOfEntries());
-		tmpNode = tmpNode->next;
-	}
-	for (int i = 0; i < distances.size()-1; ++i)
-	{
-		distances.back() = distances.back() + distances[i];
-	}
-	threshold_Value = distances.back() / distances.size();
-
-	for (int i = 0; i < distances.size(); ++i)
-	{
-		distances.pop_back();
-	}
-
-	// The tree is copied completely and the old tree deleted afterwards
-	// During this process the Clusters are reentered
-	
-	newTreeRoot = new CFTreeNode();
-
-	pathCopy(newTreeRoot, rootNode);
-
-	deleteTree(*rootNode);
-
-}
 
 
 // TODO :: think about the delay-split (default on) & Outlier Handling Option (default off) p.15
@@ -184,6 +147,45 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 }
 */
 
+void rebuild()
+{
+	// change threshould value || the paper has no perfect solution --> TODO research
+	// paper: average of the distances between nearest pairs of leaf entries in all leaf nodes
+	// find first leaf node
+	CFTreeNode* tmpNode = rootNode;
+	std::vector<double> distances;
+
+	while (!tmpNode->isLeafNode())
+	{
+		tmpNode = tmpNode->getFirstElement();
+	}
+	while (tmpNode->next != NULL)
+	{
+		distances.push_back(tmpNode->getclosestDistanceOfEntries());
+		tmpNode = tmpNode->next;
+	}
+	for (int i = 0; i < distances.size() - 1; ++i)
+	{
+		distances.back() = distances.back() + distances[i];
+	}
+	threshold_Value = distances.back() / distances.size();
+
+	for (int i = 0; i < distances.size(); ++i)
+	{
+		distances.pop_back();
+	}
+
+	// The tree is copied completely and the old tree deleted afterwards
+	// During this process the Clusters are reentered
+
+	newTreeRoot = new CFTreeNode();
+
+	pathCopy(newTreeRoot, rootNode);
+
+	deleteTree(rootNode);
+
+}
+
 int main()
 {
     std::cout << "Start BIRCH!\n"; 
@@ -191,15 +193,14 @@ int main()
 	ClusteringFeature newCF;
 	current_tree_size = 1;
 	// read CSV
-	readCSV("../../Inputfiles/Sample.csv");
-
+	readBIRCHCSV("../../Inputfiles/Sample.csv");
 	// Phase 1
 	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
 	for (int k = 0; k < total.size(); ++k)
 	{
-		total[k].getCoordinates(tmpLS);
 		for (int i = 0; i < DIMENSIONS; ++i)
 		{
+			tmpLS[i] = total[k].getCoordinate(i);
 			tmpSS[i] = pow(tmpLS[i], 2);
 		}
 		newCF = ClusteringFeature(1, tmpLS, tmpSS);
@@ -227,7 +228,7 @@ int main()
 		numberOfLeafNodes++;
 		tmp = tmp->next;
 	}
-	kMeans::main();
+	//kMeans::main();
 
 
 	// Phase 4  --- TODO (optional)

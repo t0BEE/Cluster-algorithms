@@ -9,7 +9,7 @@ protected:
 	double coordinates[DIMENSIONS];
 public:
 	Point();
-	Point(double position[DIMENSIONS]);
+	Point(double* position);
 	void setCluster(int);
 	void getCoordinates(double* coordinateBuffer);
 	int getCluster();

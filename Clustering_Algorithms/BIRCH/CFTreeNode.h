@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ClusteringFeature.h"
-#include <vector>
 
 class CFTreeNode
 {

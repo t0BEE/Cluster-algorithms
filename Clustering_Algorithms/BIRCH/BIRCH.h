@@ -1,13 +1,7 @@
 #pragma once
 
-
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include "Parameter.h"
 #include "CFTreeNode.h"
+#include "Point.h"
 
 
 int main();

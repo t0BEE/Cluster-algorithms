@@ -10,7 +10,7 @@ Point::Point(){}
 // Input: double array with coordinates
 // Output: --
 // Effect: New Cluster instance created with position and neutral clusterNumber
-Point::Point(double position[DIMENSIONS])
+Point::Point(double* position)
 {
 	for (int i = 0; i < DIMENSIONS; ++i)
 	{

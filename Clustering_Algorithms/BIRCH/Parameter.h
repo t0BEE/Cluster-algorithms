@@ -8,6 +8,12 @@
 #define MAXIMUM_TREE_SIZE 1024	// MEMORY / PAGE_SIZE
 
 #include <math.h>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <vector>
+
 
 static double threshold_Value = 0.0;	// T
 static double const_map_dimension = sizeof(double) * 3;			// C

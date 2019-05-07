@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "kPoint.h"
-#include "kParameter.h"
 #include <iostream>
 #include <algorithm>
 

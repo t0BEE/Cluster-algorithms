@@ -1,7 +1,5 @@
 #include "kMeans.h"
 
-
-
 std::vector<Point> total;
 std::vector<Cluster> clusters;
 int randomInt = 0;
@@ -109,7 +107,8 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 	fileOStream.close();
 }
 
-int main(int argc, char **argv)
+// int argc, char **argv
+int main()
 {
 	// Init phase ----------------------------- 
 	std::ofstream csvOutputfile;
