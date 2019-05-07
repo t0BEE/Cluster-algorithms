@@ -58,11 +58,6 @@ void insertCF(ClusteringFeature addCF)
 			rootNode->childNodes.push_back(newNode);
 			rootNode->childCF.push_back(newNode->getCF());
 		}
-		else if (rootNode->childNodes.size() < B_ENTRIES)
-		{ // some space is left		
-			rootNode->childNodes.push_back(newNode);
-			rootNode->childCF.push_back(newNode->getCF());
-		}
 		else
 		{ // split the root node because no space is left
 			CFTreeNode* newRoot = new CFTreeNode();
