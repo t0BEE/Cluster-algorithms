@@ -81,9 +81,11 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 				closestIndex = i;
 			}
 		}
-
 		// recursive call for the tree structure
 		newNode = this->childNodes[closestIndex]->insert(addCF);
+
+		// update the path
+		this->childCF[closestIndex] = this->childNodes[closestIndex]->getCF();
 
 		// if a split occurs a new CFTreeNode is returned by pointer otherwise nullptr
 		if (newNode != nullptr)
@@ -100,12 +102,8 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 			{ // split the non leaf because no space is left
 				newNode = this->splitNonLeaf(this, newNode);
 			}
-
 		}
 
-		// update the path
-		this->childCF.erase(childCF.begin() + closestIndex);
-		this->childCF.insert(childCF.begin() + closestIndex, this->childNodes[closestIndex]->getCF());
 	}
 	return newNode;
 }
@@ -173,14 +171,19 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
  * A leaf node is split into two 
  * The points are seperated and assigned to them
  * Input: --
- * Output: New Leaf Node (CFTreeNode)
- * Effect: New Node created and Points are torn between both
+ * Output: New NonLeaf Node (CFTreeNode)
+ * Effect: New Node created and Points are torn between first input and return value
 */
 CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 {
 
 	std::vector<ClusteringFeature> tmpCF;
 	std::vector<CFTreeNode*> tmpTreeNode;
+
+	// create new Node to seperate the nodes on the same level
+	CFTreeNode* newNonLeafNode = new CFTreeNode();
+	newNonLeafNode->childNodes.push_back(newNode);
+	newNonLeafNode->childCF.push_back(newNode->getCF());
 
 	// move all elements to tmp Vectors
 	for (int i = (int) oldNode->childCF.size() - 1; i >= 0; --i)
@@ -191,9 +194,10 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 		oldNode->childNodes.pop_back();
 	}
 	// add newNode to it
-	tmpCF.push_back(newNode->getCF());
-	tmpTreeNode.push_back(newNode);
-
+	tmpCF.push_back(newNonLeafNode->childCF[0]);
+	newNonLeafNode->childCF.pop_back();
+	tmpTreeNode.push_back(newNonLeafNode->childNodes[0]);
+	newNonLeafNode->childNodes.pop_back();
 
 	// choose farthest pair of entries
 	int far1, far2;
@@ -224,10 +228,8 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 		}
 	}
 
-	CFTreeNode* newerNode = new CFTreeNode();
-
-	newerNode->childCF.push_back(tmpCF[far2]);
-	newerNode->childNodes.push_back(tmpTreeNode[far2]);
+	newNonLeafNode->childCF.push_back(tmpCF[far2]);
+	newNonLeafNode->childNodes.push_back(tmpTreeNode[far2]);
 
 	oldNode->childCF.push_back(tmpCF[far1]);
 	oldNode->childNodes.push_back(tmpTreeNode[far1]);
@@ -241,7 +243,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	// now assign!
 	int currentLength = (int) tmpCF.size();
 	oldNode->childCF[0].calcCentroid(tmpCentroid1);
-	newerNode->childCF[0].calcCentroid(tmpCentroid2);
+	newNonLeafNode->childCF[0].calcCentroid(tmpCentroid2);
 
 	for (int i = currentLength - 1; i >= 0; --i)
 	{	// Compare distances of the centroids and assign clusters to the closest
@@ -253,13 +255,13 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 		}
 		else
 		{
-			newerNode->childCF.push_back(tmpCF[i]);
-			newerNode->childNodes.push_back(tmpTreeNode[i]);
+			newNonLeafNode->childCF.push_back(tmpCF[i]);
+			newNonLeafNode->childNodes.push_back(tmpTreeNode[i]);
 		}
 		tmpCF.pop_back();
 		tmpTreeNode.pop_back();
 	}
-	return newerNode;
+	return newNonLeafNode;
 }
 
 
