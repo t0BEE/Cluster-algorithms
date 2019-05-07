@@ -59,21 +59,16 @@ void ClusteringFeature::calcCentroid(double* buffer)
 double ClusteringFeature::calcRadius(ClusteringFeature cfToAdd)
 {
 	double radius = 0.0;
-	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
-	double inputLS[DIMENSIONS], inputSS[DIMENSIONS];
+	double tmpLS[DIMENSIONS];
+	double inputLS[DIMENSIONS];
 	cfToAdd.getLS(inputLS);
-	cfToAdd.getSS(inputSS);
 	int totalNrPoints = this->getNumberOfPoints() + cfToAdd.getNumberOfPoints();
 	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		tmpLS[i] = this->linearSum[i] + inputLS[i];
-		tmpSS[i] = this->squareSum[i] + inputSS[i];
+		radius += pow(tmpLS[i], 2) - (2 * tmpLS[i] * tmpLS[i] / totalNrPoints) + pow(tmpLS[i] / totalNrPoints, 2);
 	}
-	for (int i = 0; i < DIMENSIONS; ++i)
-	{ // check for this calculation
-		radius += tmpSS[i] - (2 * tmpLS[i] * tmpLS[i] / totalNrPoints) + (tmpLS[i]);
-		radius = sqrt(radius / totalNrPoints);
-	}
+	radius = sqrt(radius / totalNrPoints);
 	return radius;
 }
 
