@@ -45,11 +45,11 @@ void insertCF(ClusteringFeature addCF)
 	newNode = rootNode->insert(addCF);
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
-	{
+	{ // root is splitted
 		tree_height++;
 		current_tree_size++;
-		if (rootNode->childNodes.size() == 0)
-		{ // if rot was a leafNode it has to be split, too
+		if (rootNode->isLeafNode())
+		{ // if root was a leafNode it has to be split, too
 			CFTreeNode* tmpNode;
 			tmpNode = rootNode;
 			rootNode = new CFTreeNode();
@@ -59,9 +59,8 @@ void insertCF(ClusteringFeature addCF)
 			rootNode->childCF.push_back(newNode->getCF());
 		}
 		else
-		{ // split the root node because no space is left
+		{ // create a new root and push the new node and old root to it
 			CFTreeNode* newRoot = new CFTreeNode();
-			newNode = rootNode->splitNonLeaf(rootNode, newNode);
 			
 			// Add to the new root
 			newRoot->childNodes.push_back(rootNode);			
