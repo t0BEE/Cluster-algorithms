@@ -81,6 +81,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 				closestIndex = i;
 			}
 		}
+
 		// recursive call for the tree structure
 		newNode = this->childNodes[closestIndex]->insert(addCF);
 
@@ -93,13 +94,25 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 			current_tree_size++;
 			// try to insert new node here
 			if (this->childNodes.size() < B_ENTRIES)
-			{ // some space is left		
-				this->childNodes.push_back(newNode);
-				this->childCF.push_back(newNode->getCF());
+			{ // some space is left
+				this->childNodes.insert(this->childNodes.begin() + closestIndex + 1, newNode);
+				this->childCF.insert(this->childCF.begin() + closestIndex + 1, newNode->getCF());
 				return nullptr;
 			}
 			else
 			{ // split the non leaf because no space is left
+				// fix prev-next-leaf connection
+				CFTreeNode* helpOne = this->childNodes[closestIndex];
+				CFTreeNode* helpTwo = this->childNodes[closestIndex + 1];
+
+				while (!(helpOne->isLeafNode()))
+				{
+					helpOne = helpOne->childNodes[helpOne->childNodes.size() - 1];
+					helpTwo = helpTwo->childNodes[helpTwo->childNodes.size() - 1];
+				}
+				helpOne->next = helpTwo;
+				helpTwo->prev = helpOne;
+				// split the non leaf now
 				newNode = this->splitNonLeaf(this, newNode);
 			}
 		}
@@ -168,7 +181,7 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 }
 
 /**
- * A leaf node is split into two 
+ * A non leaf node is split into two 
  * The points are seperated and assigned to them
  * Input: --
  * Output: New NonLeaf Node (CFTreeNode)
@@ -179,6 +192,20 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 
 	std::vector<ClusteringFeature> tmpCF;
 	std::vector<CFTreeNode*> tmpTreeNode;
+
+	// to retain the prev-next-leaf chain the left most prev pointer and the right most next pointer is stored
+	CFTreeNode* helpNext = oldNode, *helpPrev = oldNode;
+	while (!(helpPrev->isLeafNode()))
+	{
+		helpPrev = helpPrev->childNodes[0];
+	}
+	helpPrev = helpPrev->prev;
+	while (!(helpNext->isLeafNode()))
+	{
+		helpNext = helpNext->childNodes[helpNext->childNodes.size()-1];
+	}
+	helpNext = helpNext->next;
+
 
 	// create new Node to seperate the nodes on the same level
 	CFTreeNode* newNonLeafNode = new CFTreeNode();
@@ -234,6 +261,24 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	oldNode->childCF.push_back(tmpCF[far1]);
 	oldNode->childNodes.push_back(tmpTreeNode[far1]);
 
+	// assign the leftmost prev pointer to the new leftmost node
+	oldNode->childNodes[0]->prev = helpPrev;
+
+	// create storage variables for the prev-next leaf chain
+	// the last used leaf node will be stored
+	CFTreeNode* tmpOld, *tmpNew;
+	tmpOld = oldNode->childNodes[0];
+	while (!(tmpOld->isLeafNode()))
+	{
+		tmpOld = tmpOld->childNodes[tmpOld->childNodes.size() - 1];
+	}
+	 
+	tmpNew = newNonLeafNode->childNodes[0];
+	while (!(tmpNew->isLeafNode()))
+	{
+		tmpNew = tmpNew->childNodes[tmpNew->childNodes.size() - 1];
+	}
+
 	tmpCF.erase(tmpCF.begin() + far2);
 	tmpCF.erase(tmpCF.begin() + far1);
 	tmpTreeNode.erase(tmpTreeNode.begin() + far2);
@@ -245,6 +290,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	oldNode->childCF[0].calcCentroid(tmpCentroid1);
 	newNonLeafNode->childCF[0].calcCentroid(tmpCentroid2);
 
+
 	for (int i = currentLength - 1; i >= 0; --i)
 	{	// Compare distances of the centroids and assign clusters to the closest
 		tmpCF[i].calcCentroid(tmpCentroidInsert);
@@ -252,15 +298,55 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 		{
 			oldNode->childCF.push_back(tmpCF[i]);
 			oldNode->childNodes.push_back(tmpTreeNode[i]);
+			// connect the new inserted leaf node with the last inserted
+			helpPrev = oldNode->childNodes[oldNode->childNodes.size() - 1];
+			while (!(helpPrev->isLeafNode()))
+			{
+				helpPrev = helpPrev->childNodes[0];
+			}
+			helpPrev->prev = tmpOld;
+			tmpOld->next = helpPrev;
+			tmpOld = helpPrev;
 		}
 		else
 		{
 			newNonLeafNode->childCF.push_back(tmpCF[i]);
 			newNonLeafNode->childNodes.push_back(tmpTreeNode[i]);
+			// connect the new inserted leaf node with the last inserted
+			helpPrev = newNonLeafNode->childNodes[newNonLeafNode->childNodes.size() - 1];
+			while (!(helpPrev->isLeafNode()))
+			{
+				helpPrev = helpPrev->childNodes[0];
+			}
+			helpPrev->prev = tmpNew;
+			tmpNew->next = helpPrev;
+			tmpNew = helpPrev;
 		}
 		tmpCF.pop_back();
 		tmpTreeNode.pop_back();
 	}
+
+	// give the right most node the right most next pointer
+	helpPrev = newNonLeafNode;
+	while (helpPrev->childNodes.size() > 0)
+	{
+		helpPrev = helpPrev->childNodes[helpPrev->childNodes.size() - 1];
+	}
+	helpPrev->next = helpNext;
+	// connect the two nodes
+	helpNext = newNonLeafNode;
+	while (helpNext->childNodes.size() > 0)
+	{
+		helpNext = helpNext->childNodes[0];
+	}
+	helpPrev = oldNode;
+	while (helpPrev->childNodes.size() > 0)
+	{
+		helpPrev = helpPrev->childNodes[helpPrev->childNodes.size() - 1];
+	}
+	helpPrev->next = helpNext;
+	helpNext->prev = helpPrev;
+
 	return newNonLeafNode;
 }
 
