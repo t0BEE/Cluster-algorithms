@@ -42,6 +42,11 @@ void readBIRCHCSV(std::string filename)
 void insertCF(ClusteringFeature addCF)
 {
 	CFTreeNode* newNode;
+	// DEBUG FLAG
+	if (tree_height == 4) //3 && rootNode->childNodes[1]->childNodes.size() == 4)//(tree_height == 4 && rootNode->childNodes.size() == 4 && rootNode->childNodes[2]->childNodes.size() == 4)
+	{
+		std::cout << std::endl;
+	}
 	newNode = rootNode->insert(addCF);
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
