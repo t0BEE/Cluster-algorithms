@@ -219,6 +219,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 
 	std::vector<ClusteringFeature> tmpCF;
 	std::vector<CFTreeNode*> tmpTreeNode;
+	CFTreeNode* tmpOld, *tmpNew;
 
 	// to retain the prev-next-leaf chain the left most prev pointer and the right most next pointer is stored
 	CFTreeNode* helpNext = oldNode, *helpPrev = oldNode;
@@ -289,12 +290,15 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	oldNode->childNodes.push_back(tmpTreeNode[far1]);
 
 	// assign the leftmost prev pointer to the new leftmost node
-	// if (oldNode.isLeafNode())
-	//oldNode->childNodes[0]->prev = helpPrev;
+	tmpOld = oldNode->childNodes.front();
+	while (!(tmpOld->isLeafNode()))
+	{
+		tmpOld = tmpOld->childNodes.front();
+	}
+	tmpOld->prev = helpPrev;
 
 	// create storage variables for the prev-next leaf chain
 	// the last used leaf node will be stored
-	CFTreeNode* tmpOld, *tmpNew;
 	tmpOld = oldNode->childNodes[0];
 	while (!(tmpOld->isLeafNode()))
 	{
