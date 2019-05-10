@@ -69,7 +69,7 @@ void insertCF(ClusteringFeature addCF)
 			newRoot->childNodes.push_back(newNode);
 			newRoot->childCF.push_back(newNode->getCF());
 			rootNode = newRoot;
-			/*
+	
 			// fix prev-next-leaf connection
 			CFTreeNode* helpOne = rootNode->childNodes[0];
 			CFTreeNode* helpTwo = rootNode->childNodes[1];
@@ -80,7 +80,7 @@ void insertCF(ClusteringFeature addCF)
 			}
 			helpOne->next = helpTwo;
 			helpTwo->prev = helpOne;
-			*/
+			
 		}
 	}
 	// Run out of memory
@@ -180,7 +180,7 @@ void rebuild()
 	{
 		tmpNode = tmpNode->getFirstElement();
 	}
-	while (tmpNode->next != NULL)
+	while (tmpNode->next != nullptr)
 	{
 		distances.push_back(tmpNode->getclosestDistanceOfEntries());
 		tmpNode = tmpNode->next;
