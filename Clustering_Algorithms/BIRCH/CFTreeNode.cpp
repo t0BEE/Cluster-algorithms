@@ -97,6 +97,20 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 			{ // some space is left
 				this->childNodes.insert(this->childNodes.begin() + closestIndex + 1, newNode);
 				this->childCF.insert(this->childCF.begin() + closestIndex + 1, newNode->getCF());
+				// fix prev pointer of the following leaf node
+				if (closestIndex != this->childNodes.size() - 2)
+				{
+					CFTreeNode* helpOne = this->childNodes[closestIndex + 1];
+					CFTreeNode* helpTwo = this->childNodes[closestIndex + 2];
+					while (!(helpOne->isLeafNode()))
+					{
+						helpOne = helpOne->childNodes.back();
+						helpTwo = helpTwo->childNodes.front();
+					}
+					helpOne->next = helpTwo;
+					helpTwo->prev = helpOne;
+				}
+
 				return nullptr;
 			}
 			else
@@ -275,7 +289,8 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	oldNode->childNodes.push_back(tmpTreeNode[far1]);
 
 	// assign the leftmost prev pointer to the new leftmost node
-	oldNode->childNodes[0]->prev = helpPrev;
+	// if (oldNode.isLeafNode())
+	//oldNode->childNodes[0]->prev = helpPrev;
 
 	// create storage variables for the prev-next leaf chain
 	// the last used leaf node will be stored
@@ -374,7 +389,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 {
 	// choose farthest pair of entries
-	int far1, far2;
+	int far1 = -5, far2 = -5;
 	double farDis = 0.0, tmpDis;
 	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
 	for (int i = 0; i < oldNode->childCF.size(); ++i)
@@ -400,6 +415,12 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 				// otherwise the bigger index will be changed when erase the smaller one
 			}
 		}
+	}
+	// in case all points are equal
+	if (far1 < 0 || far2 < 0)
+	{
+		far1 = 0;
+		far2 = 1;
 	}
 	// create temporary vector of CFs and assign the rest of CFs to it
 	std::vector<ClusteringFeature> tmpCFs;

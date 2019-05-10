@@ -42,12 +42,18 @@ void readBIRCHCSV(std::string filename)
 void insertCF(ClusteringFeature addCF)
 {
 	CFTreeNode* newNode;
+	// DEBUG FLAG
+	if (tree_height == 3)//(tree_height == 4 && rootNode->childNodes.size() == 4 && rootNode->childNodes[2]->childNodes.size() == 4)
+	{
+		std::cout << std::endl;
+	}
 	newNode = rootNode->insert(addCF);
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
 	{ // root is splitted
 		tree_height++;
 		current_tree_size++;
+
 		if (rootNode->isLeafNode())
 		{ // if root was a leafNode it has to be split, too
 			CFTreeNode* tmpNode;
@@ -68,6 +74,18 @@ void insertCF(ClusteringFeature addCF)
 			newRoot->childNodes.push_back(newNode);
 			newRoot->childCF.push_back(newNode->getCF());
 			rootNode = newRoot;
+			/*
+			// fix prev-next-leaf connection
+			CFTreeNode* helpOne = rootNode->childNodes[0];
+			CFTreeNode* helpTwo = rootNode->childNodes[1];
+			while (!(helpOne->isLeafNode()))
+			{
+				helpOne = helpOne->childNodes.back();
+				helpTwo = helpTwo->childNodes.front();
+			}
+			helpOne->next = helpTwo;
+			helpTwo->prev = helpOne;
+			*/
 		}
 	}
 	// Run out of memory
@@ -215,7 +233,7 @@ int main()
 		newCF = ClusteringFeature(1, tmpLS, tmpSS);
 		insertCF(newCF);
 	}
-
+	std::cout << std::endl;
 	// Phase 2  --- TODO (optional)
 	/*
 	some clustering methods perform well in terms of speed and quality
@@ -227,6 +245,7 @@ int main()
 	// nodes have a fixed size --> which means that it can not hold natural clusters
 	// applied on a coarse summary of data
 	// maybe start k-means on different Non-leaf nodes --> parallel
+	/*
 	int numberOfLeafNodes = 0;
 	CFTreeNode* tmp = rootNode;
 	while (!(tmp->isLeafNode()))
@@ -237,8 +256,8 @@ int main()
 		numberOfLeafNodes++;
 		tmp = tmp->next;
 	}
-	//kMeans::main();
-
+	kMeans::main();
+	*/
 
 	// Phase 4  --- TODO (optional)
 	// refine the tree by redistributing the data points to the closest seed
