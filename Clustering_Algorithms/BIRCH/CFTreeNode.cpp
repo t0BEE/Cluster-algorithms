@@ -255,7 +255,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	newNonLeafNode->childNodes.pop_back();
 
 	// choose farthest pair of entries
-	int far1, far2;
+	int far1 = -5, far2 = -5;
 	double farDis = 0.0, tmpDis;
 	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
 	for (int i = 0; i < tmpCF.size(); ++i)
@@ -281,6 +281,12 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 				// otherwise the bigger index will be changed when erase the smaller one
 			}
 		}
+	}
+	// in case all points are equal
+	if (far1 < 0 || far2 < 0)
+	{
+		far1 = 0;
+		far2 = 1;
 	}
 
 	newNonLeafNode->childCF.push_back(tmpCF[far2]);

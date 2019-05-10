@@ -108,8 +108,7 @@ void insertCF(ClusteringFeature addCF)
 void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 {
 	for (int j = 0; j < oldTree->childCF.size(); ++j)
-	{
-		newTree->insertNode(oldTree->childCF[j], oldTree->childNodes[j]);
+	{		
 		if (oldTree->isLeafNode())
 		{
 			for (int i = 0; i < oldTree->childCF.size(); ++i)
@@ -119,6 +118,7 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 		}
 		else
 		{
+			newTree->insertNode(oldTree->childCF[j], oldTree->childNodes[j]);
 			pathCopy(newTree->childNodes[j], oldTree->childNodes[j]);
 		}
 	}
@@ -198,10 +198,8 @@ void rebuild()
 	}
 	threshold_Value = distances.back() / distances.size();
 
-	for (int i = 0; i < distances.size(); ++i)
-	{
-		distances.pop_back();
-	}
+	distances.clear();
+
 
 	// The tree is copied completely and the old tree deleted afterwards
 	// During this process the Clusters are reentered
