@@ -102,16 +102,29 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 			else
 			{ // split the non leaf because no space is left
 				// fix prev-next-leaf connection
-				CFTreeNode* helpOne = this->childNodes[closestIndex];
-				CFTreeNode* helpTwo = this->childNodes[closestIndex + 1];
-
-				while (!(helpOne->isLeafNode()))
+				if (closestIndex == this->childNodes.size() - 1)
 				{
-					helpOne = helpOne->childNodes[helpOne->childNodes.size() - 1];
-					helpTwo = helpTwo->childNodes[helpTwo->childNodes.size() - 1];
+					CFTreeNode* helpOne = this->childNodes[closestIndex];
+
+					while (!(helpOne->isLeafNode()))
+					{
+						helpOne = helpOne->childNodes.back();
+					}
+					helpOne->next = nullptr;
 				}
-				helpOne->next = helpTwo;
-				helpTwo->prev = helpOne;
+				else
+				{
+					CFTreeNode* helpOne = this->childNodes[closestIndex];
+					CFTreeNode* helpTwo = this->childNodes[closestIndex + 1];
+
+					while (!(helpOne->isLeafNode()))
+					{
+						helpOne = helpOne->childNodes.back();
+						helpTwo = helpTwo->childNodes.front();
+					}
+					helpOne->next = helpTwo;
+					helpTwo->prev = helpOne;
+				}
 				// split the non leaf now
 				newNode = this->splitNonLeaf(this, newNode);
 			}
@@ -270,13 +283,13 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	tmpOld = oldNode->childNodes[0];
 	while (!(tmpOld->isLeafNode()))
 	{
-		tmpOld = tmpOld->childNodes[tmpOld->childNodes.size() - 1];
+		tmpOld = tmpOld->childNodes.back();
 	}
 	 
 	tmpNew = newNonLeafNode->childNodes[0];
 	while (!(tmpNew->isLeafNode()))
 	{
-		tmpNew = tmpNew->childNodes[tmpNew->childNodes.size() - 1];
+		tmpNew = tmpNew->childNodes.back();
 	}
 
 	tmpCF.erase(tmpCF.begin() + far2);
@@ -299,7 +312,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 			oldNode->childCF.push_back(tmpCF[i]);
 			oldNode->childNodes.push_back(tmpTreeNode[i]);
 			// connect the new inserted leaf node with the last inserted
-			helpPrev = oldNode->childNodes[oldNode->childNodes.size() - 1];
+			helpPrev = oldNode->childNodes.back();
 			while (!(helpPrev->isLeafNode()))
 			{
 				helpPrev = helpPrev->childNodes[0];
@@ -313,7 +326,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 			newNonLeafNode->childCF.push_back(tmpCF[i]);
 			newNonLeafNode->childNodes.push_back(tmpTreeNode[i]);
 			// connect the new inserted leaf node with the last inserted
-			helpPrev = newNonLeafNode->childNodes[newNonLeafNode->childNodes.size() - 1];
+			helpPrev = newNonLeafNode->childNodes.back();
 			while (!(helpPrev->isLeafNode()))
 			{
 				helpPrev = helpPrev->childNodes[0];
@@ -330,7 +343,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	helpPrev = newNonLeafNode;
 	while (helpPrev->childNodes.size() > 0)
 	{
-		helpPrev = helpPrev->childNodes[helpPrev->childNodes.size() - 1];
+		helpPrev = helpPrev->childNodes.back();
 	}
 	helpPrev->next = helpNext;
 	// connect the two nodes
@@ -342,7 +355,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	helpPrev = oldNode;
 	while (helpPrev->childNodes.size() > 0)
 	{
-		helpPrev = helpPrev->childNodes[helpPrev->childNodes.size() - 1];
+		helpPrev = helpPrev->childNodes.back();
 	}
 	helpPrev->next = helpNext;
 	helpNext->prev = helpPrev;
