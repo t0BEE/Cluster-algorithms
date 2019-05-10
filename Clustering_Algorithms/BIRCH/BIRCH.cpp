@@ -190,7 +190,9 @@ void rebuild()
 		distances.push_back(tmpNode->getclosestDistanceOfEntries());
 		tmpNode = tmpNode->next;
 	}
-	for (int i = 0; i < distances.size() - 1; ++i)
+	distances.push_back(tmpNode->getclosestDistanceOfEntries());
+	// Add all other distances on the last item - (-2) because the last item may not be used twice
+	for (int i = 0; i < distances.size() - 2; ++i)
 	{
 		distances.back() = distances.back() + distances[i];
 	}

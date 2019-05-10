@@ -498,6 +498,7 @@ CFTreeNode* CFTreeNode::getFirstElement()
 */
 double CFTreeNode::getclosestDistanceOfEntries()
 {
+	if (childCF.size() == 1) return 0.0;
 	// find nearest pair of entries
 	double distanceHelp = DBL_MAX, dblHelp, tmpCentr1[DIMENSIONS], tmpCentr2[DIMENSIONS];
 	for (int i = 0; i < this->childCF.size(); ++i)
