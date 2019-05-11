@@ -190,6 +190,7 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 			else
 			{	// split the leaf and create new node
 				CFTreeNode* newNode = new CFTreeNode();
+				current_tree_size++;
 				// before splitting push_back the new CF to oldNode
 				this->childCF.push_back(addCF);
 				splitLeaf(this, newNode);

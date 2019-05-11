@@ -18,7 +18,7 @@
 static double threshold_Value = 0.0;	// T
 static double const_map_dimension = sizeof(double) * 3;			// C
 static double cf_entry_size = const_map_dimension * DIMENSIONS;	// C * d
-static int current_tree_size;
+extern int current_tree_size;
 // inserting Points -- not clusters
 // use D0 as distance meassurement
 // Threshold condition is radius -- easier / faster

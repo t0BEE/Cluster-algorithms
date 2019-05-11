@@ -10,6 +10,7 @@ std::vector<Point_B> total;
 CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
 static int tree_height;
+int current_tree_size = 0;
 
 void readBIRCHCSV(std::string filename)
 {
@@ -217,7 +218,7 @@ int main()
     std::cout << "Start BIRCH!\n"; 
 	rootNode = new CFTreeNode();
 	ClusteringFeature newCF;
-	current_tree_size = 1;
+	current_tree_size++;
 	tree_height = 1;
 	// read CSV
 	readBIRCHCSV("../../Inputfiles/Sample.csv");
