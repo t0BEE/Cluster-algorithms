@@ -53,7 +53,7 @@ void insertCF(ClusteringFeature addCF)
 	if (newNode != nullptr)
 	{ // root is splitted
 		tree_height++;
-		current_tree_size++;
+		current_tree_size += 2; // the new node + a new root node
 
 		if (rootNode->isLeafNode())
 		{ // if root was a leafNode it has to be split, too
