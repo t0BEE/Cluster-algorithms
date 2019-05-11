@@ -11,6 +11,7 @@ CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
 static int tree_height;
 int current_tree_size = 0;
+double threshold_Value = 0.0;
 
 void readBIRCHCSV(std::string filename)
 {

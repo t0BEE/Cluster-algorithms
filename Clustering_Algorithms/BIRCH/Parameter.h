@@ -15,7 +15,7 @@
 #include <vector>
 
 
-static double threshold_Value = 0.0;	// T
+extern double threshold_Value;		// T
 static double const_map_dimension = sizeof(double) * 3;			// C
 static double cf_entry_size = const_map_dimension * DIMENSIONS;	// C * d
 extern int current_tree_size;

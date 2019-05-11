@@ -60,13 +60,17 @@ double ClusteringFeature::calcRadius(ClusteringFeature cfToAdd)
 {
 	double radius = 0.0;
 	double tmpLS[DIMENSIONS];
+	double tmpSS[DIMENSIONS];
 	double inputLS[DIMENSIONS];
+	double inputSS[DIMENSIONS];
 	cfToAdd.getLS(inputLS);
+	cfToAdd.getSS(inputSS);
 	int totalNrPoints = this->getNumberOfPoints() + cfToAdd.getNumberOfPoints();
 	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		tmpLS[i] = this->linearSum[i] + inputLS[i];
-		radius += pow(tmpLS[i], 2) - (2 * tmpLS[i] * tmpLS[i] / totalNrPoints) + pow(tmpLS[i] / totalNrPoints, 2);
+		tmpSS[i] = this->squareSum[i] + inputSS[i];
+		radius += tmpSS[i] - (tmpLS[i] * tmpLS[i] / totalNrPoints);
 	}
 	radius = sqrt(radius / totalNrPoints);
 	return radius;
