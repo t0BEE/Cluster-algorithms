@@ -13,6 +13,9 @@ static int tree_height;
 int current_tree_size = 0;
 double threshold_Value = 0.0;
 
+//prev and next when rebuilding
+CFTreeNode* tmpPrev;
+
 void readBIRCHCSV(std::string filename)
 {
 
@@ -94,9 +97,28 @@ void insertCF(ClusteringFeature addCF)
 	if (current_tree_size > MAXIMUM_TREE_SIZE)
 	{
 		rebuild();
+		rootNode = newTreeRoot;
+		delete newTreeRoot;
 	}
 }
 
+void prevNextChain(CFTreeNode* node)
+{
+	for (int i = 0; i < node->childNodes.size(); ++i)
+	{
+		prevNextChain(node->childNodes[i]);
+	}
+	if (node->isLeafNode())
+	{
+		if (!(tmpPrev)) tmpPrev = node;
+		else
+		{
+			node->prev = tmpPrev;
+			tmpPrev->next = node;
+			tmpPrev = node;
+		}
+	}
+}
 
 
 // TODO :: think about the delay-split (default on) & Outlier Handling Option (default off) p.15
@@ -120,8 +142,16 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 		}
 		else
 		{
-			newTree->insertNode(oldTree->childCF[j], oldTree->childNodes[j]);
+			CFTreeNode *newCopiedNode = new CFTreeNode();
+
+			newTree->insertNode(oldTree->childCF[j], newCopiedNode);
 			pathCopy(newTree->childNodes[j], oldTree->childNodes[j]);
+			// update CF 
+			for (int i = newTree->childCF.size() - 1; i >= 0; --i)
+			{
+				newTree->childCF.insert(newTree->childCF.begin(), newTree->childNodes[i]->getCF());
+				newTree->childCF.pop_back();
+			}
 		}
 	}
 
@@ -135,7 +165,6 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 			newTree->childCF.erase(newTree->childCF.begin() + j);
 		}
 	}
-
 }
 
 
@@ -209,7 +238,9 @@ void rebuild()
 	newTreeRoot = new CFTreeNode();
 
 	pathCopy(newTreeRoot, rootNode);
-
+	// prev - next pointer chain
+	prevNextChain(newTreeRoot);
+	// delete old tree
 	deleteTree(rootNode);
 
 }

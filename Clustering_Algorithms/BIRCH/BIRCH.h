@@ -7,7 +7,8 @@
 int main();
 void readCSV(std::string filename);
 void writeCSVFile(std::ofstream&, std::string);
-void insertPoint(unsigned int index);
+void insertCF(ClusteringFeature addCF);
 void rebuild();
-void deleteTree(CFTreeNode delRoot);
+void deleteTree(CFTreeNode* delRoot);
 void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree);
+void prevNextChain(CFTreeNode* node);

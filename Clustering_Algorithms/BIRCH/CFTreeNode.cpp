@@ -68,7 +68,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 
 		double distance = DBL_MAX, tmpDis;
 		double tmpInsertCentroid[DIMENSIONS], tmpCentroid[DIMENSIONS];
-		int closestIndex;
+		int closestIndex = -5;
 		addCF.calcCentroid(tmpInsertCentroid);
 		for (int i = 0; i < this->childNodes.size(); ++i)
 		{
@@ -81,6 +81,10 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 				closestIndex = i;
 			}
 		}
+
+		// when calling in rebuilding process there are no points to calculate the centroid
+		if (closestIndex < 0) closestIndex = 0;
+
 
 		// recursive call for the tree structure
 		newNode = this->childNodes[closestIndex]->insert(addCF);
