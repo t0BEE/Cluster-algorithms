@@ -479,6 +479,7 @@ ClusteringFeature CFTreeNode::getCF()
 {
 	ClusteringFeature* newCF =  new ClusteringFeature();
 	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
+	int numberOfPoints = 0;
 	
 	for (int i = 0; i < childCF.size(); i++)
 	{
@@ -486,8 +487,9 @@ ClusteringFeature CFTreeNode::getCF()
 		this->childCF[i].getSS(tmpSS);
 		newCF->addToLS(tmpLS);
 		newCF->addToSS(tmpSS);
+		numberOfPoints += this->childCF[i].getNumberOfPoints();
 	}
-	newCF->setNumberOfPoints((int) childCF.size());
+	newCF->setNumberOfPoints(numberOfPoints);
 	return *newCF;
 }
 
