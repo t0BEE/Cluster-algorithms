@@ -1,8 +1,6 @@
 #include "BIRCH.h"
 #include "../k-Means/kMeans.h"
 
-// TODO --- Thoughts #1 how is the tree balanced?
-//			--> pathCopy() --> insertCluster()
 
 using namespace kMeans;
 
@@ -47,11 +45,6 @@ void readBIRCHCSV(std::string filename)
 void insertCF(ClusteringFeature addCF)
 {
 	CFTreeNode* newNode;
-	// DEBUG FLAG
-	if (tree_height == 4) //3 && rootNode->childNodes[1]->childNodes.size() == 4)//(tree_height == 4 && rootNode->childNodes.size() == 4 && rootNode->childNodes[2]->childNodes.size() == 4)
-	{
-		std::cout << std::endl;
-	}
 	newNode = rootNode->insert(addCF);
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
@@ -98,6 +91,7 @@ void insertCF(ClusteringFeature addCF)
 	{
 		rebuild();
 		rootNode = newTreeRoot;
+		newTreeRoot = nullptr;
 		// calculate new current tree size
 		current_tree_size = 0;
 		calcTreeSize(rootNode);
@@ -191,7 +185,9 @@ void deleteTree(CFTreeNode* delRoot)
 			deleteTree(delRoot->childNodes[j]);
 		}
 	}
-	delete delRoot;
+	// delete is not necessary - the old nodes are used in the new tree
+	//delete delRoot;
+	delRoot = nullptr;
 }
 
 /*
