@@ -94,7 +94,7 @@ bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)
 			this->linearSum[i] = this->linearSum[i] + inputLS[i];
 			this->squareSum[i] = this->squareSum[i] + inputSS[i];
 		}
-		this->numberOfPoints++;
+		this->numberOfPoints = this->numberOfPoints + absorbCF.getNumberOfPoints();
 		return true;
 	}
 }

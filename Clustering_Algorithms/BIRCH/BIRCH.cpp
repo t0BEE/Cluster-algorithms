@@ -185,9 +185,7 @@ void deleteTree(CFTreeNode* delRoot)
 			deleteTree(delRoot->childNodes[j]);
 		}
 	}
-	// delete is not necessary - the old nodes are used in the new tree
-	//delete delRoot;
-	delRoot = nullptr;
+	delete delRoot;
 }
 
 /*
