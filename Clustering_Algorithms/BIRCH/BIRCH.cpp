@@ -94,12 +94,23 @@ void insertCF(ClusteringFeature addCF)
 		}
 	}
 	// Run out of memory
-	if (current_tree_size > MAXIMUM_TREE_SIZE)
+	while (current_tree_size > MAXIMUM_TREE_SIZE)
 	{
 		rebuild();
 		rootNode = newTreeRoot;
-		delete newTreeRoot;
+		// calculate new current tree size
+		current_tree_size = 0;
+		calcTreeSize(rootNode);
 	}
+}
+
+void calcTreeSize(CFTreeNode* node)
+{
+	for (int i = 0; i < node->childNodes.size(); ++i)
+	{
+		calcTreeSize(node->childNodes[i]);
+	}
+	current_tree_size++;
 }
 
 void prevNextChain(CFTreeNode* node)
@@ -116,6 +127,7 @@ void prevNextChain(CFTreeNode* node)
 			node->prev = tmpPrev;
 			tmpPrev->next = node;
 			tmpPrev = node;
+			tmpPrev->next = nullptr;
 		}
 	}
 }
@@ -135,34 +147,30 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 	{		
 		if (oldTree->isLeafNode())
 		{
-			for (int i = 0; i < oldTree->childCF.size(); ++i)
-			{
-				newTreeRoot->insert(oldTree->childCF[i]);
-			}
+			newTreeRoot->insert(oldTree->childCF[j]);
 		}
 		else
 		{
 			CFTreeNode *newCopiedNode = new CFTreeNode();
 
 			newTree->insertNode(oldTree->childCF[j], newCopiedNode);
-			pathCopy(newTree->childNodes[j], oldTree->childNodes[j]);
-			// update CF 
+			pathCopy(newTree->childNodes.back(), oldTree->childNodes[j]);
+			// update CF - where points are deleted
 			for (int i = newTree->childCF.size() - 1; i >= 0; --i)
 			{
 				newTree->childCF.insert(newTree->childCF.begin(), newTree->childNodes[i]->getCF());
 				newTree->childCF.pop_back();
 			}
-		}
-	}
-
-	// clean tree
-	for (int j = 0; j < newTree->childCF.size(); ++j)
-	{
-		if (newTree->childCF[j].getNumberOfPoints() == 0)
-		{
-			delete newTree->childNodes[j];
-			newTree->childNodes.erase(newTree->childNodes.begin() + j);
-			newTree->childCF.erase(newTree->childCF.begin() + j);
+			// clean tree - delete nodes with no childCFs
+			for (int j = 0; j < newTree->childCF.size(); ++j)
+			{
+				if (newTree->childCF[j].getNumberOfPoints() == 0)
+				{
+					delete newTree->childNodes[j];
+					newTree->childNodes.erase(newTree->childNodes.begin() + j);
+					newTree->childCF.erase(newTree->childCF.begin() + j);
+				}
+			}
 		}
 	}
 }

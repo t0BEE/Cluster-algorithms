@@ -12,3 +12,4 @@ void rebuild();
 void deleteTree(CFTreeNode* delRoot);
 void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree);
 void prevNextChain(CFTreeNode* node);
+void calcTreeSize(CFTreeNode* node);
