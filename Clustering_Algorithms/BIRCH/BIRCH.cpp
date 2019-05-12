@@ -188,23 +188,60 @@ void deleteTree(CFTreeNode* delRoot)
 	delete delRoot;
 }
 
-/*
-void writeCSVFile(std::ofstream &fileOStream, std::string filename)
+
+void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 {
 	fileOStream.open((filename));
-	fileOStream << "a;b;c\n";
-	for (unsigned int j = 0; j < total.size(); ++j)
+	fileOStream << "NumberofPoints";
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
-		fileOStream << std::to_string(total[j].getX()) << ";" << std::to_string(total[j].getY()) << ";" << std::to_string(total[j].getCluster()) << "\n";
+		fileOStream << ";LS[" << i << "]";
 	}
-	// write Centroids in CSV with cluster number = total
-	for (int j = 0; j < CLUSTER_TOTAL; ++j)
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
-		fileOStream << std::to_string(clusters[j].getCentroid().getX()) << ";" << std::to_string(clusters[j].getCentroid().getY()) << ";" << std::to_string(CLUSTER_TOTAL) << "\n";
+		fileOStream << ";SS[" << i << "]";
 	}
+	fileOStream << "\n";
+	CFTreeNode *tmpNode = rootNode;
+	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
+	while (!(tmpNode->isLeafNode())) tmpNode = tmpNode->childNodes.front();
+	while (tmpNode->next)
+	{
+		for (int i = 0; i < tmpNode->childCF.size(); ++i)
+		{
+			tmpNode->childCF[i].getLS(tmpLS);
+			tmpNode->childCF[i].getSS(tmpSS);
+			fileOStream << tmpNode->childCF[i].getNumberOfPoints();
+			for (int i = 0; i < DIMENSIONS; ++i)
+			{
+				fileOStream << ";" << tmpLS[i];
+			}
+			for (int i = 0; i < DIMENSIONS; ++i)
+			{
+				fileOStream << ";" << tmpSS[i];
+			}
+			fileOStream << "\n";
+		}
+		tmpNode = tmpNode->next;
+	}
+	for (int i = 0; i < tmpNode->childCF.size(); ++i)
+	{
+		tmpNode->childCF[i].getLS(tmpLS);
+		tmpNode->childCF[i].getSS(tmpSS);
+		fileOStream << tmpNode->childCF[i].getNumberOfPoints();
+		for (int i = 0; i < DIMENSIONS; ++i)
+		{
+			fileOStream << ";" << tmpLS[i];
+		}
+		for (int i = 0; i < DIMENSIONS; ++i)
+		{
+			fileOStream << ";" << tmpSS[i];
+		}
+		fileOStream << "\n";
+	}
+
 	fileOStream.close();
 }
-*/
 
 void rebuild()
 {
@@ -254,6 +291,7 @@ int main()
 	ClusteringFeature newCF;
 	current_tree_size++;
 	tree_height = 1;
+	std::ofstream csvOutputfile;
 	// read CSV
 	readBIRCHCSV("../../Inputfiles/Sample.csv");
 	// Phase 1
@@ -268,7 +306,10 @@ int main()
 		newCF = ClusteringFeature(1, tmpLS, tmpSS);
 		insertCF(newCF);
 	}
-	std::cout << std::endl;
+	// write leaf CFs in CSV
+	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH.csv");
+
+
 	// Phase 2  --- TODO (optional)
 	/*
 	some clustering methods perform well in terms of speed and quality

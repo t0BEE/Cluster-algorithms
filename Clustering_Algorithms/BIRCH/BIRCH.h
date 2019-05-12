@@ -6,7 +6,7 @@
 
 int main();
 void readCSV(std::string filename);
-void writeCSVFile(std::ofstream&, std::string);
+void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename);
 void insertCF(ClusteringFeature addCF);
 void rebuild();
 void deleteTree(CFTreeNode* delRoot);
