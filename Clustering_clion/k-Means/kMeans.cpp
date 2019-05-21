@@ -75,7 +75,7 @@ void readCSV(std::string filename)
 			total.push_back(Point(dData));
 		}catch(std::exception)
 		{ }
-		// erste Zeile schmeißt Exception! ("x","y")
+		// erste Zeile schmeiï¿½t Exception! ("x","y")
 	}
 }
 
@@ -118,9 +118,7 @@ int main()
 
 	//read CSV
 	readCSV("../../Inputfiles/SampleOld.csv");
-	std::cout << "--- start ---" << std::endl;
-	std::cout << "Number of Points: " << total.size() << std::endl;
-	std::cout << "Number of Clusters: " << CLUSTER_TOTAL << std::endl;
+
 	// Init Clusters
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
 		clusters.push_back(Cluster(i, total[(unsigned int) std::rand()%total.size()]));
@@ -128,11 +126,7 @@ int main()
 	}
 
 	assignPoints();
-	writeCSVFile(csvOutputfile, "outputBefore.csv");
 
-	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
-		clusters[i].printList();
-	}
 
 	////       start working       //////////////
 	
@@ -140,14 +134,8 @@ int main()
 	{
 		calcCentroids();
 		assignPoints();
-		writeCSVFile(csvOutputfile, ("output" + std::to_string(i) + ".csv"));
 	}
-
-	std::cout << "--- ----- ---" << std::endl;
-	for (int i = 0; i < CLUSTER_TOTAL; ++i) 
-	{
-		clusters[i].printList();
-	}
+    writeCSVFile(csvOutputfile, ("K_output.csv"));
 
 	return 0;
 }

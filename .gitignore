@@ -1,13 +1,11 @@
 #exclude csv output files
 *.csv
 *ipynb*
-Clustering_Algorithms/k-Means/Debug/*
-Clustering_Algorithms/Debug/*
-Clustering_Algorithms/.vs/*
-Clustering_Algorithms/ClusteringAlgorithms.sln
-Clustering_Algorithms/k-Means/k-Means.vcx*
-Clustering_Algorithms/BIRCH/BIRCH.vcx*
-Clustering_Algorithms/k-Means/x64/*
-Clustering_Algorithms/BIRCH/x64/*
-Clustering_Algorithms/x64/*
+Clustering_Algorithms/*
 .vs/*
+Clustering_clion/BIRCH/.idea/*
+Clustering_clion/BIRCH/cmake-build-debug/*
+Clustering_clion/BIRCH/*.txt
+Clustering_clion/k-Means/.idea/*
+Clustering_clion/k-Means/cmake-build-debug/*
+Clustering_clion/k-Means/*.txt
