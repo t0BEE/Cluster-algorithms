@@ -249,7 +249,6 @@ void kMeans_BIRCH()
     // Get centroids
     CFTreeNode* tmpNode;
     tmpNode = rootNode;
-    ClusteringFeature tmpCF;
     double tmpLS[DIMENSIONS] ;
     std::vector<Point_B*> centroids;
     while(!(tmpNode->isLeafNode()))
@@ -258,14 +257,23 @@ void kMeans_BIRCH()
     }
     while (tmpNode->next != nullptr)
     {
-        tmpCF = tmpNode->getCF();
-        tmpCF.getLS(tmpLS);
+        for (int j = 0; j < tmpNode->childCF.size(); ++j) {
+            tmpNode->childCF[j].getLS(tmpLS);
+            for (int i = 0; i < DIMENSIONS; ++i)
+            {
+                tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
+            }
+            centroids.push_back(new Point_B(tmpLS));
+        }
+        tmpNode = tmpNode->next;
+    }
+    for (int j = 0; j < tmpNode->childCF.size(); ++j) {
+        tmpNode->childCF[j].getLS(tmpLS);
         for (int i = 0; i < DIMENSIONS; ++i)
         {
-            tmpLS[i] = tmpLS[i] / tmpCF.getNumberOfPoints();
+            tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
         }
         centroids.push_back(new Point_B(tmpLS));
-        tmpNode = tmpNode->next;
     }
 
     // Create cluster
@@ -285,11 +293,15 @@ void kMeans_BIRCH()
         }
         assignPoints_B();
     }
+    for (int k = 0; k < clusters.size(); ++k)
+    {
+        clusters[k]->calcCentroid();
+    }
 
     // write result
     std::ofstream fOutput;
     fOutput.open(("finalOutput.csv"));
-    fOutput << "x; y; c \n";
+    fOutput << "x;y;c\n";
     double tmpPoint[DIMENSIONS];
     for (int i = 0; i < clusters.size(); ++i)
     {
@@ -310,7 +322,7 @@ void kMeans_BIRCH()
         {
             fOutput << tmpPoint[k] << ";";
         }
-        fOutput << 0 << "\n";
+        fOutput << clusters.size() + 3 << "\n";
     }
     fOutput.close();
 }
