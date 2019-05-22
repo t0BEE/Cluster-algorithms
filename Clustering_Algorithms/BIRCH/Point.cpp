@@ -39,3 +39,11 @@ double Point_B::getCoordinate(int dimension)
 {
 	return this->coordinates[dimension];
 }
+
+void Point_B::setCoordinates(double position[DIMENSIONS])
+{
+	for (int i = 0; i < DIMENSIONS; ++i)
+	{
+		this->coordinates[i] = position[i];
+	}
+}

@@ -1,6 +1,6 @@
 #include "ClusteringFeature.h"
 
-ClusteringFeature::ClusteringFeature() 
+ClusteringFeature::ClusteringFeature()
 {
 	for (int i = 0; i < DIMENSIONS; ++i)
 	{
@@ -107,7 +107,7 @@ void ClusteringFeature::addToLS(double* buffer)
 	}
 }
 
-void ClusteringFeature::addToSS(double* buffer) 
+void ClusteringFeature::addToSS(double* buffer)
 {
 	for (int i = 0; i < DIMENSIONS; ++i)
 	{
@@ -118,14 +118,4 @@ void ClusteringFeature::addToSS(double* buffer)
 void ClusteringFeature::setNumberOfPoints(int number)
 {
 	this->numberOfPoints = number;
-}
-
-void ClusteringFeature::updateCF(int nrPoints, double* LS, double* SS)
-{
-for (int i = 0; i < DIMENSIONS; ++i)
-{
-	this->linearSum[i] = LS[i];
-	this->squareSum[i] = SS[i];
-}
-this->numberOfPoints = nrPoints;
 }

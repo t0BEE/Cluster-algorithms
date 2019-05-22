@@ -17,4 +17,3 @@ namespace kMeans {
 	void calcCentroids();
 	void writeCSVFile(std::ofstream&, std::string);
 }
-

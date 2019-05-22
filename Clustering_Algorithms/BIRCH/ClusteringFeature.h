@@ -6,7 +6,7 @@
 class ClusteringFeature 
 {
 private:
-	unsigned int numberOfPoints;
+	int numberOfPoints;
 	double linearSum[DIMENSIONS];
 	double squareSum[DIMENSIONS];
 	double calcRadius(ClusteringFeature cfToAdd);
@@ -21,6 +21,5 @@ public:
 	void addToLS(double* buffer);
 	void addToSS(double* buffer);
 	void setNumberOfPoints(int number);
-	void updateCF(int nrPoints, double* LS, double* SS);
 };
 

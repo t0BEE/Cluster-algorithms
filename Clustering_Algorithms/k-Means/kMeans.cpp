@@ -1,4 +1,4 @@
-#include "kMeans.h"
+ï»¿#include "kMeans.h"
 
 std::vector<Point> total;
 std::vector<Cluster> clusters;
@@ -73,9 +73,11 @@ void readCSV(std::string filename)
 		try
 		{
 			total.push_back(Point(dData));
-		}catch(std::exception)
-		{ }
-		// erste Zeile schmeißt Exception! ("x","y")
+		}
+		catch (std::exception)
+		{
+		}
+		// erste Zeile schmeiï¿½t Exception! ("x","y")
 	}
 }
 
@@ -91,8 +93,8 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 	{
 		for (int k = 0; k < DIMENSIONS; ++k)
 		{
-		fileOStream << std::to_string(total[j].getCoordinate(k)) << ";";
-		}			
+			fileOStream << std::to_string(total[j].getCoordinate(k)) << ";";
+		}
 		fileOStream << std::to_string(total[j].getCluster()) << "\n";
 	}
 	// write Centroids in CSV with cluster number = total
@@ -101,7 +103,7 @@ void writeCSVFile(std::ofstream &fileOStream, std::string filename)
 		for (int k = 0; k < DIMENSIONS; ++k)
 		{
 			fileOStream << std::to_string(clusters[j].getCentroid().getCoordinate(k)) << ";";
-		}			
+		}
 		fileOStream << std::to_string(CLUSTER_TOTAL) << "\n";
 	}
 	fileOStream.close();
@@ -118,36 +120,24 @@ int main()
 
 	//read CSV
 	readCSV("../../Inputfiles/SampleOld.csv");
-	std::cout << "--- start ---" << std::endl;
-	std::cout << "Number of Points: " << total.size() << std::endl;
-	std::cout << "Number of Clusters: " << CLUSTER_TOTAL << std::endl;
+
 	// Init Clusters
 	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
-		clusters.push_back(Cluster(i, total[(unsigned int) std::rand()%total.size()]));
+		clusters.push_back(Cluster(i, total[(unsigned int)std::rand() % total.size()]));
 		//clusters.push_back(Cluster(i, Point(std::rand()%7, std::rand()%7)));
 	}
 
 	assignPoints();
-	writeCSVFile(csvOutputfile, "outputBefore.csv");
 
-	for (int i = 0; i < CLUSTER_TOTAL; ++i) {
-		clusters[i].printList();
-	}
 
 	////       start working       //////////////
-	
+
 	for (int i = 0; i < ITERARTIONS; ++i)
 	{
 		calcCentroids();
 		assignPoints();
-		writeCSVFile(csvOutputfile, ("output" + std::to_string(i) + ".csv"));
 	}
-
-	std::cout << "--- ----- ---" << std::endl;
-	for (int i = 0; i < CLUSTER_TOTAL; ++i) 
-	{
-		clusters[i].printList();
-	}
+	writeCSVFile(csvOutputfile, ("K_output.csv"));
 
 	return 0;
 }

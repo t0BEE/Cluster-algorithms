@@ -283,8 +283,9 @@ void kMeans_BIRCH()
         centroids[k]->getCoordinates(tmpLS);
         clusters[k]->centroid.setCoordinates(tmpLS);
     }
+    // k-means iterations
     assignPoints_B();
-    for (int i = 0; i < 4; ++i) // 4 iterations
+    for (int i = 0; i < 6; ++i) // 6 iterations
     {
         for (int k = 0; k < clusters.size(); ++k)
         {
@@ -292,10 +293,6 @@ void kMeans_BIRCH()
             clusters[k]->clusterList.clear();
         }
         assignPoints_B();
-    }
-    for (int k = 0; k < clusters.size(); ++k)
-    {
-        clusters[k]->calcCentroid();
     }
 
     // write result

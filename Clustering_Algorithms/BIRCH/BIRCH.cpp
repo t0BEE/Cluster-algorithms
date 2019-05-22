@@ -1,4 +1,4 @@
-#include "BIRCH.h"
+ï»¿#include "BIRCH.h"
 #include "../k-Means/kMeans.h"
 
 
@@ -7,6 +7,7 @@ using namespace kMeans;
 std::vector<Point_B> total;
 CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
+std::vector<Cluster_B*> clusters;
 static int tree_height;
 int current_tree_size = 0;
 double threshold_Value = 0.0;
@@ -38,7 +39,7 @@ void readBIRCHCSV(std::string filename)
 		catch (std::exception)
 		{
 		}
-		// erste Zeile schmeißt Exception! ("x","y")
+		// erste Zeile schmeiï¿½t Exception! ("x","y")
 	}
 }
 
@@ -65,14 +66,14 @@ void insertCF(ClusteringFeature addCF)
 		else
 		{ // create a new root and push the new node and old root to it
 			CFTreeNode* newRoot = new CFTreeNode();
-			
+
 			// Add to the new root
-			newRoot->childNodes.push_back(rootNode);			
+			newRoot->childNodes.push_back(rootNode);
 			newRoot->childCF.push_back(rootNode->getCF());
 			newRoot->childNodes.push_back(newNode);
 			newRoot->childCF.push_back(newNode->getCF());
 			rootNode = newRoot;
-	
+
 			// fix prev-next-leaf connection
 			CFTreeNode* helpOne = rootNode->childNodes[0];
 			CFTreeNode* helpTwo = rootNode->childNodes[1];
@@ -83,7 +84,7 @@ void insertCF(ClusteringFeature addCF)
 			}
 			helpOne->next = helpTwo;
 			helpTwo->prev = helpOne;
-			
+
 		}
 	}
 	// Run out of memory
@@ -130,7 +131,7 @@ void prevNextChain(CFTreeNode* node)
 // TODO :: think about the delay-split (default on) & Outlier Handling Option (default off) p.15
 /**
  * left most path of the old tree is pushed recursively as the right most tree in new tree
- * if it reaches a leaf node --> the entries are reentred from the top 
+ * if it reaches a leaf node --> the entries are reentred from the top
  * Input: New tree node / old tree node (CFTreeNode)
  * Output: ---
  * Effect: a completely new tree is created
@@ -138,7 +139,7 @@ void prevNextChain(CFTreeNode* node)
 void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 {
 	for (int j = 0; j < oldTree->childCF.size(); ++j)
-	{		
+	{
 		if (oldTree->isLeafNode())
 		{
 			newTreeRoot->insert(oldTree->childCF[j]);
@@ -150,19 +151,19 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 			newTree->insertNode(oldTree->childCF[j], newCopiedNode);
 			pathCopy(newTree->childNodes.back(), oldTree->childNodes[j]);
 			// update CF - where points are deleted
-			for (int i = newTree->childCF.size() - 1; i >= 0; --i)
+			for (int i = (int)newTree->childCF.size() - 1; i >= 0; --i)
 			{
 				newTree->childCF.insert(newTree->childCF.begin(), newTree->childNodes[i]->getCF());
 				newTree->childCF.pop_back();
 			}
 			// clean tree - delete nodes with no childCFs
-			for (int j = 0; j < newTree->childCF.size(); ++j)
+			for (int k = 0; k < newTree->childCF.size(); ++k)
 			{
-				if (newTree->childCF[j].getNumberOfPoints() == 0)
+				if (newTree->childCF[k].getNumberOfPoints() == 0)
 				{
-					delete newTree->childNodes[j];
-					newTree->childNodes.erase(newTree->childNodes.begin() + j);
-					newTree->childCF.erase(newTree->childCF.begin() + j);
+					delete newTree->childNodes[k];
+					newTree->childNodes.erase(newTree->childNodes.begin() + k);
+					newTree->childCF.erase(newTree->childCF.begin() + k);
 				}
 			}
 		}
@@ -174,7 +175,7 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
  * Deletes the tree recursively
  * Input: root node of the tree to delete (CFTreeNode)
  * Output: ---
- * Effect: 
+ * Effect:
 */
 void deleteTree(CFTreeNode* delRoot)
 {
@@ -212,13 +213,13 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 			tmpNode->childCF[i].getLS(tmpLS);
 			tmpNode->childCF[i].getSS(tmpSS);
 			fileOStream << tmpNode->childCF[i].getNumberOfPoints();
-			for (int i = 0; i < DIMENSIONS; ++i)
+			for (int j = 0; j < DIMENSIONS; ++j)
 			{
-				fileOStream << ";" << tmpLS[i];
+				fileOStream << ";" << tmpLS[j];
 			}
-			for (int i = 0; i < DIMENSIONS; ++i)
+			for (int j = 0; j < DIMENSIONS; ++j)
 			{
-				fileOStream << ";" << tmpSS[i];
+				fileOStream << ";" << tmpSS[j];
 			}
 			fileOStream << "\n";
 		}
@@ -229,18 +230,119 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 		tmpNode->childCF[i].getLS(tmpLS);
 		tmpNode->childCF[i].getSS(tmpSS);
 		fileOStream << tmpNode->childCF[i].getNumberOfPoints();
-		for (int i = 0; i < DIMENSIONS; ++i)
+		for (int j = 0; j < DIMENSIONS; ++j)
 		{
-			fileOStream << ";" << tmpLS[i];
+			fileOStream << ";" << tmpLS[j];
 		}
-		for (int i = 0; i < DIMENSIONS; ++i)
+		for (int j = 0; j < DIMENSIONS; ++j)
 		{
-			fileOStream << ";" << tmpSS[i];
+			fileOStream << ";" << tmpSS[j];
 		}
 		fileOStream << "\n";
 	}
 
 	fileOStream.close();
+}
+
+void kMeans_BIRCH()
+{
+	// Get centroids
+	CFTreeNode* tmpNode;
+	tmpNode = rootNode;
+	double tmpLS[DIMENSIONS];
+	std::vector<Point_B*> centroids;
+	while (!(tmpNode->isLeafNode()))
+	{
+		tmpNode = tmpNode->childNodes[0];
+	}
+	while (tmpNode->next != nullptr)
+	{
+		for (int j = 0; j < tmpNode->childCF.size(); ++j) {
+			tmpNode->childCF[j].getLS(tmpLS);
+			for (int i = 0; i < DIMENSIONS; ++i)
+			{
+				tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
+			}
+			centroids.push_back(new Point_B(tmpLS));
+		}
+		tmpNode = tmpNode->next;
+	}
+	for (int j = 0; j < tmpNode->childCF.size(); ++j) {
+		tmpNode->childCF[j].getLS(tmpLS);
+		for (int i = 0; i < DIMENSIONS; ++i)
+		{
+			tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
+		}
+		centroids.push_back(new Point_B(tmpLS));
+	}
+
+	// Create cluster
+	for (int k = 0; k < centroids.size(); ++k)
+	{
+		clusters.push_back(new Cluster_B());
+		centroids[k]->getCoordinates(tmpLS);
+		clusters[k]->centroid.setCoordinates(tmpLS);
+	}
+	assignPoints_B();
+	for (int i = 0; i < 4; ++i) // 4 iterations
+	{
+		for (int k = 0; k < clusters.size(); ++k)
+		{
+			clusters[k]->calcCentroid();
+			clusters[k]->clusterList.clear();
+		}
+		assignPoints_B();
+	}
+
+	// write result
+	std::ofstream fOutput;
+	fOutput.open(("finalOutput.csv"));
+	fOutput << "x;y;c\n";
+	double tmpPoint[DIMENSIONS];
+	for (int i = 0; i < clusters.size(); ++i)
+	{
+		for (int j = 0; j < clusters[i]->clusterList.size(); ++j)
+		{
+			clusters[i]->clusterList[j].getCoordinates(tmpPoint);
+			for (int k = 0; k < DIMENSIONS; ++k)
+			{
+				fOutput << tmpPoint[k] << ";";
+			}
+			fOutput << (i + 1) << "\n";
+		}
+	}
+	for (int i = 0; i < clusters.size(); ++i)
+	{
+		clusters[i]->centroid.getCoordinates(tmpPoint);
+		for (int k = 0; k < DIMENSIONS; ++k)
+		{
+			fOutput << tmpPoint[k] << ";";
+		}
+		fOutput << clusters.size() + 3 << "\n";
+	}
+	fOutput.close();
+}
+
+void assignPoints_B()
+{
+	for (unsigned int i = 0; i < total.size(); ++i)
+	{
+		int shortestDistance = -1;
+		double tmpPointOne[DIMENSIONS], tmpCentroid[DIMENSIONS];
+		double distance = DBL_MAX, tmpDis;
+		for (unsigned int k = 0; k < clusters.size(); ++k)
+		{
+			clusters[k]->centroid.getCoordinates(tmpCentroid);
+			total[i].getCoordinates(tmpPointOne);
+			tmpDis = calcDistance(tmpCentroid, tmpPointOne);
+			if (tmpDis < distance)
+			{
+				distance = tmpDis;
+				shortestDistance = k;
+			}
+		}
+		clusters[shortestDistance]->clusterList.push_back(total[i]);
+	}
 }
 
 void rebuild()
@@ -286,14 +388,14 @@ void rebuild()
 
 int main()
 {
-    std::cout << "Start BIRCH!\n"; 
+	//std::cout << "Start BIRCH!\n";
 	rootNode = new CFTreeNode();
 	ClusteringFeature newCF;
 	current_tree_size++;
 	tree_height = 1;
 	std::ofstream csvOutputfile;
 	// read CSV
-	readBIRCHCSV("../../Inputfiles/Sample.csv");
+	readBIRCHCSV("../../../Inputfiles/Sample.csv");
 	// Phase 1
 	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
 	for (int k = 0; k < total.size(); ++k)
@@ -321,22 +423,10 @@ int main()
 	// nodes have a fixed size --> which means that it can not hold natural clusters
 	// applied on a coarse summary of data
 	// maybe start k-means on different Non-leaf nodes --> parallel
-	/*
-	int numberOfLeafNodes = 0;
-	CFTreeNode* tmp = rootNode;
-	while (!(tmp->isLeafNode()))
-		tmp = tmp->getFirstElement();
-	
-	while (tmp->next)
-	{
-		numberOfLeafNodes++;
-		tmp = tmp->next;
-	}
-	kMeans::main();
-	*/
+	kMeans_BIRCH();
+
 
 	// Phase 4  --- TODO (optional)
 	// refine the tree by redistributing the data points to the closest seed
 	// centroids of phase 3 are seeds
 }
-

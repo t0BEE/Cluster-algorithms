@@ -9,7 +9,7 @@ void Cluster_B::calcCentroid()
         coordinates[i] = 0.0;
         for (int j = 0; j < clusterList.size(); ++j)
         {
-            coordinates[i] += clusterList[i].getCoordinate(i);
+            coordinates[i] += clusterList[j].getCoordinate(i);
         }
         coordinates[i] = coordinates[i] / clusterList.size();
     }

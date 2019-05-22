@@ -73,14 +73,14 @@ void Cluster::printList()
 		if (j < (DIMENSIONS - 1)) std::cout << "|";
 	}
 	std::cout << ")" << std::endl;
-	std::for_each(pointList.begin(), pointList.end(),[](Point point)
+	std::for_each(pointList.begin(), pointList.end(), [](Point point)
 	{
 		std::cout << "(";
 		for (int j = 0; j < DIMENSIONS; ++j)
 		{
 			std::cout << point.getCoordinate(j);
 			if (j < (DIMENSIONS - 1)) std::cout << "|";
-		}	
+		}
 		std::cout << ")" << std::endl;
 	});
 }
@@ -101,7 +101,7 @@ void Cluster::calcCentroid()
 			coordinates[i] += pointList[i].getCoordinate(i);
 		}
 		coordinates[i] = coordinates[i] / pointList.size();
-	} 
-	
+	}
+
 	this->centroid.setPosition(coordinates);
 }

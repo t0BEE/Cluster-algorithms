@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "kParameter.h"
+#include <cmath>
 
 class Point
 {

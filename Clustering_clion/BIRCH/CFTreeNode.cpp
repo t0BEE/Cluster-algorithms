@@ -537,4 +537,3 @@ void CFTreeNode::insertNode(ClusteringFeature cfInsert, CFTreeNode* nodeInsert)
 	this->childCF.push_back(cfInsert);
 	this->childNodes.push_back(nodeInsert);
 }
-

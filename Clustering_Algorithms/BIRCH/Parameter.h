@@ -13,6 +13,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <cfloat>
 
 
 extern double threshold_Value;		// T
