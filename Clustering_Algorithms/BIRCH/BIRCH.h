@@ -4,7 +4,8 @@
 #include "Cluster.h"
 
 
-int main();
+int main(int argc, char *argv[]);
+int birch(std::string filename);
 void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename);
 void insertCF(ClusteringFeature addCF);
 void rebuild();

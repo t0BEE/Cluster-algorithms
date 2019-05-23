@@ -1,3 +1,4 @@
+#include <chrono>
 #include "BIRCH.h"
 #include "../k-Means/kMeans.h"
 
@@ -387,16 +388,15 @@ void rebuild()
 
 }
 
-int main()
+int birch(std::string filename)
 {
-    //std::cout << "Start BIRCH!\n";
 	rootNode = new CFTreeNode();
 	ClusteringFeature newCF;
 	current_tree_size++;
 	tree_height = 1;
 	std::ofstream csvOutputfile;
 	// read CSV
-	readBIRCHCSV("../../../Inputfiles/Sample.csv");
+	readBIRCHCSV(filename);
 	// Phase 1
 	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
 	for (int k = 0; k < total.size(); ++k)
@@ -413,22 +413,40 @@ int main()
 	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH.csv");
 
 
-	// Phase 2  --- TODO (optional)
-	/*
-	some clustering methods perform well in terms of speed and quality
-	close the gap between output of phase 1 and best performance of phase 3
-	*/
-
-	// Phase 3  --- TODO
-	// use an existing clustering algorithm --> k-means
-	// nodes have a fixed size --> which means that it can not hold natural clusters
-	// applied on a coarse summary of data
-	// maybe start k-means on different Non-leaf nodes --> parallel
 	kMeans_BIRCH();
+	return 0;
+}
 
+int main(int argc, char *argv[])
+{
+	if (argc < 8)
+	{
+		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, epsilon, minPts" << std::endl;
+		return 1;
+	}
+	std::string testCaseName = std::string(argv[1]);
+	char measurementDelim = argv[2][0];
+	int runs = std::stoi(argv[3], nullptr, 10);
 
-	// Phase 4  --- TODO (optional)
-	// refine the tree by redistributing the data points to the closest seed
-	// centroids of phase 3 are seeds
+	std::string dataFile(argv[4]);
+	int dimensions = std::stoi(argv[5], nullptr, 10);
+	char delim = argv[6][0];
+	float epsilon = std::stof(argv[7], nullptr);
+	int minPts = std::stoi(argv[8], nullptr, 10);
+
+	//birch();
+
+	std::chrono::high_resolution_clock::time_point startTime, endTime;
+	std::cerr << testCaseName;
+	for (int i = 0; i < runs; ++i) {
+		startTime = std::chrono::high_resolution_clock::now();
+		birch("../../../Inputfiles/Sample.csv");
+		startTime = std::chrono::high_resolution_clock::now();
+
+		long long int timeMS = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+		std::cerr << measurementDelim << timeMS;
+	}
+	std::cerr << std::endl;
+	return 0;
 }
 
