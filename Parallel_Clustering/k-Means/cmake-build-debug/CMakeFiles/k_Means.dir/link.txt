@@ -1,1 +1,0 @@
-/usr/bin/c++.exe  -g  -static-libgcc -static-libstdc++ CMakeFiles/k_Means.dir/kMeans.cpp.o CMakeFiles/k_Means.dir/kPoint.cpp.o CMakeFiles/k_Means.dir/kCluster.cpp.o  -o k_Means.exe -Wl,--out-implib,libk_Means.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

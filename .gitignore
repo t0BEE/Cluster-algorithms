@@ -3,9 +3,7 @@
 *ipynb*
 Clustering_Windows/*
 .vs/*
-Clustering_Algorithms/BIRCH/.idea/*
-Clustering_Algorithms/BIRCH/cmake-build-debug/*
-Clustering_Algorithms/BIRCH/*.txt
-Clustering_Algorithms/k-Means/.idea/*
-Clustering_Algorithms/k-Means/cmake-build-debug/*
-Clustering_Algorithms/k-Means/*.txt
+**/BIRCH/*.txt
+**/.idea/*
+**/k-Means/*.txt
+**/cmake-build-debug/*
