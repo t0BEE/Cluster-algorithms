@@ -28,8 +28,11 @@ int Cluster::getClusternumber()
 // Effect: pointList in the cluster is increased in size
 void Cluster::addPoint(Point insert)
 {
-	insert.setCluster(this->clusterNumber);
-	pointList.push_back(insert);
+    #pragma omp critical (changeCluster)
+    {
+        insert.setCluster(this->clusterNumber);
+        pointList.push_back(insert);
+    }
 }
 
 // Remove a point from the cluster
@@ -39,11 +42,12 @@ void Cluster::addPoint(Point insert)
 // Input: point to remove
 // Output: --
 // Effect: pointList in the cluster is decreased in size
-void Cluster::removePoint(Point remove)
+void Cluster::removePoint(const Point& remove)
 {
+    #pragma omp critical (changeCluster)
 	for (unsigned int i = 0; i < pointList.size(); ++i)
 	{
-		if (abs(calcPointDistance(remove, pointList[i])) < 0.005)
+		if (std::abs(calcPointDistance(remove, pointList[i])) < 0.005)
 		{
 			pointList.erase(pointList.begin() + i);
 			break;

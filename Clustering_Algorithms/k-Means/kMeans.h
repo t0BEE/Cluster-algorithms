@@ -8,12 +8,15 @@
 #include <string>
 #include <sstream>
 #include <ctime>
+#include <chrono>
+
 
 namespace kMeans {
 	double calcDistance(Point, Point);
-	int main();		// k = number of clusters
+    int main(int argc, char *argv[]);
+    int k_Means(std::string filename);
 	void assignPoints();
 	void readCSV(std::string filename);
 	void calcCentroids();
-	void writeCSVFile(std::ofstream&, std::string);
+	void writeCSVFile(std::string);
 }

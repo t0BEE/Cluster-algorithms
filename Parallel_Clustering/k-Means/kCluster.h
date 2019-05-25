@@ -13,7 +13,7 @@ public:
 	Cluster(int, Point);
 	int getClusternumber();
 	void addPoint(Point);
-	void removePoint(Point);
+	void removePoint(const Point&);
 	void calcCentroid();
 	Point getCentroid();
 	void printList();
