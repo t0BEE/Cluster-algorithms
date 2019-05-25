@@ -3,12 +3,11 @@
 
 class Point_B
 {
-protected:
-	double coordinates[DIMENSIONS];
+	std::vector<double> coordinates;
 public:
 	Point_B();
 	Point_B(double* position);
 	void getCoordinates(double* coordinateBuffer);
 	double getCoordinate(int dimension);
-	void setCoordinates(double position[DIMENSIONS]);
+	void setCoordinates(double *position);
 };

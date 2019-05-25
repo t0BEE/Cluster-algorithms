@@ -7,8 +7,8 @@ class ClusteringFeature
 {
 private:
 	int numberOfPoints;
-	double linearSum[DIMENSIONS];
-	double squareSum[DIMENSIONS];
+	std::vector<double> linearSum;
+	std::vector<double> squareSum;
 	double calcRadius(ClusteringFeature cfToAdd);
 public:
 	ClusteringFeature();
