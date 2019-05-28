@@ -206,7 +206,8 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 	}
 	fileOStream << "\n";
 	CFTreeNode *tmpNode = rootNode;
-	double tmpLS[dimensions], tmpSS[dimensions];
+	double tmpLS[dimensions];
+    long double tmpSS[dimensions];
 	while (!(tmpNode->isLeafNode())) tmpNode = tmpNode->childNodes.front();
 	while (tmpNode->next)
 	{
@@ -248,11 +249,13 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 
 void kMeans_BIRCH(std::string filename)
 {
-    // Get centroids
+    // Get centroids & create Cluster
     CFTreeNode* tmpNode;
     tmpNode = rootNode;
     double tmpLS[dimensions] ;
     std::vector<Point_B*> centroids;
+
+    //TODO: leaf nodes als CLustercentroids?
     while(!(tmpNode->isLeafNode()))
     {
         tmpNode = tmpNode->childNodes[0];
@@ -401,7 +404,9 @@ int birch(std::string filename)
 	// read CSV
 	readBIRCHCSV(filename);
 	// Phase 1
-	double tmpLS[dimensions], tmpSS[dimensions];
+    std::cerr << "    --> Phase 1" << std::endl;
+	double tmpLS[dimensions];
+    long double tmpSS[dimensions];
 	for (int k = 0; k < total.size(); ++k)
 	{
 		for (int i = 0; i < dimensions; ++i)

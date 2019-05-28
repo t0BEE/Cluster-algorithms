@@ -481,7 +481,8 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 ClusteringFeature CFTreeNode::getCF()
 {
 	ClusteringFeature* newCF =  new ClusteringFeature();
-	double tmpLS[dimensions], tmpSS[dimensions];
+	double tmpLS[dimensions];
+    long double tmpSS[dimensions];
 	int numberOfPoints = 0;
 	
 	for (int i = 0; i < childCF.size(); i++)
