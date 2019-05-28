@@ -15,5 +15,5 @@ void prevNextChain(CFTreeNode* node);
 void calcTreeSize(CFTreeNode* node);
 
 // k-Means
-void kMeans_BIRCH();
+void kMeans_BIRCH(std::string filename);
 void assignPoints_B();

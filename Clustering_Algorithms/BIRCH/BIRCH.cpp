@@ -1,19 +1,19 @@
 #include <chrono>
 #include "BIRCH.h"
-#include "../k-Means/kMeans.h"
 
-
-using namespace kMeans;
 
 std::vector<Point_B> total;
 CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
-std::vector<Cluster_B*> clusters;
+std::vector<Point_B*> centroids;
 static int tree_height;
-int current_tree_size, dimensions, page_size, memory, cf_entry_size;
+int current_tree_size, dimensions, page_size, cf_entry_size, memory;
 int max_tree_size, b_Entries, l_Entries;
 double threshold_Value;
 char delim;
+
+std::chrono::high_resolution_clock::time_point startTime, endTime, phase_time;
+
 
 //prev and next when rebuilding
 CFTreeNode* tmpPrev;
@@ -42,7 +42,7 @@ void readBIRCHCSV(std::string filename)
 		catch (std::exception)
 		{
 		}
-		// erste Zeile schmei�t Exception! ("x","y")
+		// invalid lines throw exceotion --> first line ("x","y")
 	}
 }
 
@@ -57,7 +57,7 @@ void insertCF(ClusteringFeature addCF)
 		current_tree_size += 2; // the new node + a new root node
 
 		if (rootNode->isLeafNode())
-		{ // if root was a leafNode it has to be split, too
+		{ // if root was a leafNode it has to be split
 			CFTreeNode* tmpNode;
 			tmpNode = rootNode;
 			rootNode = new CFTreeNode();
@@ -246,7 +246,7 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 	fileOStream.close();
 }
 
-void kMeans_BIRCH()
+void kMeans_BIRCH(std::string filename)
 {
     // Get centroids
     CFTreeNode* tmpNode;
@@ -299,7 +299,7 @@ void kMeans_BIRCH()
 
     // write result
     std::ofstream fOutput;
-    fOutput.open(("finalOutput.csv"));
+    fOutput.open(("finalOutput_" + filename));
     fOutput << "x;y;c\n";
     double tmpPoint[dimensions];
     for (int i = 0; i < clusters.size(); ++i)
@@ -413,11 +413,11 @@ int birch(std::string filename)
 		insertCF(newCF);
 	}
 	// write leaf CFs in CSV
-	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH.csv");
-
-
-	kMeans_BIRCH();
-	clusters.clear();
+	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_" + filename);
+    phase_time = std::chrono::high_resolution_clock::now();
+    std::cerr << "    --> Phase 3" << std::endl;
+	kMeans_BIRCH(filename);
+	centroids.clear();
 	total.clear();
 	deleteTree(rootNode);
 	return 0;
@@ -425,67 +425,66 @@ int birch(std::string filename)
 
 int main(int argc, char *argv[])
 {
-    /*
-	if (argc < 8)
+	if (argc < 7)
 	{
-		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, page size in Byte, Memory in Byte" << std::endl;
+		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, page size in Byte" << std::endl;
 		return 1;
 	}
-    std::string dataFile(argv[4]);
+
 	std::string testCaseName = std::string(argv[1]);
 	char measurementDelim = argv[2][0];
 	int runs = std::stoi(argv[3], nullptr, 10);
+    std::string dataFile(argv[4]);
 
-	std::string dataFile(argv[4]);
 	dimensions = std::stoi(argv[5], nullptr, 10);
 	delim = argv[6][0];
 	page_size = std::stoi(argv[7], nullptr, 10);
-	memory = std::stoi(argv[8], nullptr, 10);
-    */
-    std::string testCaseName = "BIRCH_Parallel";
-    char measurementDelim = ';';
-    int runs = 10;
-    std::string dataFile = "../../../Inputfiles/Sample.csv";
 
-    dimensions = 2;
-    delim = ';';
-    page_size = 1024;
-    memory = 1048576;
-    cf_entry_size = sizeof(int) + sizeof(double) * 2 * dimensions;
-    //max_tree_size = memory / page_size;
-    //b_Entries = page_size / cf_entry_size;
-    //l_Entries = page_size / cf_entry_size;
+    std::ifstream file(dataFile, std::ifstream::in | std::ifstream::binary);
 
-    max_tree_size = 15;
-    b_Entries = 4;
-    l_Entries = 4;
+    file.seekg(0, std::ios::end);
+    memory = (int) (file.tellg() * 0.1);
+    file.close();
+
+    cf_entry_size = sizeof(int) + (sizeof(double) + sizeof(long double)) * dimensions;
+    max_tree_size = memory / page_size;
+    b_Entries = page_size / cf_entry_size;
+    l_Entries = page_size / cf_entry_size;
+
+    std::cerr << "TestCaseName: " << testCaseName << " --- measurementDelim: " << measurementDelim << " --- runs: " << runs << " --- dataFile: " << dataFile;
+    std::cerr << " ---dimensions: " << dimensions << " --- delim: " << delim << " --- page_size: " << page_size/1024 << "KB --- memory: " << memory/1024 <<"KB" << std::endl;
 
     // warm up
     for (int i = 0; i < 2; ++i)
     {
-        birch(dataFile);
+		std::cerr << "warmUP #" << i << std::endl;
+		birch(dataFile);
     }
-
+	std::cerr << "warmUP DONE" << std::endl;
 	std::ofstream fileOStream;
-	fileOStream.open(("BIRCH_Sequential.csv"));
-	std::chrono::high_resolution_clock::time_point startTime, endTime;
+	fileOStream.open(("BIRCH_Sequential_" + dataFile));
 	std::cerr << testCaseName;
 	fileOStream << testCaseName << std::endl;
 	long long int avgTime = 0;
+	long long int avgPhase = 0;
 
 	for (int i = 0; i < runs; ++i) {
+		std::cerr << "Testrun #" << i << std::endl;
 		startTime = std::chrono::high_resolution_clock::now();
 		birch(dataFile);
 		endTime = std::chrono::high_resolution_clock::now();
 
 		long long int timeMS = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-		std::cerr << measurementDelim << timeMS;
-		fileOStream << "Run:" << i << "  --  " << timeMS << " ms" << std::endl;
+		long long int phaseMS = std::chrono::duration_cast<std::chrono::microseconds>(phase_time - startTime).count();
+
+		std::cerr << timeMS << "ms" << std::endl;
+		fileOStream << "Run:" << i << "  --  " << timeMS << " ms  --- BIRCH phase 1: " << phaseMS << "ms"<< std::endl;
 		avgTime += timeMS;
+        avgPhase += phaseMS;
 	}
-	std::cerr << std::endl;
-	fileOStream << "----------------------------------" << std::endl << "Average Time: " << (avgTime/runs) << " ms" << std::endl;
+	fileOStream << "----------------------------------" << std::endl << "Average Time: " << (avgTime/runs) << " ms  --- Phase 1 Average: " << (avgPhase/runs) << "ms" << std::endl;
 	fileOStream.close();
+
 	return 0;
 }
 
