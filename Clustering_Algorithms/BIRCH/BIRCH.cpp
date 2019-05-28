@@ -264,9 +264,9 @@ void kMeans_BIRCH(std::string filename)
     {
         for (int j = 0; j < tmpNode->childCF.size(); ++j) {
             tmpNode->childCF[j].getLS(tmpLS);
-            for (int i = 0; i < dimensions; ++i)
+            for (int d = 0; d < dimensions; ++d)
             {
-                tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
+                tmpLS[d] = tmpLS[d] / tmpNode->childCF[j].getNumberOfPoints();
             }
             centroids.push_back(new Point_B(tmpLS));
         }
