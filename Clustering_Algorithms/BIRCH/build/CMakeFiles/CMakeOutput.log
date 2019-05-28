@@ -1,0 +1,716 @@
+The system is: Linux - 4.19.45 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/3.13.4/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/3.13.4/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_f1862/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_f1862.dir/build.make CMakeFiles/cmTC_f1862.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f1862.dir/testCCompiler.c.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc    -o CMakeFiles/cmTC_f1862.dir/testCCompiler.c.o   -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_f1862
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f1862.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc      CMakeFiles/cmTC_f1862.dir/testCCompiler.c.o  -o cmTC_f1862 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_532fe/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_532fe.dir/build.make CMakeFiles/cmTC_532fe.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc    -o CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o   -c /nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/share/cmake-3.13/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_532fe
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_532fe.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc     -v CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o  -o cmTC_532fe 
+Using built-in specs.
+COLLECT_GCC=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/bin/gcc
+COLLECT_LTO_WRAPPER=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper
+Target: x86_64-unknown-linux-gnu
+Configured with: 
+Thread model: posix
+gcc version 8.3.0 (GCC) 
+COMPILER_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/
+LIBRARY_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_532fe' '-B' '/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-B' '/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/' '-idirafter' '/nix/store/sr4253np2gz2bpha4gn8gqlmiw604155-glibc-2.27-dev/include' '-idirafter' '/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/include-fixed' '-B' '/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/' '-isystem' '/nix/store/rk2695a0jml1d5x9vp6nfmfiqfpsgs5g-valgrind-3.14.0-dev/include' '-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib' '-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib' '-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-mtune=generic' '-march=x86-64'
+ /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/collect2 -plugin /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/liblto_plugin.so -plugin-opt=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper -plugin-opt=-fresolution=/run/user/1000/ccj1T8P0.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib64/ld-linux-x86-64.so.2 -o cmTC_532fe /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crt1.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crti.o /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtbegin.o -L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../.. -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/ld-linux-x86-64.so.2 CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtend.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_532fe' '-B' '/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-B' '/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/' '-idirafter' '/nix/store/sr4253np2gz2bpha4gn8gqlmiw604155-glibc-2.27-dev/include' '-idirafter' '/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/include-fixed' '-B' '/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/' '-isystem' '/nix/store/rk2695a0jml1d5x9vp6nfmfiqfpsgs5g-valgrind-3.14.0-dev/include' '-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib' '-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib' '-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-mtune=generic' '-march=x86-64'
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_532fe/fast"]
+  ignore line: [make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp']
+  ignore line: [/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_532fe.dir/build.make CMakeFiles/cmTC_532fe.dir/build]
+  ignore line: [make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc    -o CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o   -c /nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_532fe]
+  ignore line: [/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_532fe.dir/link.txt --verbose=1]
+  ignore line: [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc     -v CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o  -o cmTC_532fe ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/bin/gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Configured with: ]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 8.3.0 (GCC) ]
+  ignore line: [COMPILER_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_532fe' '-B' '/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-B' '/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/' '-idirafter' '/nix/store/sr4253np2gz2bpha4gn8gqlmiw604155-glibc-2.27-dev/include' '-idirafter' '/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/include-fixed' '-B' '/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/' '-isystem' '/nix/store/rk2695a0jml1d5x9vp6nfmfiqfpsgs5g-valgrind-3.14.0-dev/include' '-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib' '-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib' '-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-mtune=generic' '-march=x86-64']
+  link line: [ /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/collect2 -plugin /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/liblto_plugin.so -plugin-opt=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper -plugin-opt=-fresolution=/run/user/1000/ccj1T8P0.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib64/ld-linux-x86-64.so.2 -o cmTC_532fe /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crt1.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crti.o /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtbegin.o -L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../.. -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/ld-linux-x86-64.so.2 CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtend.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crtn.o]
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/run/user/1000/ccj1T8P0.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_532fe] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crt1.o] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crti.o] ==> ignore
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtbegin.o] ==> ignore
+    arg [-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib] ==> dir [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib]
+    arg [-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+    arg [-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+    arg [-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+    arg [-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+    arg [-L/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin] ==> dir [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin]
+    arg [-L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0] ==> dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0]
+    arg [-L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64] ==> dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64]
+    arg [-L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../..] ==> dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../..]
+    arg [-dynamic-linker] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/ld-linux-x86-64.so.2] ==> ignore
+    arg [CMakeFiles/cmTC_532fe.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtend.o] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crtn.o] ==> ignore
+  collapse library dir [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib] ==> [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib]
+  collapse library dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+  collapse library dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+  collapse library dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+  collapse library dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+  collapse library dir [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin] ==> [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin]
+  collapse library dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0] ==> [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0]
+  collapse library dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64] ==> [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib64]
+  collapse library dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../..] ==> [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib;/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib;/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib;/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin;/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0;/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib64;/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib]
+  implicit fwks: []
+
+
+
+
+Detecting C [-std=c11] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_77d95/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_77d95.dir/build.make CMakeFiles/cmTC_77d95.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_77d95.dir/feature_tests.c.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc   -std=c11 -o CMakeFiles/cmTC_77d95.dir/feature_tests.c.o   -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_77d95
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_77d95.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc      CMakeFiles/cmTC_77d95.dir/feature_tests.c.o  -o cmTC_77d95 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c99] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_18c76/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_18c76.dir/build.make CMakeFiles/cmTC_18c76.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_18c76.dir/feature_tests.c.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc   -std=c99 -o CMakeFiles/cmTC_18c76.dir/feature_tests.c.o   -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_18c76
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_18c76.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc      CMakeFiles/cmTC_18c76.dir/feature_tests.c.o  -o cmTC_18c76 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c90] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_18f46/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_18f46.dir/build.make CMakeFiles/cmTC_18f46.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_18f46.dir/feature_tests.c.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc   -std=c90 -o CMakeFiles/cmTC_18f46.dir/feature_tests.c.o   -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_18f46
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_18f46.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/cc      CMakeFiles/cmTC_18f46.dir/feature_tests.c.o  -o cmTC_18f46 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:0c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:0c_variadic_macros
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_770c5/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_770c5.dir/build.make CMakeFiles/cmTC_770c5.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_770c5.dir/testCXXCompiler.cxx.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++     -o CMakeFiles/cmTC_770c5.dir/testCXXCompiler.cxx.o -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_770c5
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_770c5.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++       CMakeFiles/cmTC_770c5.dir/testCXXCompiler.cxx.o  -o cmTC_770c5 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_428be/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_428be.dir/build.make CMakeFiles/cmTC_428be.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++     -o CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o -c /nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_428be
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_428be.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++      -v CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_428be 
+Using built-in specs.
+COLLECT_GCC=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/bin/g++
+COLLECT_LTO_WRAPPER=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper
+Target: x86_64-unknown-linux-gnu
+Configured with: 
+Thread model: posix
+gcc version 8.3.0 (GCC) 
+COMPILER_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/
+LIBRARY_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_428be' '-B' '/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-B' '/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/' '-idirafter' '/nix/store/sr4253np2gz2bpha4gn8gqlmiw604155-glibc-2.27-dev/include' '-idirafter' '/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/include-fixed' '-B' '/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/' '-isystem' '/nix/store/rk2695a0jml1d5x9vp6nfmfiqfpsgs5g-valgrind-3.14.0-dev/include' '-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib' '-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib' '-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/collect2 -plugin /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/liblto_plugin.so -plugin-opt=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper -plugin-opt=-fresolution=/run/user/1000/cceuyOm5.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib64/ld-linux-x86-64.so.2 -o cmTC_428be /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crt1.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crti.o /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtbegin.o -L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../.. -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/ld-linux-x86-64.so.2 CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtend.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_428be' '-B' '/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-B' '/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/' '-idirafter' '/nix/store/sr4253np2gz2bpha4gn8gqlmiw604155-glibc-2.27-dev/include' '-idirafter' '/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/include-fixed' '-B' '/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/' '-isystem' '/nix/store/rk2695a0jml1d5x9vp6nfmfiqfpsgs5g-valgrind-3.14.0-dev/include' '-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib' '-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib' '-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_428be/fast"]
+  ignore line: [make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp']
+  ignore line: [/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_428be.dir/build.make CMakeFiles/cmTC_428be.dir/build]
+  ignore line: [make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++     -o CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o -c /nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_428be]
+  ignore line: [/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_428be.dir/link.txt --verbose=1]
+  ignore line: [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++      -v CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_428be ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/bin/g++]
+  ignore line: [COLLECT_LTO_WRAPPER=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Configured with: ]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 8.3.0 (GCC) ]
+  ignore line: [COMPILER_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib/:/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/:/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64/:/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_428be' '-B' '/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-B' '/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/' '-idirafter' '/nix/store/sr4253np2gz2bpha4gn8gqlmiw604155-glibc-2.27-dev/include' '-idirafter' '/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/include-fixed' '-B' '/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/' '-isystem' '/nix/store/rk2695a0jml1d5x9vp6nfmfiqfpsgs5g-valgrind-3.14.0-dev/include' '-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib' '-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib' '-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/collect2 -plugin /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/liblto_plugin.so -plugin-opt=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper -plugin-opt=-fresolution=/run/user/1000/cceuyOm5.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib64/ld-linux-x86-64.so.2 -o cmTC_428be /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crt1.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crti.o /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtbegin.o -L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib -L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib -L/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64 -L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../.. -dynamic-linker /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/ld-linux-x86-64.so.2 CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtend.o /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crtn.o]
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/libexec/gcc/x86_64-unknown-linux-gnu/8.3.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/run/user/1000/cceuyOm5.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_428be] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crt1.o] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crti.o] ==> ignore
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtbegin.o] ==> ignore
+    arg [-L/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib] ==> dir [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib]
+    arg [-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+    arg [-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+    arg [-L/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+    arg [-L/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+    arg [-L/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin] ==> dir [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin]
+    arg [-L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0] ==> dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0]
+    arg [-L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64] ==> dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64]
+    arg [-L/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../..] ==> dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../..]
+    arg [-dynamic-linker] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/ld-linux-x86-64.so.2] ==> ignore
+    arg [CMakeFiles/cmTC_428be.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/crtend.o] ==> ignore
+    arg [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib/crtn.o] ==> ignore
+  collapse library dir [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib] ==> [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib]
+  collapse library dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+  collapse library dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+  collapse library dir [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib] ==> [/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib]
+  collapse library dir [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib] ==> [/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib]
+  collapse library dir [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin] ==> [/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin]
+  collapse library dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0] ==> [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0]
+  collapse library dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../../../lib64] ==> [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib64]
+  collapse library dir [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0/../../..] ==> [/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib]
+  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+  implicit dirs: [/nix/store/2jpl1wq2khp1p2iaw99bi4lljwv2wdyh-glibc-2.27-static/lib;/nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27/lib;/nix/store/l2ji5ciwrrmm7qppm7zjn1jyqv96band-gcc-8.3.0-lib/lib;/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin;/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib/gcc/x86_64-unknown-linux-gnu/8.3.0;/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib64;/nix/store/0kx6aihjd2pddbj4l5g87wws3sqgxrj9-gcc-8.3.0/lib]
+  implicit fwks: []
+
+
+
+
+Detecting CXX [-std=c++2a] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_471ca/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_471ca.dir/build.make CMakeFiles/cmTC_471ca.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_471ca.dir/feature_tests.cxx.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++    -std=c++2a -o CMakeFiles/cmTC_471ca.dir/feature_tests.cxx.o -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_471ca
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_471ca.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++       CMakeFiles/cmTC_471ca.dir/feature_tests.cxx.o  -o cmTC_471ca 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:1cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++17] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_6dc91/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_6dc91.dir/build.make CMakeFiles/cmTC_6dc91.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_6dc91.dir/feature_tests.cxx.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++    -std=c++17 -o CMakeFiles/cmTC_6dc91.dir/feature_tests.cxx.o -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_6dc91
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6dc91.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++       CMakeFiles/cmTC_6dc91.dir/feature_tests.cxx.o  -o cmTC_6dc91 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:1cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++14] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_a7ef4/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_a7ef4.dir/build.make CMakeFiles/cmTC_a7ef4.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a7ef4.dir/feature_tests.cxx.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++    -std=c++14 -o CMakeFiles/cmTC_a7ef4.dir/feature_tests.cxx.o -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_a7ef4
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a7ef4.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++       CMakeFiles/cmTC_a7ef4.dir/feature_tests.cxx.o  -o cmTC_a7ef4 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:1cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++11] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_eceea/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_eceea.dir/build.make CMakeFiles/cmTC_eceea.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_eceea.dir/feature_tests.cxx.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++    -std=c++11 -o CMakeFiles/cmTC_eceea.dir/feature_tests.cxx.o -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_eceea
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eceea.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++       CMakeFiles/cmTC_eceea.dir/feature_tests.cxx.o  -o cmTC_eceea 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++98] compiler features compiled with the following output:
+Change Dir: /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make" "cmTC_d935a/fast"
+make[1]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+/nix/store/8n7v99ii7cg694pz0cfch422zvkdqfv4-gnumake-4.2.1/bin/make -f CMakeFiles/cmTC_d935a.dir/build.make CMakeFiles/cmTC_d935a.dir/build
+make[2]: Entering directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_d935a.dir/feature_tests.cxx.o
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++    -std=c++98 -o CMakeFiles/cmTC_d935a.dir/feature_tests.cxx.o -c /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_d935a
+/nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d935a.dir/link.txt --verbose=1
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++       CMakeFiles/cmTC_d935a.dir/feature_tests.cxx.o  -o cmTC_d935a 
+make[2]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:0cxx_alias_templates
+    Feature record: CXX_FEATURE:0cxx_alignas
+    Feature record: CXX_FEATURE:0cxx_alignof
+    Feature record: CXX_FEATURE:0cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:0cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:0cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:0cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:0cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:0cxx_default_function_template_args
+    Feature record: CXX_FEATURE:0cxx_defaulted_functions
+    Feature record: CXX_FEATURE:0cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:0cxx_delegating_constructors
+    Feature record: CXX_FEATURE:0cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:0cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:0cxx_explicit_conversions
+    Feature record: CXX_FEATURE:0cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:0cxx_extern_templates
+    Feature record: CXX_FEATURE:0cxx_final
+    Feature record: CXX_FEATURE:0cxx_func_identifier
+    Feature record: CXX_FEATURE:0cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:0cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:0cxx_inline_namespaces
+    Feature record: CXX_FEATURE:0cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:0cxx_local_type_template_args
+    Feature record: CXX_FEATURE:0cxx_long_long_type
+    Feature record: CXX_FEATURE:0cxx_noexcept
+    Feature record: CXX_FEATURE:0cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:0cxx_nullptr
+    Feature record: CXX_FEATURE:0cxx_override
+    Feature record: CXX_FEATURE:0cxx_range_for
+    Feature record: CXX_FEATURE:0cxx_raw_string_literals
+    Feature record: CXX_FEATURE:0cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:0cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:0cxx_rvalue_references
+    Feature record: CXX_FEATURE:0cxx_sizeof_member
+    Feature record: CXX_FEATURE:0cxx_static_assert
+    Feature record: CXX_FEATURE:0cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:0cxx_thread_local
+    Feature record: CXX_FEATURE:0cxx_trailing_return_types
+    Feature record: CXX_FEATURE:0cxx_unicode_literals
+    Feature record: CXX_FEATURE:0cxx_uniform_initialization
+    Feature record: CXX_FEATURE:0cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:0cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:0cxx_variadic_macros
+    Feature record: CXX_FEATURE:0cxx_variadic_templates

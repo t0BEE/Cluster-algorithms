@@ -171,9 +171,9 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 	}
 	else {
 		// Get index of closest cluster ( meassured by centroid of cf to insert - other centroids )
+        addCF.calcCentroid(tmpInsert);
 		for (int i = 0; i < childCF.size(); ++i)
-		{	
-			addCF.calcCentroid(tmpInsert);
+		{
 			childCF[i].calcCentroid(tmp);
 			tmpDis = calcDistance(tmpInsert, tmp);
 			if (tmpDis < distance)

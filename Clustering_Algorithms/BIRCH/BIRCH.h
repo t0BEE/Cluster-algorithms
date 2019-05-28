@@ -1,8 +1,7 @@
 #pragma once
 
 #include "CFTreeNode.h"
-#include "Cluster.h"
-
+#include "Point.h"
 
 int main(int argc, char *argv[]);
 int birch(std::string filename);

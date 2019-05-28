@@ -86,15 +86,11 @@ bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)
 	}
 	else
 	{
-		// Maybe already set in calcRadius
 		// update values
-		double inputLS[dimensions], inputSS[dimensions];
-		absorbCF.getLS(inputLS);
-		absorbCF.getSS(inputSS);
 		for (int i = 0; i < dimensions; ++i)
 		{
-			this->linearSum[i] = this->linearSum[i] + inputLS[i];
-			this->squareSum[i] = this->squareSum[i] + inputSS[i];
+			this->linearSum[i] = this->linearSum[i] + absorbCF.getDimLS(i);
+			this->squareSum[i] = this->squareSum[i] + absorbCF.getDimSS(i);
 		}
 		this->numberOfPoints = this->numberOfPoints + absorbCF.getNumberOfPoints();
 		return true;
@@ -120,4 +116,14 @@ void ClusteringFeature::addToSS(long double* buffer)
 void ClusteringFeature::setNumberOfPoints(int number)
 {
 	this->numberOfPoints = number;
+}
+
+double ClusteringFeature::getDimLS(int dimension)
+{
+	return this->linearSum[dimension];
+}
+
+long double ClusteringFeature::getDimSS(int dimension)
+{
+return this->squareSum[dimension];
 }

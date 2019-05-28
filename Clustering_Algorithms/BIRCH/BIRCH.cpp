@@ -260,7 +260,8 @@ void kMeans_BIRCH(std::string filename)
     {
         tmpNode = tmpNode->childNodes[0];
     }
-    while (tmpNode->next != nullptr)
+
+    while (tmpNode != nullptr)
     {
         for (int j = 0; j < tmpNode->childCF.size(); ++j) {
             tmpNode->childCF[j].getLS(tmpLS);
@@ -270,33 +271,36 @@ void kMeans_BIRCH(std::string filename)
             }
             centroids.push_back(new Point_B(tmpLS));
         }
-        tmpNode = tmpNode->next;
+		tmpNode = tmpNode->next;
     }
-    for (int j = 0; j < tmpNode->childCF.size(); ++j) {
-        tmpNode->childCF[j].getLS(tmpLS);
-        for (int i = 0; i < dimensions; ++i)
-        {
-            tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
-        }
-        centroids.push_back(new Point_B(tmpLS));
-    }
+    double tmpCent[centroids.size()][dimensions];
+            int centSize[centroids.size()];
+            // k-means iterations
+            assignPoints_B();
+            for (int i = 0; i < 4; ++i) // 4 iterations
+            {
+                // calculate centroids
+                for (int j = 0; j < centroids.size(); ++j)
+                {
+                    centSize[j] = 0;
+                    for (int d = 0; d < dimensions; ++d) {
+                        tmpCent[j][d] = 0;
+                    }
+                }
+                for (int j = 0; j < total.size(); ++j)
+                {
+                    for (int d = 0; d < dimensions; ++d)
+                    {
+                        tmpCent[total[j].cluster][d] += total[j].getCoordinate(d);
+                    }
+                    centSize[total[j].cluster]++;
+                }
+                for (int m = 0; m < centroids.size(); ++m) {
+                    for (int d = 0; d < dimensions; ++d) {
+                        tmpCent[m][d] = tmpCent[m][d] / centSize[m];
+                    }
+		}
 
-    // Create cluster
-    for (int k = 0; k < centroids.size(); ++k)
-    {
-        clusters.push_back(new Cluster_B());
-        centroids[k]->getCoordinates(tmpLS);
-        clusters[k]->centroid.setCoordinates(tmpLS);
-    }
-    // k-means iterations
-    assignPoints_B();
-    for (int i = 0; i < 6; ++i) // 6 iterations
-    {
-        for (int k = 0; k < clusters.size(); ++k)
-        {
-            clusters[k]->calcCentroid();
-            clusters[k]->clusterList.clear();
-        }
         assignPoints_B();
     }
 
@@ -305,26 +309,23 @@ void kMeans_BIRCH(std::string filename)
     fOutput.open(("finalOutput_" + filename));
     fOutput << "x;y;c\n";
     double tmpPoint[dimensions];
-    for (int i = 0; i < clusters.size(); ++i)
+    for (int i = 0; i < total.size(); ++i)
     {
-        for (int j = 0; j < clusters[i]->clusterList.size(); ++j)
-        {
-            clusters[i]->clusterList[j].getCoordinates(tmpPoint);
-            for (int k = 0; k < dimensions; ++k)
-            {
-                fOutput << tmpPoint[k] << ";";
-            }
-            fOutput << (i + 1) << "\n";
-        }
+         total[i].getCoordinates(tmpPoint);
+         for (int k = 0; k < dimensions; ++k)
+         {
+             fOutput << tmpPoint[k] << ";";
+         }
+         fOutput << (total[i].cluster + 1) << "\n";
     }
-    for (int i = 0; i < clusters.size(); ++i)
+    for (int i = 0; i < centroids.size(); ++i)
     {
-        clusters[i]->centroid.getCoordinates(tmpPoint);
+        centroids[i]->getCoordinates(tmpPoint);
         for (int k = 0; k < dimensions; ++k)
         {
             fOutput << tmpPoint[k] << ";";
         }
-        fOutput << clusters.size() + 3 << "\n";
+        fOutput << centroids.size() + 3 << "\n";
     }
     fOutput.close();
 }
@@ -336,9 +337,9 @@ void assignPoints_B()
         int shortestDistance = -1;
         double tmpPointOne[dimensions], tmpCentroid[dimensions];
         double distance = DBL_MAX, tmpDis;
-        for (unsigned int k = 0; k < clusters.size(); ++k)
+        for (unsigned int k = 0; k < centroids.size(); ++k)
         {
-            clusters[k]->centroid.getCoordinates(tmpCentroid);
+            centroids[k]->getCoordinates(tmpCentroid);
             total[i].getCoordinates(tmpPointOne);
             tmpDis = calcDistance(tmpCentroid, tmpPointOne);
             if (tmpDis < distance)
@@ -347,7 +348,7 @@ void assignPoints_B()
                 shortestDistance = k;
             }
         }
-        clusters[shortestDistance]->clusterList.push_back(total[i]);
+        total[i].cluster = shortestDistance;
     }
 }
 
@@ -374,7 +375,7 @@ void rebuild()
 	{
 		distances.back() = distances.back() + distances[i];
 	}
-	threshold_Value = distances.back() / distances.size();
+	threshold_Value = 5 * distances.back() / distances.size(); //TODO: threshold Value anschauen
 
 	distances.clear();
 
