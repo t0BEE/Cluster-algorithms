@@ -2,19 +2,19 @@
 
 ClusteringFeature::ClusteringFeature() 
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
-		this->linearSum[i] = 0;
-		this->squareSum[i] = 0;
+		this->linearSum.push_back(0.0);
+		this->squareSum.push_back(0.0);
 	}
 }
 
-ClusteringFeature::ClusteringFeature(int nrPoints, double* LS, double* SS)
+ClusteringFeature::ClusteringFeature(int nrPoints, double* LS, long double* SS)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
-		this->linearSum[i] = LS[i];
-		this->squareSum[i] = SS[i];
+		this->linearSum.push_back(LS[i]);
+		this->squareSum.push_back(SS[i]);
 	}
 	this->numberOfPoints = nrPoints;
 }
@@ -25,23 +25,25 @@ ClusteringFeature::ClusteringFeature(int nrPoints, double* LS, double* SS)
 // Effect: the buffer contains the linear sum
 void ClusteringFeature::getLS(double* buffer)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		buffer[i] = this->linearSum[i];
 	}
 }
 
+
 // Get the Square Sum of the Clustering Feature
 // Input: pointer to transfer the values
 // Output: --
 // Effect: the buffer contains the square sum
-void ClusteringFeature::getSS(double* buffer)
+void ClusteringFeature::getSS(long double* buffer)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		buffer[i] = this->squareSum[i];
 	}
 }
+
 
 int ClusteringFeature::getNumberOfPoints()
 {
@@ -50,7 +52,7 @@ int ClusteringFeature::getNumberOfPoints()
 
 void ClusteringFeature::calcCentroid(double* buffer)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		buffer[i] = this->linearSum[i] / numberOfPoints;
 	}
@@ -59,14 +61,14 @@ void ClusteringFeature::calcCentroid(double* buffer)
 double ClusteringFeature::calcRadius(ClusteringFeature cfToAdd)
 {
 	double radius = 0.0;
-	double tmpLS[DIMENSIONS];
-	double tmpSS[DIMENSIONS];
-	double inputLS[DIMENSIONS];
-	double inputSS[DIMENSIONS];
+	double tmpLS[dimensions];
+	long double tmpSS[dimensions];
+	double inputLS[dimensions];
+	long double inputSS[dimensions];
 	cfToAdd.getLS(inputLS);
 	cfToAdd.getSS(inputSS);
 	int totalNrPoints = this->getNumberOfPoints() + cfToAdd.getNumberOfPoints();
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		tmpLS[i] = this->linearSum[i] + inputLS[i];
 		tmpSS[i] = this->squareSum[i] + inputSS[i];
@@ -84,15 +86,11 @@ bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)
 	}
 	else
 	{
-		// Maybe already set in calcRadius
 		// update values
-		double inputLS[DIMENSIONS], inputSS[DIMENSIONS];
-		absorbCF.getLS(inputLS);
-		absorbCF.getSS(inputSS);
-		for (int i = 0; i < DIMENSIONS; ++i)
+		for (int i = 0; i < dimensions; ++i)
 		{
-			this->linearSum[i] = this->linearSum[i] + inputLS[i];
-			this->squareSum[i] = this->squareSum[i] + inputSS[i];
+			this->linearSum[i] = this->linearSum[i] + absorbCF.getDimLS(i);
+			this->squareSum[i] = this->squareSum[i] + absorbCF.getDimSS(i);
 		}
 		this->numberOfPoints = this->numberOfPoints + absorbCF.getNumberOfPoints();
 		return true;
@@ -101,15 +99,15 @@ bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)
 
 void ClusteringFeature::addToLS(double* buffer)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		this->linearSum[i] += buffer[i];
 	}
 }
 
-void ClusteringFeature::addToSS(double* buffer) 
+void ClusteringFeature::addToSS(long double* buffer)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		this->squareSum[i] += buffer[i];
 	}
@@ -118,4 +116,14 @@ void ClusteringFeature::addToSS(double* buffer)
 void ClusteringFeature::setNumberOfPoints(int number)
 {
 	this->numberOfPoints = number;
+}
+
+double ClusteringFeature::getDimLS(int dimension)
+{
+	return this->linearSum[dimension];
+}
+
+long double ClusteringFeature::getDimSS(int dimension)
+{
+return this->squareSum[dimension];
 }

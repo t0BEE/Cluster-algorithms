@@ -1,8 +1,7 @@
 #pragma once
 
 #include "CFTreeNode.h"
-#include "Cluster.h"
-
+#include "Point.h"
 
 int main(int argc, char *argv[]);
 int birch(std::string filename);
@@ -15,5 +14,5 @@ void prevNextChain(CFTreeNode* node);
 void calcTreeSize(CFTreeNode* node);
 
 // k-Means
-void kMeans_BIRCH();
+void kMeans_BIRCH(std::string filename);
 void assignPoints_B();

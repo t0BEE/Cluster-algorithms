@@ -16,9 +16,9 @@ CFTreeNode::CFTreeNode() {}
  */
 void CFTreeNode::getCentroid(double* buffer)
 {
-	double coordinates[DIMENSIONS], tmp[DIMENSIONS];
+	double coordinates[dimensions], tmp[dimensions];
 	int totalNrPoints=0;
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		coordinates[i] = 0;
 	}
@@ -28,7 +28,7 @@ void CFTreeNode::getCentroid(double* buffer)
 		addTwoPoints(coordinates, tmp);
 		totalNrPoints += childCF[i].getNumberOfPoints();
 	}
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		buffer[i] = coordinates[i] / totalNrPoints;
 	}
@@ -67,7 +67,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 	else {
 
 		double distance = DBL_MAX, tmpDis;
-		double tmpInsertCentroid[DIMENSIONS], tmpCentroid[DIMENSIONS];
+		double tmpInsertCentroid[dimensions], tmpCentroid[dimensions];
 		int closestIndex = -5;
 		addCF.calcCentroid(tmpInsertCentroid);
 		for (int i = 0; i < this->childNodes.size(); ++i)
@@ -97,7 +97,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 		{ // a split occured
 			current_tree_size++;
 			// try to insert new node here
-			if (this->childNodes.size() < B_ENTRIES)
+			if (this->childNodes.size() < b_Entries)
 			{ // some space is left
 				this->childNodes.insert(this->childNodes.begin() + closestIndex + 1, newNode);
 				this->childCF.insert(this->childCF.begin() + closestIndex + 1, newNode->getCF());
@@ -163,7 +163,7 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 {
 	double distance = DBL_MAX, tmpDis;
 	int closestIndex = 0;
-	double tmpInsert[DIMENSIONS], tmp[DIMENSIONS];
+	double tmpInsert[dimensions], tmp[dimensions];
 	// If there is no cluster in leaf node, create a new one
 	if (childCF.size() == 0)
 	{
@@ -171,9 +171,9 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 	}
 	else {
 		// Get index of closest cluster ( meassured by centroid of cf to insert - other centroids )
+        addCF.calcCentroid(tmpInsert);
 		for (int i = 0; i < childCF.size(); ++i)
-		{	
-			addCF.calcCentroid(tmpInsert);
+		{
 			childCF[i].calcCentroid(tmp);
 			tmpDis = calcDistance(tmpInsert, tmp);
 			if (tmpDis < distance)
@@ -187,7 +187,7 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 		else
 		{ // addCF could not be absorbed
 			// check if there is space left in the leaf node to create a new entry
-			if (this->childCF.size() < L_ENTRIES)
+			if (this->childCF.size() < l_Entries)
 			{
 				this->childCF.push_back(addCF);
 			}
@@ -261,7 +261,7 @@ CFTreeNode* CFTreeNode::splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	// choose farthest pair of entries
 	int far1 = -5, far2 = -5;
 	double farDis = 0.0, tmpDis;
-	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
+	double tmpCentroid1[dimensions], tmpCentroid2[dimensions], tmpCentroidInsert[dimensions];
 	for (int i = 0; i < tmpCF.size(); ++i)
 	{
 		for (int j = 0; j < tmpCF.size(); ++j)
@@ -403,7 +403,7 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 	// choose farthest pair of entries
 	int far1 = -5, far2 = -5;
 	double farDis = 0.0, tmpDis;
-	double tmpCentroid1[DIMENSIONS], tmpCentroid2[DIMENSIONS], tmpCentroidInsert[DIMENSIONS];
+	double tmpCentroid1[dimensions], tmpCentroid2[dimensions], tmpCentroidInsert[dimensions];
 	for (int i = 0; i < oldNode->childCF.size(); ++i)
 	{
 		for (int j = 0; j < oldNode->childCF.size(); ++j)
@@ -481,7 +481,8 @@ void CFTreeNode::splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode)
 ClusteringFeature CFTreeNode::getCF()
 {
 	ClusteringFeature* newCF =  new ClusteringFeature();
-	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
+	double tmpLS[dimensions];
+    long double tmpSS[dimensions];
 	int numberOfPoints = 0;
 	
 	for (int i = 0; i < childCF.size(); i++)
@@ -512,7 +513,7 @@ double CFTreeNode::getclosestDistanceOfEntries()
 {
 	if (childCF.size() == 1) return 0.0;
 	// find nearest pair of entries
-	double distanceHelp = DBL_MAX, dblHelp, tmpCentr1[DIMENSIONS], tmpCentr2[DIMENSIONS];
+	double distanceHelp = DBL_MAX, dblHelp, tmpCentr1[dimensions], tmpCentr2[dimensions];
 	for (int i = 0; i < this->childCF.size(); ++i)
 	{
 		for (int j = 0; j < this->childCF.size(); ++j)

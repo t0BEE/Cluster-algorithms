@@ -50,7 +50,7 @@ void readBIRCHCSV(std::string filename)
 		{
 			total.push_back(Point_B(dData));
 		}
-		catch (std::exception)
+		catch (std::exception&)
 		{
 		}
 		// invalid lines throw exceotion --> first line ("x","y")
@@ -261,55 +261,44 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 void kMeans_BIRCH(std::string filename)
 {
     // Get centroids & create Cluster
-    CFTreeNode* tmpNode;
-    tmpNode = rootNode;
     double tmpLS[dimensions] ;
-    std::vector<Point_B*> centroids;
 
-    //TODO: leaf nodes als CLustercentroids?
-    while(!(tmpNode->isLeafNode()))
+    for (int l = 0; l < rootNode->childCF.size(); ++l)
     {
-        tmpNode = tmpNode->childNodes[0];
+        rootNode->childCF[l].getLS(tmpLS);
+        for (int d = 0; d < dimensions; ++d)
+        {
+            tmpLS[d] = tmpLS[d] / rootNode->childCF[l].getNumberOfPoints();
+        }
+        centroids.push_back(new Point_B(tmpLS));
     }
 
-    while (tmpNode != nullptr)
+    double tmpCent[centroids.size()][dimensions];
+    int centSize[centroids.size()];
+    // k-means iterations
+    assignPoints_B();
+    for (int i = 0; i < 4; ++i) // 4 iterations
     {
-        for (int j = 0; j < tmpNode->childCF.size(); ++j) {
-            tmpNode->childCF[j].getLS(tmpLS);
+    // calculate centroids
+        for (int j = 0; j < centroids.size(); ++j)
+        {
+            centSize[j] = 0;
+            for (int d = 0; d < dimensions; ++d) {
+                tmpCent[j][d] = 0;
+            }
+        }
+        for (int j = 0; j < total.size(); ++j)
+        {
             for (int d = 0; d < dimensions; ++d)
             {
-                tmpLS[d] = tmpLS[d] / tmpNode->childCF[j].getNumberOfPoints();
+                tmpCent[total[j].cluster][d] += total[j].getCoordinate(d);
             }
-            centroids.push_back(new Point_B(tmpLS));
+            centSize[total[j].cluster]++;
         }
-		tmpNode = tmpNode->next;
-    }
-    double tmpCent[centroids.size()][dimensions];
-            int centSize[centroids.size()];
-            // k-means iterations
-            assignPoints_B();
-            for (int i = 0; i < 4; ++i) // 4 iterations
-            {
-                // calculate centroids
-                for (int j = 0; j < centroids.size(); ++j)
-                {
-                    centSize[j] = 0;
-                    for (int d = 0; d < dimensions; ++d) {
-                        tmpCent[j][d] = 0;
-                    }
-                }
-                for (int j = 0; j < total.size(); ++j)
-                {
-                    for (int d = 0; d < dimensions; ++d)
-                    {
-                        tmpCent[total[j].cluster][d] += total[j].getCoordinate(d);
-                    }
-                    centSize[total[j].cluster]++;
-                }
-                for (int m = 0; m < centroids.size(); ++m) {
-                    for (int d = 0; d < dimensions; ++d) {
-                        tmpCent[m][d] = tmpCent[m][d] / centSize[m];
-                    }
+        for (int m = 0; m < centroids.size(); ++m) {
+            for (int d = 0; d < dimensions; ++d) {
+                tmpCent[m][d] = tmpCent[m][d] / centSize[m];
+            }
 		}
 
         assignPoints_B();

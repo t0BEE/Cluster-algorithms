@@ -12,9 +12,9 @@ Point_B::Point_B() {}
 // Effect: New Cluster instance created with position and neutral clusterNumber
 Point_B::Point_B(double* position)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
-		this->coordinates[i] = position[i];
+		this->coordinates.push_back(position[i]);
 	}
 }
 
@@ -25,7 +25,7 @@ Point_B::Point_B(double* position)
 // Effect: the input array contains the coordinates
 void Point_B::getCoordinates(double* coordinateBuffer)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		coordinateBuffer[i] = this->coordinates[i];
 	}
@@ -40,10 +40,20 @@ double Point_B::getCoordinate(int dimension)
 	return this->coordinates[dimension];
 }
 
-void Point_B::setCoordinates(double position[DIMENSIONS])
+void Point_B::setCoordinates(double *position)
 {
-	for (int i = 0; i < DIMENSIONS; ++i)
+	if (this->coordinates.size() == 0)
 	{
-		this->coordinates[i] = position[i];
+		for (int i = 0; i < dimensions; ++i)
+		{
+			this->coordinates.push_back(position[i]);
+		}
+	} else
+	{
+		for (int i = 0; i < dimensions; ++i)
+		{
+			this->coordinates[i] = position[i];
+		}
 	}
+
 }

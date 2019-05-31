@@ -1,17 +1,30 @@
 #include <chrono>
 #include "BIRCH.h"
-#include "../k-Means/kMeans.h"
 
-
-using namespace kMeans;
 
 std::vector<Point_B> total;
 CFTreeNode* rootNode;
 CFTreeNode* newTreeRoot;
-std::vector<Cluster_B*> clusters;
+std::vector<Point_B*> centroids;
 static int tree_height;
-int current_tree_size = 0;
-double threshold_Value = 0.0;
+int current_tree_size, dimensions, page_size, cf_entry_size, memory;
+int max_tree_size, b_Entries, l_Entries;
+double threshold_Value;
+char delim;
+
+std::chrono::high_resolution_clock::time_point startTime, endTime, read_time, write_time, phase_time;
+/*
+ * startTime
+ *      - read data
+ * read_time
+ *      - BIRCH - Phase 1
+ * phase_time
+ *      - k-means - Phase 3
+ * write_time
+ *      - write data
+ * endTime
+ * */
+
 
 //prev and next when rebuilding
 CFTreeNode* tmpPrev;
@@ -25,10 +38,10 @@ void readBIRCHCSV(std::string filename)
 	{
 		// put line in stringstream to seperate 
 		std::stringstream ststream(line);
-		std::string sData[DIMENSIONS];
-		double dData[DIMENSIONS];
+		std::string sData[dimensions];
+		double dData[dimensions];
 		// seperated with ; in CSV  -- get value after value
-		for (int i = 0; i < DIMENSIONS; ++i)
+		for (int i = 0; i < dimensions; ++i)
 		{
 			std::getline(ststream, sData[i], ';');
 			dData[i] = std::stod(sData[i]);
@@ -37,10 +50,10 @@ void readBIRCHCSV(std::string filename)
 		{
 			total.push_back(Point_B(dData));
 		}
-		catch (std::exception)
+		catch (std::exception&)
 		{
 		}
-		// erste Zeile schmei�t Exception! ("x","y")
+		// invalid lines throw exceotion --> first line ("x","y")
 	}
 }
 
@@ -55,7 +68,7 @@ void insertCF(ClusteringFeature addCF)
 		current_tree_size += 2; // the new node + a new root node
 
 		if (rootNode->isLeafNode())
-		{ // if root was a leafNode it has to be split, too
+		{ // if root was a leafNode it has to be split
 			CFTreeNode* tmpNode;
 			tmpNode = rootNode;
 			rootNode = new CFTreeNode();
@@ -89,7 +102,7 @@ void insertCF(ClusteringFeature addCF)
 		}
 	}
 	// Run out of memory
-	while (current_tree_size > MAXIMUM_TREE_SIZE)
+	while (current_tree_size > max_tree_size)
 	{
 		rebuild();
 		rootNode = newTreeRoot;
@@ -129,7 +142,6 @@ void prevNextChain(CFTreeNode* node)
 }
 
 
-// TODO :: think about the delay-split (default on) & Outlier Handling Option (default off) p.15
 /**
  * left most path of the old tree is pushed recursively as the right most tree in new tree
  * if it reaches a leaf node --> the entries are reentred from the top 
@@ -193,19 +205,20 @@ void deleteTree(CFTreeNode* delRoot)
 
 void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 {
-	fileOStream.open((filename));
+	fileOStream.open((filename), std::ofstream::trunc);
 	fileOStream << "NumberofPoints";
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		fileOStream << ";LS[" << i << "]";
 	}
-	for (int i = 0; i < DIMENSIONS; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
 		fileOStream << ";SS[" << i << "]";
 	}
 	fileOStream << "\n";
 	CFTreeNode *tmpNode = rootNode;
-	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
+	double tmpLS[dimensions];
+    long double tmpSS[dimensions];
 	while (!(tmpNode->isLeafNode())) tmpNode = tmpNode->childNodes.front();
 	while (tmpNode->next)
 	{
@@ -214,11 +227,11 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 			tmpNode->childCF[i].getLS(tmpLS);
 			tmpNode->childCF[i].getSS(tmpSS);
 			fileOStream << tmpNode->childCF[i].getNumberOfPoints();
-			for (int j = 0; j < DIMENSIONS; ++j)
+			for (int j = 0; j < dimensions; ++j)
 			{
 				fileOStream << ";" << tmpLS[j];
 			}
-			for (int j = 0; j < DIMENSIONS; ++j)
+			for (int j = 0; j < dimensions; ++j)
 			{
 				fileOStream << ";" << tmpSS[j];
 			}
@@ -231,11 +244,11 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 		tmpNode->childCF[i].getLS(tmpLS);
 		tmpNode->childCF[i].getSS(tmpSS);
 		fileOStream << tmpNode->childCF[i].getNumberOfPoints();
-		for (int j = 0; j < DIMENSIONS; ++j)
+		for (int j = 0; j < dimensions; ++j)
 		{
 			fileOStream << ";" << tmpLS[j];
 		}
-		for (int j = 0; j < DIMENSIONS; ++j)
+		for (int j = 0; j < dimensions; ++j)
 		{
 			fileOStream << ";" << tmpSS[j];
 		}
@@ -245,82 +258,75 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 	fileOStream.close();
 }
 
-void kMeans_BIRCH()
+void kMeans_BIRCH(std::string filename)
 {
-    // Get centroids
-    CFTreeNode* tmpNode;
-    tmpNode = rootNode;
-    double tmpLS[DIMENSIONS] ;
-    std::vector<Point_B*> centroids;
-    while(!(tmpNode->isLeafNode()))
+    // Get centroids & create Cluster
+    double tmpLS[dimensions] ;
+
+    for (int l = 0; l < rootNode->childCF.size(); ++l)
     {
-        tmpNode = tmpNode->childNodes[0];
-    }
-    while (tmpNode->next != nullptr)
-    {
-        for (int j = 0; j < tmpNode->childCF.size(); ++j) {
-            tmpNode->childCF[j].getLS(tmpLS);
-            for (int i = 0; i < DIMENSIONS; ++i)
-            {
-                tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
-            }
-            centroids.push_back(new Point_B(tmpLS));
-        }
-        tmpNode = tmpNode->next;
-    }
-    for (int j = 0; j < tmpNode->childCF.size(); ++j) {
-        tmpNode->childCF[j].getLS(tmpLS);
-        for (int i = 0; i < DIMENSIONS; ++i)
+        rootNode->childCF[l].getLS(tmpLS);
+        for (int d = 0; d < dimensions; ++d)
         {
-            tmpLS[i] = tmpLS[i] / tmpNode->childCF[j].getNumberOfPoints();
+            tmpLS[d] = tmpLS[d] / rootNode->childCF[l].getNumberOfPoints();
         }
         centroids.push_back(new Point_B(tmpLS));
     }
 
-    // Create cluster
-    for (int k = 0; k < centroids.size(); ++k)
-    {
-        clusters.push_back(new Cluster_B());
-        centroids[k]->getCoordinates(tmpLS);
-        clusters[k]->centroid.setCoordinates(tmpLS);
-    }
+    double tmpCent[centroids.size()][dimensions];
+    int centSize[centroids.size()];
     // k-means iterations
     assignPoints_B();
-    for (int i = 0; i < 6; ++i) // 6 iterations
+    for (int i = 0; i < 4; ++i) // 4 iterations
     {
-        for (int k = 0; k < clusters.size(); ++k)
+    // calculate centroids
+        for (int j = 0; j < centroids.size(); ++j)
         {
-            clusters[k]->calcCentroid();
-            clusters[k]->clusterList.clear();
+            centSize[j] = 0;
+            for (int d = 0; d < dimensions; ++d) {
+                tmpCent[j][d] = 0;
+            }
         }
+        for (int j = 0; j < total.size(); ++j)
+        {
+            for (int d = 0; d < dimensions; ++d)
+            {
+                tmpCent[total[j].cluster][d] += total[j].getCoordinate(d);
+            }
+            centSize[total[j].cluster]++;
+        }
+        for (int m = 0; m < centroids.size(); ++m) {
+            for (int d = 0; d < dimensions; ++d) {
+                tmpCent[m][d] = tmpCent[m][d] / centSize[m];
+            }
+		}
+
         assignPoints_B();
     }
 
+    write_time = std::chrono::high_resolution_clock::now();
     // write result
     std::ofstream fOutput;
-    fOutput.open(("finalOutput.csv"));
+    fOutput.open(("finalOutput_" + filename));
     fOutput << "x;y;c\n";
-    double tmpPoint[DIMENSIONS];
-    for (int i = 0; i < clusters.size(); ++i)
+    double tmpPoint[dimensions];
+    for (int i = 0; i < total.size(); ++i)
     {
-        for (int j = 0; j < clusters[i]->clusterList.size(); ++j)
-        {
-            clusters[i]->clusterList[j].getCoordinates(tmpPoint);
-            for (int k = 0; k < DIMENSIONS; ++k)
-            {
-                fOutput << tmpPoint[k] << ";";
-            }
-            fOutput << (i + 1) << "\n";
-        }
+         total[i].getCoordinates(tmpPoint);
+         for (int k = 0; k < dimensions; ++k)
+         {
+             fOutput << tmpPoint[k] << ";";
+         }
+         fOutput << (total[i].cluster + 1) << "\n";
     }
-    for (int i = 0; i < clusters.size(); ++i)
+    for (int i = 0; i < centroids.size(); ++i)
     {
-        clusters[i]->centroid.getCoordinates(tmpPoint);
-        for (int k = 0; k < DIMENSIONS; ++k)
+        centroids[i]->getCoordinates(tmpPoint);
+        for (int k = 0; k < dimensions; ++k)
         {
             fOutput << tmpPoint[k] << ";";
         }
-        fOutput << clusters.size() + 3 << "\n";
+        fOutput << centroids.size() + 3 << "\n";
     }
     fOutput.close();
 }
@@ -330,11 +336,11 @@ void assignPoints_B()
     for (unsigned int i = 0; i < total.size(); ++i)
     {
         int shortestDistance = -1;
-        double tmpPointOne[DIMENSIONS], tmpCentroid[DIMENSIONS];
+        double tmpPointOne[dimensions], tmpCentroid[dimensions];
         double distance = DBL_MAX, tmpDis;
-        for (unsigned int k = 0; k < clusters.size(); ++k)
+        for (unsigned int k = 0; k < centroids.size(); ++k)
         {
-            clusters[k]->centroid.getCoordinates(tmpCentroid);
+            centroids[k]->getCoordinates(tmpCentroid);
             total[i].getCoordinates(tmpPointOne);
             tmpDis = calcDistance(tmpCentroid, tmpPointOne);
             if (tmpDis < distance)
@@ -343,13 +349,13 @@ void assignPoints_B()
                 shortestDistance = k;
             }
         }
-        clusters[shortestDistance]->clusterList.push_back(total[i]);
+        total[i].cluster = shortestDistance;
     }
 }
 
 void rebuild()
 {
-	// change threshould value || the paper has no perfect solution --> TODO research
+	// change threshould value || the paper has no perfect solution
 	// paper: average of the distances between nearest pairs of leaf entries in all leaf nodes
 	// find first leaf node
 	CFTreeNode* tmpNode = rootNode;
@@ -370,7 +376,7 @@ void rebuild()
 	{
 		distances.back() = distances.back() + distances[i];
 	}
-	threshold_Value = distances.back() / distances.size();
+	threshold_Value = 5 * distances.back() / distances.size(); //TODO: threshold Value anschauen
 
 	distances.clear();
 
@@ -390,6 +396,8 @@ void rebuild()
 
 int birch(std::string filename)
 {
+	threshold_Value = 0.0;
+	current_tree_size = 0;
 	rootNode = new CFTreeNode();
 	ClusteringFeature newCF;
 	current_tree_size++;
@@ -398,10 +406,12 @@ int birch(std::string filename)
 	// read CSV
 	readBIRCHCSV(filename);
 	// Phase 1
-	double tmpLS[DIMENSIONS], tmpSS[DIMENSIONS];
+    read_time = std::chrono::high_resolution_clock::now();
+	double tmpLS[dimensions];
+    long double tmpSS[dimensions];
 	for (int k = 0; k < total.size(); ++k)
 	{
-		for (int i = 0; i < DIMENSIONS; ++i)
+		for (int i = 0; i < dimensions; ++i)
 		{
 			tmpLS[i] = total[k].getCoordinate(i);
 			tmpSS[i] = pow(tmpLS[i], 2);
@@ -410,43 +420,88 @@ int birch(std::string filename)
 		insertCF(newCF);
 	}
 	// write leaf CFs in CSV
-	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH.csv");
-
-
-	kMeans_BIRCH();
+	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_" + filename);
+    phase_time = std::chrono::high_resolution_clock::now();
+    //Phase 3
+	kMeans_BIRCH(filename);
+	centroids.clear();
+	total.clear();
+	deleteTree(rootNode);
 	return 0;
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc < 8)
+	if (argc < 7)
 	{
-		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, epsilon, minPts" << std::endl;
+		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, page size in Byte" << std::endl;
 		return 1;
 	}
+
 	std::string testCaseName = std::string(argv[1]);
 	char measurementDelim = argv[2][0];
 	int runs = std::stoi(argv[3], nullptr, 10);
+    std::string dataFile(argv[4]);
 
-	std::string dataFile(argv[4]);
-	int dimensions = std::stoi(argv[5], nullptr, 10);
-	char delim = argv[6][0];
-	float epsilon = std::stof(argv[7], nullptr);
-	int minPts = std::stoi(argv[8], nullptr, 10);
+	dimensions = std::stoi(argv[5], nullptr, 10);
+	delim = argv[6][0];
+	page_size = std::stoi(argv[7], nullptr, 10);
 
-	//birch();
+    std::ifstream file(dataFile, std::ifstream::in | std::ifstream::binary);
 
-	std::chrono::high_resolution_clock::time_point startTime, endTime;
+    file.seekg(0, std::ios::end);
+    memory = (int) (file.tellg() * 0.1);
+    file.close();
+
+    cf_entry_size = sizeof(int) + (sizeof(double) + sizeof(long double)) * dimensions;
+    max_tree_size = memory / page_size;
+    b_Entries = page_size / cf_entry_size;
+    l_Entries = page_size / cf_entry_size;
+
+    std::cerr << "TestCaseName: " << testCaseName << " --- measurementDelim: " << measurementDelim << " --- runs: " << runs << " --- dataFile: " << dataFile;
+    std::cerr << " ---dimensions: " << dimensions << " --- delim: " << delim << " --- page_size: " << page_size/1024 << "KB --- memory: " << memory/1024 <<"KB" << std::endl;
+
+    // warm up
+    for (int i = 0; i < 2; ++i)
+    {
+		std::cerr << "warmUP #" << i << std::endl;
+		birch(dataFile);
+    }
+	std::cerr << "warmUP DONE" << std::endl;
+	std::ofstream fileOStream;
+	fileOStream.open(("BIRCH_Sequential_" + dataFile));
 	std::cerr << testCaseName;
-	for (int i = 0; i < runs; ++i) {
-		startTime = std::chrono::high_resolution_clock::now();
-		birch("../../../Inputfiles/Sample.csv");
-		startTime = std::chrono::high_resolution_clock::now();
+	fileOStream << testCaseName << std::endl;
+	long long int avgRead = 0;
+	long long int avgBIRCH = 0;
+	long long int avgKMeans = 0;
+	long long int avgWrite = 0;
 
-		long long int timeMS = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-		std::cerr << measurementDelim << timeMS;
+	for (int i = 0; i < runs; ++i) {
+		std::cerr << "Testrun #" << i << std::endl;
+		startTime = std::chrono::high_resolution_clock::now();
+		birch(dataFile);
+		endTime = std::chrono::high_resolution_clock::now();
+
+		long long int timeRead = std::chrono::duration_cast<std::chrono::microseconds>(read_time - startTime).count();
+		long long int timeBIRCH = std::chrono::duration_cast<std::chrono::microseconds>(phase_time - read_time).count();
+		long long int timeKMeans = std::chrono::duration_cast<std::chrono::microseconds>(write_time - phase_time).count();
+		long long int timeWrite = std::chrono::duration_cast<std::chrono::microseconds>(endTime - write_time).count();
+
+		fileOStream << "Run:" << i << "  --  Read: " << timeRead << " ms  --- BIRCH Phase 1: " << timeBIRCH << " ms  --- k-Means Phase 3: " << timeKMeans << " ms  --- Write: " << timeWrite << "ms" << std::endl;
+		avgRead += timeRead;
+		avgBIRCH += timeBIRCH;
+		avgKMeans += timeKMeans;
+		avgWrite += timeWrite;
+
 	}
-	std::cerr << std::endl;
+	fileOStream << "----------------------------------" << std::endl << "Average Read: " << (avgRead/runs) << " ms  --- Average BIRCH Phase 1: ";
+	fileOStream << (avgBIRCH/runs) << " ms  --- Average k-Means Phase 3: " << (avgKMeans/runs) << " ms  --- Average Write: " << (avgWrite/runs)<< "ms" << std::endl;
+	fileOStream.close();
+
+	// standard output to be piped in extra file
+	std::cout << dataFile << "_BIRCH_Seq;" << (avgRead/runs) << ";" << (avgBIRCH/runs) << ";" << (avgKMeans/runs) << ";" << (avgWrite/runs) << std::endl;
+
 	return 0;
 }
 
