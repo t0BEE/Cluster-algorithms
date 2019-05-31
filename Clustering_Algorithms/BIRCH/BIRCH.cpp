@@ -12,7 +12,18 @@ int max_tree_size, b_Entries, l_Entries;
 double threshold_Value;
 char delim;
 
-std::chrono::high_resolution_clock::time_point startTime, endTime, phase_time;
+std::chrono::high_resolution_clock::time_point startTime, endTime, read_time, write_time, phase_time;
+/*
+ * startTime
+ *      - read data
+ * read_time
+ *      - BIRCH - Phase 1
+ * phase_time
+ *      - k-means - Phase 3
+ * write_time
+ *      - write data
+ * endTime
+ * */
 
 
 //prev and next when rebuilding
@@ -304,6 +315,7 @@ void kMeans_BIRCH(std::string filename)
         assignPoints_B();
     }
 
+    write_time = std::chrono::high_resolution_clock::now();
     // write result
     std::ofstream fOutput;
     fOutput.open(("finalOutput_" + filename));
@@ -405,7 +417,7 @@ int birch(std::string filename)
 	// read CSV
 	readBIRCHCSV(filename);
 	// Phase 1
-    std::cerr << "    --> Phase 1" << std::endl;
+    read_time = std::chrono::high_resolution_clock::now();
 	double tmpLS[dimensions];
     long double tmpSS[dimensions];
 	for (int k = 0; k < total.size(); ++k)
@@ -421,7 +433,7 @@ int birch(std::string filename)
 	// write leaf CFs in CSV
 	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_" + filename);
     phase_time = std::chrono::high_resolution_clock::now();
-    std::cerr << "    --> Phase 3" << std::endl;
+    //Phase 3
 	kMeans_BIRCH(filename);
 	centroids.clear();
 	total.clear();
@@ -471,8 +483,10 @@ int main(int argc, char *argv[])
 	fileOStream.open(("BIRCH_Sequential_" + dataFile));
 	std::cerr << testCaseName;
 	fileOStream << testCaseName << std::endl;
-	long long int avgTime = 0;
-	long long int avgPhase = 0;
+	long long int avgRead = 0;
+	long long int avgBIRCH = 0;
+	long long int avgKMeans = 0;
+	long long int avgWrite = 0;
 
 	for (int i = 0; i < runs; ++i) {
 		std::cerr << "Testrun #" << i << std::endl;
@@ -480,16 +494,24 @@ int main(int argc, char *argv[])
 		birch(dataFile);
 		endTime = std::chrono::high_resolution_clock::now();
 
-		long long int timeMS = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-		long long int phaseMS = std::chrono::duration_cast<std::chrono::microseconds>(phase_time - startTime).count();
+		long long int timeRead = std::chrono::duration_cast<std::chrono::microseconds>(read_time - startTime).count();
+		long long int timeBIRCH = std::chrono::duration_cast<std::chrono::microseconds>(phase_time - read_time).count();
+		long long int timeKMeans = std::chrono::duration_cast<std::chrono::microseconds>(write_time - phase_time).count();
+		long long int timeWrite = std::chrono::duration_cast<std::chrono::microseconds>(endTime - write_time).count();
 
-		std::cerr << timeMS << "ms" << std::endl;
-		fileOStream << "Run:" << i << "  --  " << timeMS << " ms  --- BIRCH phase 1: " << phaseMS << "ms"<< std::endl;
-		avgTime += timeMS;
-        avgPhase += phaseMS;
+		fileOStream << "Run:" << i << "  --  Read: " << timeRead << " ms  --- BIRCH Phase 1: " << timeBIRCH << " ms  --- k-Means Phase 3: " << timeKMeans << " ms  --- Write: " << timeWrite << "ms" << std::endl;
+		avgRead += timeRead;
+		avgBIRCH += timeBIRCH;
+		avgKMeans += timeKMeans;
+		avgWrite += timeWrite;
+
 	}
-	fileOStream << "----------------------------------" << std::endl << "Average Time: " << (avgTime/runs) << " ms  --- Phase 1 Average: " << (avgPhase/runs) << "ms" << std::endl;
+	fileOStream << "----------------------------------" << std::endl << "Average Read: " << (avgRead/runs) << " ms  --- Average BIRCH Phase 1: ";
+	fileOStream << (avgBIRCH/runs) << " ms  --- Average k-Means Phase 3: " << (avgKMeans/runs) << " ms  --- Average Write: " << (avgWrite/runs)<< "ms" << std::endl;
 	fileOStream.close();
+
+	// standard output to be piped in extra file
+	std::cout << dataFile << "_BIRCH_Seq;" << (avgRead/runs) << ";" << (avgBIRCH/runs) << ";" << (avgKMeans/runs) << ";" << (avgWrite/runs) << std::endl;
 
 	return 0;
 }
