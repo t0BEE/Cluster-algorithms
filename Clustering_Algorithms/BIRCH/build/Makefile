@@ -48,10 +48,10 @@ RM = /nix/store/hl5d3b9f9psdh54z42ychqd23y8iwiwv-cmake-3.13.4/bin/cmake -E remov
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH
+CMAKE_SOURCE_DIR = /mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build
+CMAKE_BINARY_DIR = /mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build/CMakeFiles /mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

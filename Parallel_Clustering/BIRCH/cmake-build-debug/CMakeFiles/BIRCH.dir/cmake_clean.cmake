@@ -4,7 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/BIRCH.dir/ClusteringFeature.cpp.o"
   "CMakeFiles/BIRCH.dir/Parameter.cpp.o"
   "CMakeFiles/BIRCH.dir/Point.cpp.o"
-  "CMakeFiles/BIRCH.dir/Cluster.cpp.o"
   "BIRCH.pdb"
   "BIRCH.exe"
   "libBIRCH.dll.a"

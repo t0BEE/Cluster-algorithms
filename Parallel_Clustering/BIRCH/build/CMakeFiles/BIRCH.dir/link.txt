@@ -1,0 +1,1 @@
+/nix/store/6n4s0bzxncqhr548h80spmlv1kinswxd-gcc-wrapper-8.3.0/bin/c++  -g  -static-libgcc -static-libstdc++ -static CMakeFiles/BIRCH.dir/BIRCH.cpp.o CMakeFiles/BIRCH.dir/CFTreeNode.cpp.o CMakeFiles/BIRCH.dir/ClusteringFeature.cpp.o CMakeFiles/BIRCH.dir/Parameter.cpp.o CMakeFiles/BIRCH.dir/Point.cpp.o  -o BIRCH 

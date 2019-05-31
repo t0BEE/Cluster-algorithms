@@ -1,3 +1,3 @@
-/cygdrive/c/Users/schiffmt/source/repos/Clustering/Parallel_Clustering/BIRCH/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/schiffmt/source/repos/Clustering/Parallel_Clustering/BIRCH/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/c/Users/schiffmt/source/repos/Clustering/Parallel_Clustering/BIRCH/cmake-build-debug/CMakeFiles/BIRCH.dir
+/cygdrive/c/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/cmake-build-debug/CMakeFiles/BIRCH.dir
+/cygdrive/c/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/cmake-build-debug/CMakeFiles/edit_cache.dir

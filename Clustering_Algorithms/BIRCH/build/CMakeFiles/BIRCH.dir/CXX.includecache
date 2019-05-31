@@ -6,39 +6,39 @@
 
 #IncludeRegexTransform: 
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/BIRCH.cpp
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/BIRCH.cpp
 chrono
 -
 BIRCH.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/BIRCH.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/BIRCH.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/BIRCH.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/BIRCH.h
 CFTreeNode.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/CFTreeNode.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/CFTreeNode.h
 Point.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Point.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Point.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/CFTreeNode.cpp
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/CFTreeNode.cpp
 CFTreeNode.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/CFTreeNode.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/CFTreeNode.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/CFTreeNode.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/CFTreeNode.h
 ClusteringFeature.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/ClusteringFeature.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/ClusteringFeature.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/ClusteringFeature.cpp
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/ClusteringFeature.cpp
 ClusteringFeature.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/ClusteringFeature.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/ClusteringFeature.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/ClusteringFeature.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/ClusteringFeature.h
 Parameter.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Parameter.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Parameter.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Parameter.cpp
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Parameter.cpp
 Parameter.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Parameter.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Parameter.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Parameter.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Parameter.h
 math.h
 -
 string
@@ -54,11 +54,11 @@ vector
 cfloat
 -
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Point.cpp
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Point.cpp
 Point.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Point.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Point.h
 
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Point.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Point.h
 Parameter.h
-/mnt/C/Users/schiffmt/source/repos/Clustering/Clustering_Algorithms/BIRCH/Parameter.h
+/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/Parameter.h
 
