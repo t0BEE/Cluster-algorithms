@@ -11,7 +11,7 @@ page_size=4096
 
 echo "REQUEST CPU"
 touch ~/REQUEST_CPU
-echo "" >> BIRCH_times
+echo "" >> BIRCH_times.csv
 sleep 10
 
 echo "CPU REQUESTED"
@@ -19,7 +19,7 @@ echo "CPU REQUESTED"
 for i in ${!data[*]}
 do
         echo "Doing single ${data[$i]}" >&2
-        $program "${task_name}\$${data[$i]}\$0" ";" "${runs}" "data/${data[$i]}.data" "2" ";" "${page_size}" | tee BIRCH_times
+        $program "${task_name}\$${data[$i]}\$0" ";" "${runs}" "data/${data[$i]}.data" "2" ";" "${page_size}" | tee BIRCH_times.csv
 done
 
 rm ~/REQUEST_CPU

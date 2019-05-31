@@ -1,4 +1,0 @@
-C:\Users\schiffmt\.CLion2019.1\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /cygdrive/c/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH
--- Configuring done
--- Generating done
--- Build files have been written to: /cygdrive/c/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/cmake-build-debug

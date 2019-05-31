@@ -11,7 +11,7 @@ page_size=4096
 
 echo "REQUEST CPU"
 touch ~/REQUEST_CPU
-echo "" >> BIRCH_times
+echo "" >> BIRCH_times.csv
 sleep 10
 
 echo "CPU REQUESTED"

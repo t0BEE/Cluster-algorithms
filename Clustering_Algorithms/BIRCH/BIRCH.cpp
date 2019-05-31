@@ -405,6 +405,7 @@ int birch(std::string filename)
 	std::ofstream csvOutputfile;
 	// read CSV
 	readBIRCHCSV(filename);
+
 	// Phase 1
     read_time = std::chrono::high_resolution_clock::now();
 	double tmpLS[dimensions];

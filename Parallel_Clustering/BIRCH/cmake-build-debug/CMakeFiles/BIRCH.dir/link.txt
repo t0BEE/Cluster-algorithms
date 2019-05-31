@@ -1,1 +1,0 @@
-/usr/bin/c++.exe -g  -static-libgcc -static-libstdc++ -static CMakeFiles/BIRCH.dir/BIRCH.cpp.o CMakeFiles/BIRCH.dir/CFTreeNode.cpp.o CMakeFiles/BIRCH.dir/ClusteringFeature.cpp.o CMakeFiles/BIRCH.dir/Parameter.cpp.o CMakeFiles/BIRCH.dir/Point.cpp.o  -o BIRCH.exe -Wl,--out-implib,libBIRCH.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
