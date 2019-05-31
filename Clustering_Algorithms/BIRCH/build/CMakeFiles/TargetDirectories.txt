@@ -1,3 +1,0 @@
-/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build/CMakeFiles/rebuild_cache.dir
-/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build/CMakeFiles/BIRCH.dir
-/mnt/C/Users/schiffmt/Documents/Cluster-algorithms/Clustering_Algorithms/BIRCH/build/CMakeFiles/edit_cache.dir
