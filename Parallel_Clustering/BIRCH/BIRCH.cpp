@@ -1,6 +1,5 @@
-#include <chrono>
 #include "BIRCH.h"
-
+#define BUFFERSIZE 20
 
 std::vector<Point_B> total;
 CFTreeNode* rootNode;
@@ -11,6 +10,8 @@ int current_tree_size, dimensions, page_size, cf_entry_size, memory;
 int max_tree_size, b_Entries, l_Entries;
 double threshold_Value, radius;
 char delim;
+ClusteringFeature* buffer[BUFFERSIZE];
+bool bufferDone;
 
 std::chrono::high_resolution_clock::time_point startTime, endTime, read_time, write_time, phase_time;
 /*
@@ -141,6 +142,13 @@ void prevNextChain(CFTreeNode* node)
     }
 }
 
+bool checkEmptyBuffer()
+{
+    for (int i = 0; i < BUFFERSIZE; ++i) {
+        if(buffer[i] != nullptr) return false;
+    }
+    return true;
+}
 
 /**
  * left most path of the old tree is pushed recursively as the right most tree in new tree
@@ -183,6 +191,54 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
     }
 }
 
+void prepareInput()
+{
+    double tmpLS[dimensions], tmpCor[dimensions], distance;
+    long double tmpSS[dimensions];
+    std::vector<Point_B> unused;
+    int buffIndex = 0;
+    for (int k = 0; k < total.size(); ++k) {
+        unused.push_back(total[k]);
+    }
+    while(unused.size() > 0)
+    {
+        //use first point as baseline
+        unused.front().getCoordinates(tmpLS);
+        unused.erase(unused.begin());
+        for (int d = 0; d < dimensions; ++d) {
+            tmpSS[d] = tmpLS[d] * tmpLS[d];
+        }
+        ClusteringFeature* newCF= new ClusteringFeature(1, tmpLS, tmpSS);
+
+        // check if other points are in area close to baseline
+        for (int i = 0; i < unused.size(); ++i) {
+            unused[i].getCoordinates(tmpCor);
+            distance = calcDistance(tmpCor, tmpLS);
+            //if yes add the to the CF
+            if (distance < threshold_Value)
+            {
+                for (int d = 0; d < dimensions; ++d) {
+                    tmpSS[d] = tmpCor[d] * tmpCor[d];
+                }
+                newCF->setNumberOfPoints(newCF->getNumberOfPoints()+1);
+                newCF->addToLS(tmpCor);
+                newCF->addToSS(tmpSS);
+                unused.erase(unused.begin()+i);
+                --i;
+            }
+        }
+        // add to buffer if not full
+        while (buffer[buffIndex] != nullptr)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        buffer[buffIndex] = newCF;
+        buffIndex++;
+        if (buffIndex == BUFFERSIZE) buffIndex = 0;
+
+    }
+    bufferDone = true;
+}
 
 /**
  * Deletes the tree recursively
@@ -403,6 +459,11 @@ int birch(std::string filename)
     current_tree_size++;
     tree_height = 1;
     std::ofstream csvOutputfile;
+    bufferDone = false;
+    for (int i = 0; i < BUFFERSIZE; ++i) {
+        buffer[i] = nullptr;
+    }
+
     // read CSV
     readBIRCHCSV(filename);
 
@@ -458,18 +519,30 @@ int birch(std::string filename)
 
     // Phase 1
     read_time = std::chrono::high_resolution_clock::now();
-    double tmpLS[dimensions];
-    long double tmpSS[dimensions];
-    for (int k = 0; k < total.size(); ++k)
+
+    #pragma omp parallel num_threads(2) shared(buffer, bufferDone)
     {
-        for (int i = 0; i < dimensions; ++i)
+        #pragma omp single nowait
         {
-            tmpLS[i] = total[k].getCoordinate(i);
-            tmpSS[i] = pow(tmpLS[i], 2);
+            prepareInput();
         }
-        newCF = ClusteringFeature(1, tmpLS, tmpSS);
-        insertCF(newCF);
+        #pragma omp single nowait
+        {
+            int bufferIndex = 0;
+            while (!bufferDone && checkEmptyBuffer())
+            {
+                    while(buffer[bufferIndex] == nullptr)
+                    {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    }
+                    insertCF(*buffer[bufferIndex]);
+                    buffer[bufferIndex] = nullptr;
+                    bufferIndex ++;
+                    if(bufferIndex == BUFFERSIZE) bufferIndex = 0;
+            }
+        }
     }
+
     // write leaf CFs in CSV
     writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_" + filename);
     phase_time = std::chrono::high_resolution_clock::now();
@@ -483,6 +556,7 @@ int birch(std::string filename)
 
 int main(int argc, char *argv[])
 {
+
     if (argc < 7)
     {
         std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, page size in Byte" << std::endl;

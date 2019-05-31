@@ -1,5 +1,7 @@
 #pragma once
-
+#include <chrono>
+#include <omp.h>
+#include <thread>
 #include "CFTreeNode.h"
 #include "Point.h"
 
