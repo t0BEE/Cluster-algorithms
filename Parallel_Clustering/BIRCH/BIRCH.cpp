@@ -194,282 +194,93 @@ void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
 void prepareInput()
 {
     if (bufferDone) return;
-    std::vector<Point_B> unused0;
-    std::vector<Point_B> unused1;
-    std::vector<Point_B> unused2;
-    std::vector<Point_B> unused3;
-    std::vector<Point_B> unusedCircle;
+    std::vector<Point_B> unused;
     int buffIndex = 0;
 
     for (int k = 0; k < total.size(); ++k) {
-        unused0.push_back(total[k]);
+        unused.push_back(total[k]);
     }
 
-    #pragma omp parallel shared(buffIndex, unused0, unused1, unused2, unused3, unusedCircle) num_threads(4)
+    #pragma omp parallel shared(buffIndex, unused) num_threads(8)
     {
         double tmpLS[dimensions], tmpCor[dimensions], distance;
         long double tmpSS[dimensions];
-        int tid = omp_get_thread_num();
+        int start = 0;
+        bool picked = false;
 
-        // Thread 0
-        if (tid == 0)
-        {
-            while(!bufferDone)
+            while(unused.size() > 0)
             {
-                 while (unused0.size() == 0 || bufferDone)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                    if(unused0.size() == 0 && unused1.size() == 0 && unused2.size() == 0 && unused3.size() == 0 && unusedCircle.size() == 0) bufferDone = true;
-                }
-                if (unused0.size() > 0)
-                {
-                    #pragma omp critical (V0)
+
+                #pragma omp critical (vector)
+                {//use first point as baseline
+                    while(unused[start].cluster == -4 && start < unused.size())
                     {
-                        unused0.front().getCoordinates(tmpLS);
-                        unused0.erase(unused0.begin());
+                        start++;
                     }
+                    if(unused[start].cluster != -4)
+                    {
+                        unused[start].cluster = -4;
+                        picked = true;
+                    }
+                }
+                if (picked)
+                {
+                    picked = false;
+                    unused[start].getCoordinates(tmpLS);
+
                     for (int d = 0; d < dimensions; ++d) {
                         tmpSS[d] = tmpLS[d] * tmpLS[d];
                     }
                     ClusteringFeature* newCF= new ClusteringFeature(1, tmpLS, tmpSS);
+
                     // check if other points are in area close to baseline
-                    while (unused0.size() > 0) {
-                        unused0.front().getCoordinates(tmpCor);
+                    for (int i = 0; i < unused.size(); ++i) {
+                        unused[i].getCoordinates(tmpCor);
                         distance = calcDistance(tmpCor, tmpLS);
                         //if yes add the to the CF
-                        if (distance < threshold_Value) {
-                            #pragma omp critical (V0)
-                            {
-                                unused0.erase(unused0.begin());
-                            }
-                            for (int d = 0; d < dimensions; ++d) {
-                                tmpSS[d] = tmpCor[d] * tmpCor[d];
-                            }
-                            newCF->setNumberOfPoints(newCF->getNumberOfPoints() + 1);
-                            newCF->addToLS(tmpCor);
-                            newCF->addToSS(tmpSS);
-                        } else
+                        if (distance < threshold_Value)
                         {
-                            #pragma omp critical (V1)
+                            if (unused[i].cluster != -4)
                             {
-                                unused1.push_back(unused0.front());
-                            }
-                            #pragma omp critical (V0)
-                            {
-                                unused0.erase(unused0.begin());
+                                #pragma omp critical (vector)
+                                {
+                                    unused[i].cluster= -4;
+                                }
+                                for (int d = 0; d < dimensions; ++d) {
+                                    tmpSS[d] = tmpCor[d] * tmpCor[d];
+                                }
+                                newCF->setNumberOfPoints(newCF->getNumberOfPoints()+1);
+                                newCF->addToLS(tmpCor);
+                                newCF->addToSS(tmpSS);
                             }
                         }
                     }
                     // add to buffer if not full
-                    #pragma omp critical (buffer)
+                    while (buffer[buffIndex] != nullptr)
                     {
-                        while (buffer[buffIndex] != nullptr)
-                        {
-                            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                        }
-                        buffer[buffIndex] = newCF;
-                        buffIndex++;
-                        if (buffIndex == BUFFERSIZE) buffIndex = 0;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(100));
                     }
+                    buffer[buffIndex] = newCF;
+                    buffIndex++;
+                    if (buffIndex == BUFFERSIZE) buffIndex = 0;
                 }
-                #pragma omp critical (VC)
+                #pragma omp single
                 {
-                    for (int i = 0; i < unusedCircle.size(); ++i) {
-                        unused0.push_back(unusedCircle[i]);
-                        unusedCircle.erase(unusedCircle.begin());
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                }
+                #pragma omp for schedule(static,1)
+                for (int i = unused.size() - 1; i >=0 ; --i) {
+                    if (unused[i].cluster == -4)
+                    {
+                        #pragma omp critical (vector)
+                        unused.erase(unused.begin() + i);
                     }
                 }
+
+                start = 0;
             }
-        }
-        // Thread 1
-        if (tid == 1)
-        {
-            while(!bufferDone)
-            {
-                while (unused1.size() == 0 || bufferDone)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                    if(unused0.size() == 0 && unused1.size() == 0 && unused2.size() == 0 && unused3.size() == 0 && unusedCircle.size() == 0) bufferDone = true;
-                }
-                if (unused1.size() > 0)
-                {
-                    #pragma omp critical (V1)
-                    {
-                        unused1.front().getCoordinates(tmpLS);
-                        unused1.erase(unused1.begin());
-                    }
-                    for (int d = 0; d < dimensions; ++d) {
-                        tmpSS[d] = tmpLS[d] * tmpLS[d];
-                    }
-                    ClusteringFeature* newCF= new ClusteringFeature(1, tmpLS, tmpSS);
-                    // check if other points are in area close to baseline
-                    while (unused1.size() > 0) {
-                        unused1.front().getCoordinates(tmpCor);
-                        distance = calcDistance(tmpCor, tmpLS);
-                        //if yes add the to the CF
-                        if (distance < threshold_Value) {
-                            #pragma omp critical (V1)
-                            {
-                                unused1.erase(unused1.begin());
-                            }
-                            for (int d = 0; d < dimensions; ++d) {
-                                tmpSS[d] = tmpCor[d] * tmpCor[d];
-                            }
-                            newCF->setNumberOfPoints(newCF->getNumberOfPoints() + 1);
-                            newCF->addToLS(tmpCor);
-                            newCF->addToSS(tmpSS);
-                        } else
-                        {
-                            #pragma omp critical (V2)
-                            {
-                                unused2.push_back(unused1.front());
-                            }
-                            #pragma omp critical (V1)
-                            {
-                                unused1.erase(unused1.begin());
-                            }
-                        }
-                    }
-                    // add to buffer if not full
-                    #pragma omp critical (buffer)
-                    {
-                        while (buffer[buffIndex] != nullptr)
-                        {
-                            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                        }
-                        buffer[buffIndex] = newCF;
-                        buffIndex++;
-                        if (buffIndex == BUFFERSIZE) buffIndex = 0;
-                    }
-                }
-            }
-        }
-        // Thread 2
-        if (tid == 2)
-        {
-            while(!bufferDone)
-            {
-                while (unused2.size() == 0 || bufferDone)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                    if(unused0.size() == 0 && unused1.size() == 0 && unused2.size() == 0 && unused3.size() == 0 && unusedCircle.size() == 0) bufferDone = true;
-                }
-                if (unused2.size() > 0)
-                {
-                    #pragma omp critical (V2)
-                    {
-                        unused2.front().getCoordinates(tmpLS);
-                        unused2.erase(unused2.begin());
-                    }
-                    for (int d = 0; d < dimensions; ++d) {
-                        tmpSS[d] = tmpLS[d] * tmpLS[d];
-                    }
-                    ClusteringFeature* newCF= new ClusteringFeature(1, tmpLS, tmpSS);
-                    // check if other points are in area close to baseline
-                    while (unused2.size() > 0) {
-                        unused2.front().getCoordinates(tmpCor);
-                        distance = calcDistance(tmpCor, tmpLS);
-                        //if yes add the to the CF
-                        if (distance < threshold_Value) {
-                        #pragma omp critical (V2)
-                            {
-                                unused2.erase(unused2.begin());
-                            }
-                            for (int d = 0; d < dimensions; ++d) {
-                                tmpSS[d] = tmpCor[d] * tmpCor[d];
-                            }
-                            newCF->setNumberOfPoints(newCF->getNumberOfPoints() + 1);
-                            newCF->addToLS(tmpCor);
-                            newCF->addToSS(tmpSS);
-                        } else
-                        {
-                            #pragma omp critical (V3)
-                            {
-                                unused2.push_back(unused2.front());
-                            }
-                            #pragma omp critical (V2)
-                            {
-                                unused2.erase(unused2.begin());
-                            }
-                        }
-                    }
-                    // add to buffer if not full
-                    #pragma omp critical (buffer)
-                    {
-                        while (buffer[buffIndex] != nullptr)
-                        {
-                            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                        }
-                        buffer[buffIndex] = newCF;
-                        buffIndex++;
-                        if (buffIndex == BUFFERSIZE) buffIndex = 0;
-                    }
-                }
-            }
-        }
-        // Thread 3
-        if (tid == 3)
-        {
-            while(!bufferDone)
-            {
-                while (unused3.size() == 0 || bufferDone)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                    if(unused0.size() == 0 && unused1.size() == 0 && unused2.size() == 0 && unused3.size() == 0 && unusedCircle.size() == 0) bufferDone = true;
-                }
-                if (unused3.size() > 0)
-                {
-                    #pragma omp critical (V3)
-                    {
-                        unused3.front().getCoordinates(tmpLS);
-                        unused3.erase(unused3.begin());
-                    }
-                    for (int d = 0; d < dimensions; ++d) {
-                        tmpSS[d] = tmpLS[d] * tmpLS[d];
-                    }
-                    ClusteringFeature* newCF= new ClusteringFeature(1, tmpLS, tmpSS);
-                    // check if other points are in area close to baseline
-                    while (unused3.size() > 0) {
-                        unused3.front().getCoordinates(tmpCor);
-                        distance = calcDistance(tmpCor, tmpLS);
-                        //if yes add the to the CF
-                        if (distance < threshold_Value) {
-                            #pragma omp critical (V3)
-                            {
-                                unused3.erase(unused3.begin());
-                            }
-                            for (int d = 0; d < dimensions; ++d) {
-                                tmpSS[d] = tmpCor[d] * tmpCor[d];
-                            }
-                            newCF->setNumberOfPoints(newCF->getNumberOfPoints() + 1);
-                            newCF->addToLS(tmpCor);
-                            newCF->addToSS(tmpSS);
-                        } else
-                        {
-                            #pragma omp critical (VC)
-                            {
-                                unusedCircle.push_back(unused3.front());
-                            }
-                            #pragma omp critical (V3)
-                            {
-                                unused3.erase(unused3.begin());
-                            }
-                        }
-                    }
-                    // add to buffer if not full
-                    #pragma omp critical (buffer)
-                    {
-                        while (buffer[buffIndex] != nullptr)
-                        {
-                            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                        }
-                        buffer[buffIndex] = newCF;
-                        buffIndex++;
-                        if (buffIndex == BUFFERSIZE) buffIndex = 0;
-                    }
-                }
-            }
-        }
+            bufferDone = true;
+
     }
 }
 
@@ -762,7 +573,7 @@ int birch(std::string filename)
         #pragma omp single nowait
         {
             int bufferIndex = 0;
-            while (!bufferDone && checkEmptyBuffer())
+            while (!bufferDone || !checkEmptyBuffer())
             {
                     while(buffer[bufferIndex] == nullptr)
                     {
