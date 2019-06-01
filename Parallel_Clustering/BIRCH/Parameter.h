@@ -10,7 +10,7 @@
 
 
 
-extern double threshold_Value;		// T
+extern std::vector<double> threshold_Value;		// T
 extern int b_Entries;
 extern int l_Entries;
 extern int max_tree_size;

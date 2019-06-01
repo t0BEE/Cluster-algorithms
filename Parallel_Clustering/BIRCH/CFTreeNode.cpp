@@ -36,14 +36,21 @@ void CFTreeNode::getCentroid(double* buffer)
 
 bool CFTreeNode::isLeafNode()
 {
-	if (this->childNodes.size() != 0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+    try{
+        if (this->childNodes.size() != 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        return false;
+    }
+
 }
 
 /**
@@ -54,14 +61,14 @@ bool CFTreeNode::isLeafNode()
  * Output: New Node, empty if no split occured (CFTreeNode)
  * Effect: cluster variable is changed / increased in size
  */
-CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
+CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF, int treeID)
 {
 	CFTreeNode* newNode;
 	// for leaf nodes
 	if (this->isLeafNode())
 	{	
 		// if a split occurs a new CFTreeNode is returned
-		return insertToLeaf(addCF);
+		return insertToLeaf(addCF, treeID);
 	}
 	// go down the tree recursively to find a leaf node to place the point
 	else {
@@ -87,7 +94,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
 
 
 		// recursive call for the tree structure
-		newNode = this->childNodes[closestIndex]->insert(addCF);
+		newNode = this->childNodes[closestIndex]->insert(addCF, treeID);
 
 		// update the path
 		this->childCF[closestIndex] = this->childNodes[closestIndex]->getCF();
@@ -159,22 +166,22 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF)
  * Output: Node which is non empty if the leaf is full and a split occurs (CFTreeNode)
  * Effect: --
 */
-CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
+CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF, int treeID)
 {
 	double distance = DBL_MAX, tmpDis;
 	int closestIndex = 0;
 	double tmpInsert[dimensions], tmp[dimensions];
 	// If there is no cluster in leaf node, create a new one
-	if (childCF.size() == 0)
+	if (this->childCF.size() == 0)
 	{
-		childCF.push_back(addCF);
+        this->childCF.push_back(addCF);
 	}
 	else {
 		// Get index of closest cluster ( meassured by centroid of cf to insert - other centroids )
         addCF.calcCentroid(tmpInsert);
-		for (int i = 0; i < childCF.size(); ++i)
+		for (int i = 0; i < this->childCF.size(); ++i)
 		{
-			childCF[i].calcCentroid(tmp);
+            this->childCF[i].calcCentroid(tmp);
 			tmpDis = calcDistance(tmpInsert, tmp);
 			if (tmpDis < distance)
 			{
@@ -182,7 +189,7 @@ CFTreeNode* CFTreeNode::insertToLeaf(ClusteringFeature addCF)
 				closestIndex = i;
 			}
 		}
-		if (this->childCF[closestIndex].absorbCF(addCF))
+		if (this->childCF[closestIndex].absorbCF(addCF, treeID))
 		{ }// absorbation successfully, the threshold condition is not broken 
 		else
 		{ // addCF could not be absorbed

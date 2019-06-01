@@ -1,23 +1,26 @@
-#include <chrono>
+
 #include "BIRCH.h"
 
 
 std::vector<Point_B> total;
-CFTreeNode* rootNode;
-CFTreeNode* newTreeRoot;
+std::vector<CFTreeNode*> rootNode;
+std::vector<CFTreeNode*> newTreeRoot;
+CFTreeNode* mergedRoot;
 std::vector<Point_B*> centroids;
 static int tree_height;
 int current_tree_size, dimensions, page_size, cf_entry_size, memory;
-int max_tree_size, b_Entries, l_Entries;
-double threshold_Value;
+int max_tree_size, b_Entries, l_Entries, numTrees;
+std::vector<double> threshold_Value;
 char delim;
 
-std::chrono::high_resolution_clock::time_point startTime, endTime, read_time, write_time, phase_time;
+std::chrono::high_resolution_clock::time_point startTime, endTime, read_time, write_time, phase_time,merge_time;
 /*
  * startTime
  *      - read data
  * read_time
  *      - BIRCH - Phase 1
+ * merge_time
+ *      - mergeTrees
  * phase_time
  *      - k-means - Phase 3
  * write_time
@@ -57,40 +60,40 @@ void readBIRCHCSV(std::string filename)
 	}
 }
 
-void insertCF(ClusteringFeature addCF)
+void insertCF(ClusteringFeature addCF, int treeID)
 {
 	CFTreeNode* newNode;
-	newNode = rootNode->insert(addCF);
+	newNode = rootNode[treeID]->insert(addCF, treeID);
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
 	{ // root is splitted
 		tree_height++;
 		current_tree_size += 2; // the new node + a new root node
 
-		if (rootNode->isLeafNode())
+		if (rootNode[treeID]->isLeafNode())
 		{ // if root was a leafNode it has to be split
 			CFTreeNode* tmpNode;
-			tmpNode = rootNode;
-			rootNode = new CFTreeNode();
-			rootNode->childNodes.push_back(tmpNode);
-			rootNode->childCF.push_back(tmpNode->getCF());
-			rootNode->childNodes.push_back(newNode);
-			rootNode->childCF.push_back(newNode->getCF());
+			tmpNode = rootNode[treeID];
+			rootNode[treeID] = new CFTreeNode();
+			rootNode[treeID]->childNodes.push_back(tmpNode);
+			rootNode[treeID]->childCF.push_back(tmpNode->getCF());
+			rootNode[treeID]->childNodes.push_back(newNode);
+			rootNode[treeID]->childCF.push_back(newNode->getCF());
 		}
 		else
 		{ // create a new root and push the new node and old root to it
 			CFTreeNode* newRoot = new CFTreeNode();
 			
 			// Add to the new root
-			newRoot->childNodes.push_back(rootNode);			
-			newRoot->childCF.push_back(rootNode->getCF());
+			newRoot->childNodes.push_back(rootNode[treeID]);
+			newRoot->childCF.push_back(rootNode[treeID]->getCF());
 			newRoot->childNodes.push_back(newNode);
 			newRoot->childCF.push_back(newNode->getCF());
-			rootNode = newRoot;
+			rootNode[treeID] = newRoot;
 	
 			// fix prev-next-leaf connection
-			CFTreeNode* helpOne = rootNode->childNodes[0];
-			CFTreeNode* helpTwo = rootNode->childNodes[1];
+			CFTreeNode* helpOne = rootNode[treeID]->childNodes[0];
+			CFTreeNode* helpTwo = rootNode[treeID]->childNodes[1];
 			while (!(helpOne->isLeafNode()))
 			{
 				helpOne = helpOne->childNodes.back();
@@ -104,12 +107,12 @@ void insertCF(ClusteringFeature addCF)
 	// Run out of memory
 	while (current_tree_size > max_tree_size)
 	{
-		rebuild();
-		rootNode = newTreeRoot;
-		newTreeRoot = nullptr;
+		rebuild(treeID);
+		rootNode[treeID] = newTreeRoot[treeID];
+		newTreeRoot[treeID] = nullptr;
 		// calculate new current tree size
 		current_tree_size = 0;
-		calcTreeSize(rootNode);
+		calcTreeSize(rootNode[treeID]);
 	}
 }
 
@@ -149,20 +152,20 @@ void prevNextChain(CFTreeNode* node)
  * Output: ---
  * Effect: a completely new tree is created
 */
-void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree)
+void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree, int treeID)
 {
 	for (int j = 0; j < oldTree->childCF.size(); ++j)
 	{		
 		if (oldTree->isLeafNode())
 		{
-			newTreeRoot->insert(oldTree->childCF[j]);
+			newTreeRoot[treeID]->insert(oldTree->childCF[j], treeID);
 		}
 		else
 		{
 			CFTreeNode *newCopiedNode = new CFTreeNode();
 
 			newTree->insertNode(oldTree->childCF[j], newCopiedNode);
-			pathCopy(newTree->childNodes.back(), oldTree->childNodes[j]);
+			pathCopy(newTree->childNodes.back(), oldTree->childNodes[j], treeID);
 			// update CF - where points are deleted
 			for (int i = (int) newTree->childCF.size() - 1; i >= 0; --i)
 			{
@@ -216,7 +219,7 @@ void writeBIRCH_CSVFile(std::ofstream &fileOStream, std::string filename)
 		fileOStream << ";SS[" << i << "]";
 	}
 	fileOStream << "\n";
-	CFTreeNode *tmpNode = rootNode;
+	CFTreeNode *tmpNode = mergedRoot;
 	double tmpLS[dimensions];
     long double tmpSS[dimensions];
 	while (!(tmpNode->isLeafNode())) tmpNode = tmpNode->childNodes.front();
@@ -263,12 +266,12 @@ void kMeans_BIRCH(std::string filename)
     // Get centroids & create Cluster
     double tmpLS[dimensions] ;
 
-    for (int l = 0; l < rootNode->childCF.size(); ++l)
+    for (int l = 0; l < mergedRoot->childCF.size(); ++l)
     {
-        rootNode->childCF[l].getLS(tmpLS);
+        mergedRoot->childCF[l].getLS(tmpLS);
         for (int d = 0; d < dimensions; ++d)
         {
-            tmpLS[d] = tmpLS[d] / rootNode->childCF[l].getNumberOfPoints();
+            tmpLS[d] = tmpLS[d] / mergedRoot->childCF[l].getNumberOfPoints();
         }
         centroids.push_back(new Point_B(tmpLS));
     }
@@ -353,12 +356,12 @@ void assignPoints_B()
     }
 }
 
-void rebuild()
+void rebuild(int treeID)
 {
 	// change threshould value || the paper has no perfect solution
 	// paper: average of the distances between nearest pairs of leaf entries in all leaf nodes
 	// find first leaf node
-	CFTreeNode* tmpNode = rootNode;
+	CFTreeNode* tmpNode = rootNode[treeID];
 	std::vector<double> distances;
 
 	while (!tmpNode->isLeafNode())
@@ -376,7 +379,7 @@ void rebuild()
 	{
 		distances.back() = distances.back() + distances[i];
 	}
-	threshold_Value = 5 * distances.back() / distances.size(); //TODO: threshold Value anschauen
+	threshold_Value[treeID] = 5 * distances.back() / distances.size(); //TODO: threshold Value anschauen
 
 	distances.clear();
 
@@ -384,22 +387,27 @@ void rebuild()
 	// The tree is copied completely and the old tree deleted afterwards
 	// During this process the Clusters are reentered
 
-	newTreeRoot = new CFTreeNode();
+	newTreeRoot[treeID] = new CFTreeNode();
 
-	pathCopy(newTreeRoot, rootNode);
+	pathCopy(newTreeRoot[treeID], rootNode[treeID], treeID);
 	// prev - next pointer chain
-	prevNextChain(newTreeRoot);
+	prevNextChain(newTreeRoot[treeID]);
 	// delete old tree
-	deleteTree(rootNode);
+	deleteTree(rootNode[treeID]);
 
 }
 
 int birch(std::string filename)
 {
-	threshold_Value = 0.0;
-	current_tree_size = 0;
-	rootNode = new CFTreeNode();
-	ClusteringFeature newCF;
+
+    	current_tree_size = 0;
+    for (int j = 0; j < numTrees; ++j) {
+        rootNode.push_back(new CFTreeNode());
+        threshold_Value.push_back(0.0);
+        newTreeRoot.push_back(nullptr);
+    }
+
+
 	current_tree_size++;
 	tree_height = 1;
 	std::ofstream csvOutputfile;
@@ -407,18 +415,55 @@ int birch(std::string filename)
 	readBIRCHCSV(filename);
 	// Phase 1
     read_time = std::chrono::high_resolution_clock::now();
-	double tmpLS[dimensions];
-    long double tmpSS[dimensions];
-	for (int k = 0; k < total.size(); ++k)
-	{
-		for (int i = 0; i < dimensions; ++i)
-		{
-			tmpLS[i] = total[k].getCoordinate(i);
-			tmpSS[i] = pow(tmpLS[i], 2);
-		}
-		newCF = ClusteringFeature(1, tmpLS, tmpSS);
-		insertCF(newCF);
-	}
+    max_tree_size = max_tree_size / numTrees;
+
+
+    #pragma omp parallel num_threads(numTrees) private(current_tree_size, tree_height, newTreeRoot)
+    {
+        double tmpLS[dimensions];
+        long double tmpSS[dimensions];
+        ClusteringFeature newCF;
+
+        int treeID = omp_get_thread_num();
+
+        #pragma omp for schedule(dynamic)
+        for (int k = 0; k < total.size(); ++k)
+        {
+            for (int i = 0; i < dimensions; ++i)
+            {
+                tmpLS[i] = total[k].getCoordinate(i);
+                tmpSS[i] = pow(tmpLS[i], 2);
+            }
+            newCF = ClusteringFeature(1, tmpLS, tmpSS);
+            insertCF(newCF, treeID);
+        }
+    }
+    merge_time = std::chrono::high_resolution_clock::now();
+
+    // merge the trees, pick the one with the biggest threshold value to be the baseline
+    int biggestThreshold = 0;
+    for (int l = 1; l < numTrees; ++l) {
+        if(threshold_Value[biggestThreshold] < threshold_Value[l])
+        {
+            biggestThreshold = l;
+        }
+    }
+
+    CFTreeNode *tmpNode;
+    for (int m = 0; m < rootNode.size(); ++m) {
+        if(m != biggestThreshold) {
+            tmpNode = rootNode[m];
+            while (!(tmpNode->isLeafNode())) tmpNode = tmpNode->getFirstElement();
+            while (tmpNode != nullptr) {
+                for (int i = 0; i < tmpNode->childCF.size(); ++i) {
+                    insertCF(tmpNode->childCF[i], biggestThreshold);
+                }
+                tmpNode = tmpNode->next;
+            }
+        }
+    }
+    mergedRoot = rootNode[biggestThreshold];
+
 	// write leaf CFs in CSV
 	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_" + filename);
     phase_time = std::chrono::high_resolution_clock::now();
@@ -426,15 +471,20 @@ int birch(std::string filename)
 	kMeans_BIRCH(filename);
 	centroids.clear();
 	total.clear();
-	deleteTree(rootNode);
+
+    deleteTree(mergedRoot);
+	rootNode.clear();
+    newTreeRoot.clear();
+	threshold_Value.clear();
+	mergedRoot = nullptr;
 	return 0;
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc < 7)
+	if (argc < 8)
 	{
-		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, page size in Byte" << std::endl;
+		std::cerr << "Need at least 5 parameters: testCaseName, measurementDelim, runs, input_data, dimensions, delimiter, page size in Byte, number of trees" << std::endl;
 		return 1;
 	}
 
@@ -446,6 +496,7 @@ int main(int argc, char *argv[])
 	dimensions = std::stoi(argv[5], nullptr, 10);
 	delim = argv[6][0];
 	page_size = std::stoi(argv[7], nullptr, 10);
+	numTrees = std::stoi(argv[8], nullptr, 10);
 
     std::ifstream file(dataFile, std::ifstream::in | std::ifstream::binary);
 
@@ -476,6 +527,7 @@ int main(int argc, char *argv[])
 	long long int avgBIRCH = 0;
 	long long int avgKMeans = 0;
 	long long int avgWrite = 0;
+	long long int avgMerge = 0;
 
 	for (int i = 0; i < runs; ++i) {
 		std::cerr << "Testrun #" << i << std::endl;
@@ -484,23 +536,25 @@ int main(int argc, char *argv[])
 		endTime = std::chrono::high_resolution_clock::now();
 
 		long long int timeRead = std::chrono::duration_cast<std::chrono::microseconds>(read_time - startTime).count();
-		long long int timeBIRCH = std::chrono::duration_cast<std::chrono::microseconds>(phase_time - read_time).count();
+		long long int timeBIRCH = std::chrono::duration_cast<std::chrono::microseconds>(merge_time - read_time).count();
+		long long int timeMerge = std::chrono::duration_cast<std::chrono::microseconds>(phase_time - merge_time).count();
 		long long int timeKMeans = std::chrono::duration_cast<std::chrono::microseconds>(write_time - phase_time).count();
 		long long int timeWrite = std::chrono::duration_cast<std::chrono::microseconds>(endTime - write_time).count();
 
-		fileOStream << "Run:" << i << "  --  Read: " << timeRead << " ms  --- BIRCH Phase 1: " << timeBIRCH << " ms  --- k-Means Phase 3: " << timeKMeans << " ms  --- Write: " << timeWrite << "ms" << std::endl;
+		fileOStream << "Run:" << i << "  --  Read: " << timeRead << " ms  --- BIRCH Build Phase 1: " << timeBIRCH << " ms  --- Tree merge: " << timeMerge <<" ms  --- k-Means Phase 3: " << timeKMeans << " ms  --- Write: " << timeWrite << "ms" << std::endl;
 		avgRead += timeRead;
 		avgBIRCH += timeBIRCH;
+		avgMerge += timeMerge;
 		avgKMeans += timeKMeans;
 		avgWrite += timeWrite;
 
 	}
 	fileOStream << "----------------------------------" << std::endl << "Average Read: " << (avgRead/runs) << " ms  --- Average BIRCH Phase 1: ";
-	fileOStream << (avgBIRCH/runs) << " ms  --- Average k-Means Phase 3: " << (avgKMeans/runs) << " ms  --- Average Write: " << (avgWrite/runs)<< "ms" << std::endl;
+	fileOStream << (avgBIRCH/runs) << " ms  --- Average tree merging: " << (avgMerge/runs) << " ms  --- Average k-Means Phase 3: " << (avgKMeans/runs) << " ms  --- Average Write: " << (avgWrite/runs)<< "ms" << std::endl;
 	fileOStream.close();
 
 	// standard output to be piped in extra file
-	std::cout << dataFile << "_BIRCH_Seq;" << (avgRead/runs) << ";" << (avgBIRCH/runs) << ";" << (avgKMeans/runs) << ";" << (avgWrite/runs) << std::endl;
+	std::cout << dataFile << "_BIRCH_Seq;" << (avgRead/runs) << ";" << (avgBIRCH/runs) << ";" << (avgMerge/runs) << ";" << (avgKMeans/runs) << ";" << (avgWrite/runs) << std::endl;
 
 	return 0;
 }

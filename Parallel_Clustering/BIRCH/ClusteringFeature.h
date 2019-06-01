@@ -19,7 +19,7 @@ public:
 	long double getDimSS(int dimension);
 	int getNumberOfPoints();
 	void calcCentroid(double* buffer);
-	bool absorbCF(ClusteringFeature absorbCF);
+	bool absorbCF(ClusteringFeature absorbCF, int treeID);
 	void addToLS(double* buffer);
 	void addToSS(long double* buffer);
 	void setNumberOfPoints(int number);

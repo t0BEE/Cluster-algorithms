@@ -78,9 +78,9 @@ double ClusteringFeature::calcRadius(ClusteringFeature cfToAdd)
 	return radius;
 }
 
-bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF)
+bool ClusteringFeature::absorbCF(ClusteringFeature absorbCF, int treeID)
 {
-	if (calcRadius(absorbCF) > threshold_Value)
+	if (calcRadius(absorbCF) > threshold_Value[treeID])
 	{
 		return false;
 	}

@@ -6,7 +6,7 @@ class CFTreeNode
 {
 private:
 	// return the new node in case of a split, otherwise return NULL
-	CFTreeNode* insertToLeaf(ClusteringFeature addCF);
+	CFTreeNode* insertToLeaf(ClusteringFeature addCF, int treeID);
 
 public:
 	// if the cluster is a Leaf Node it contains no childNodes but pointer to 
@@ -24,7 +24,7 @@ public:
 	bool isLeafNode();
 	void splitLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
 	ClusteringFeature getCF();
-	CFTreeNode* insert(ClusteringFeature addCF);
+	CFTreeNode* insert(ClusteringFeature addCF, int treeID);
 	CFTreeNode* splitNonLeaf(CFTreeNode* oldNode, CFTreeNode* newNode);
 	CFTreeNode* getFirstElement();
 	double getclosestDistanceOfEntries();
