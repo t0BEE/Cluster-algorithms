@@ -196,15 +196,19 @@ void prepareInput()
     if (bufferDone) return;
     std::vector<Point_B> unused;
     int buffIndex = 0;
-
+    
     for (int k = 0; k < total.size(); ++k) {
         unused.push_back(total[k]);
     }
 
-    #pragma omp parallel shared(buffIndex, unused) num_threads(8)
+    #pragma omp parallel shared(buffIndex, unused) num_threads(2)
     {
-        double tmpLS[dimensions], tmpCor[dimensions], distance;
+
+        double tmpLS[dimensions];
         long double tmpSS[dimensions];
+        //double *tmpLS = (double*) calloc(dimensions, sizeof(double));
+        //long double *tmpSS = (long double*) calloc(dimensions, sizeof(long double));
+
         int start = 0;
         bool picked = false;
 
@@ -235,23 +239,20 @@ void prepareInput()
 
                     // check if other points are in area close to baseline
                     for (int i = 0; i < unused.size(); ++i) {
-                        unused[i].getCoordinates(tmpCor);
-                        distance = calcDistance(tmpCor, tmpLS);
-                        //if yes add the to the CF
-                        if (distance < threshold_Value)
+                        unused[i].getCoordinates(tmpLS);
+                        for (int d = 0; d < dimensions; ++d)
+                        {
+                            tmpSS[d] = tmpLS[d] * tmpLS[d];
+                        }
+                        //if CF is not used
+                        #pragma omp critical (vector)
                         {
                             if (unused[i].cluster != -4)
                             {
-                                #pragma omp critical (vector)
+                                if (newCF->absorbCF(ClusteringFeature(1, tmpLS, tmpSS)))
                                 {
                                     unused[i].cluster= -4;
                                 }
-                                for (int d = 0; d < dimensions; ++d) {
-                                    tmpSS[d] = tmpCor[d] * tmpCor[d];
-                                }
-                                newCF->setNumberOfPoints(newCF->getNumberOfPoints()+1);
-                                newCF->addToLS(tmpCor);
-                                newCF->addToSS(tmpSS);
                             }
                         }
                     }
