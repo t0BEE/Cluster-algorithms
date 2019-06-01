@@ -4,6 +4,7 @@ program=$1
 
 runs=$2
 task_name=$3
+tree_num=$4
 set OMP_DYNAMIC=0
 
 data=(blobs circles noise)
@@ -19,7 +20,7 @@ echo "CPU REQUESTED"
 for i in ${!data[*]}
 do
         echo "Doing single ${data[$i]}" >&2
-        $program "${task_name}\$${data[$i]}\$0" ";" "${runs}" "data/${data[$i]}.data" "2" ";" "${page_size}" | tee BIRCH_times
+        $program "${task_name}\$${data[$i]}\$0" ";" "${runs}" "data/${data[$i]}.data" "2" ";" "${page_size}" "${tree_num}" | tee BIRCH_times
 done
 
 rm ~/REQUEST_CPU
