@@ -197,12 +197,15 @@ void deleteTree(CFTreeNode* delRoot)
 {
 	if (!(delRoot->isLeafNode()))
 	{
-		for (int j = 0; j < delRoot->childNodes.size(); ++j)
+		for (int j = delRoot->childNodes.size() - 1; j >= 0 ; --j)
 		{
 			deleteTree(delRoot->childNodes[j]);
+			delRoot->childNodes.pop_back();
 		}
 	}
-	delete delRoot;
+	if (delRoot != nullptr)
+	    delRoot->childCF.clear();
+	    delete delRoot;
 }
 
 
@@ -310,7 +313,9 @@ void kMeans_BIRCH(std::string filename)
     write_time = std::chrono::high_resolution_clock::now();
     // write result
     std::ofstream fOutput;
-    fOutput.open(("finalOutput_" + filename));
+    std::string outName = "";
+    outName.append(filename.begin()+5,filename.begin()+8);
+    fOutput.open(("finalOutput_BIRCH_"+outName+"Parallel.csv"));
     fOutput << "x;y;c\n";
     double tmpPoint[dimensions];
     for (int i = 0; i < total.size(); ++i)
@@ -465,15 +470,19 @@ int birch(std::string filename)
     mergedRoot = rootNode[biggestThreshold];
 
 	// write leaf CFs in CSV
-	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_" + filename);
+	std::string outName= "";
+	outName.append(filename.begin()+5,filename.begin()+8);
+	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_Phase1__" + outName +".csv");
     phase_time = std::chrono::high_resolution_clock::now();
     //Phase 3
 	kMeans_BIRCH(filename);
 	centroids.clear();
 	total.clear();
 
-    deleteTree(mergedRoot);
-	rootNode.clear();
+    for (int n = 0; n < rootNode.size(); ++n) {
+        deleteTree(rootNode[n]);
+    }
+    rootNode.clear();
     newTreeRoot.clear();
 	threshold_Value.clear();
 	mergedRoot = nullptr;
@@ -488,7 +497,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	std::string testCaseName = std::string(argv[1]);
+
+    std::string testCaseName = std::string(argv[1]);
 	char measurementDelim = argv[2][0];
 	int runs = std::stoi(argv[3], nullptr, 10);
     std::string dataFile(argv[4]);
@@ -499,6 +509,7 @@ int main(int argc, char *argv[])
 	numTrees = std::stoi(argv[8], nullptr, 10);
 
     std::ifstream file(dataFile, std::ifstream::in | std::ifstream::binary);
+
 
     file.seekg(0, std::ios::end);
     memory = (int) (file.tellg() * 0.1);
@@ -520,7 +531,9 @@ int main(int argc, char *argv[])
     }
 	std::cerr << "warmUP DONE" << std::endl;
 	std::ofstream fileOStream;
-	fileOStream.open(("BIRCH_Sequential_" + dataFile));
+    std::string out = "";
+    out.append(dataFile.begin()+5,dataFile.begin()+8);
+    fileOStream.open(("BIRCH_Parallel_"+out+"_times.csv"));
 	std::cerr << testCaseName;
 	fileOStream << testCaseName << std::endl;
 	long long int avgRead = 0;

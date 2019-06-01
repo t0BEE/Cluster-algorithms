@@ -36,20 +36,12 @@ void CFTreeNode::getCentroid(double* buffer)
 
 bool CFTreeNode::isLeafNode()
 {
-    try{
-        if (this->childNodes.size() != 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    catch (const std::exception& e)
+    if (this->childNodes.size() != 0)
     {
         return false;
     }
+
+    return true;
 
 }
 
