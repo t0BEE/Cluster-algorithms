@@ -201,13 +201,11 @@ void prepareInput()
         unused.push_back(total[k]);
     }
 
-    #pragma omp parallel shared(buffIndex, unused) num_threads(2)
+    #pragma omp parallel shared(buffIndex, unused) num_threads(8)
     {
 
         double tmpLS[dimensions];
         long double tmpSS[dimensions];
-        //double *tmpLS = (double*) calloc(dimensions, sizeof(double));
-        //long double *tmpSS = (long double*) calloc(dimensions, sizeof(long double));
 
         int start = 0;
         bool picked = false;
