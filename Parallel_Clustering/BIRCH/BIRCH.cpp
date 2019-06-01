@@ -201,7 +201,7 @@ void prepareInput()
         unused.push_back(total[k]);
     }
 
-    #pragma omp parallel shared(buffIndex, unused) num_threads(8)
+    #pragma omp parallel shared(buffIndex, unused) num_threads(12)
     {
 
         double tmpLS[dimensions];
