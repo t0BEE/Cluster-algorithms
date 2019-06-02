@@ -94,7 +94,7 @@ CFTreeNode* CFTreeNode::insert(ClusteringFeature addCF, int treeID)
 		// if a split occurs a new CFTreeNode is returned by pointer otherwise nullptr
 		if (newNode != nullptr)
 		{ // a split occured
-			current_tree_size++;
+			current_tree_size[treeID] = current_tree_size[treeID] + 1;
 			// try to insert new node here
 			if (this->childNodes.size() < b_Entries)
 			{ // some space is left

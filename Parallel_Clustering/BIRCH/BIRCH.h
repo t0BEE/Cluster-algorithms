@@ -13,7 +13,7 @@ void rebuild(int treeID);
 void deleteTree(CFTreeNode* delRoot);
 void pathCopy(CFTreeNode* newTree, CFTreeNode* oldTree, int treeID);
 void prevNextChain(CFTreeNode* node);
-void calcTreeSize(CFTreeNode* node);
+void calcTreeSize(CFTreeNode* node, int treeID);
 
 // k-Means
 void kMeans_BIRCH(std::string filename);

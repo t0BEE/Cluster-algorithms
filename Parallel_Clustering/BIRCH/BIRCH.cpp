@@ -7,8 +7,9 @@ std::vector<CFTreeNode*> rootNode;
 std::vector<CFTreeNode*> newTreeRoot;
 CFTreeNode* mergedRoot;
 std::vector<Point_B*> centroids;
-static int tree_height;
-int current_tree_size, dimensions, page_size, cf_entry_size, memory;
+std::vector<int> current_tree_size;
+
+int dimensions, page_size, cf_entry_size, memory;
 int max_tree_size, b_Entries, l_Entries, numTrees;
 std::vector<double> threshold_Value;
 char delim;
@@ -67,8 +68,7 @@ void insertCF(ClusteringFeature addCF, int treeID)
 	// If the root is split, the tree will grow in height
 	if (newNode != nullptr)
 	{ // root is splitted
-		tree_height++;
-		current_tree_size += 2; // the new node + a new root node
+		current_tree_size[treeID] = current_tree_size[treeID] + 2; // the new node + a new root node
 
 		if (rootNode[treeID]->isLeafNode())
 		{ // if root was a leafNode it has to be split
@@ -105,24 +105,24 @@ void insertCF(ClusteringFeature addCF, int treeID)
 		}
 	}
 	// Run out of memory
-	while (current_tree_size > max_tree_size)
+	while (current_tree_size[treeID] > max_tree_size)
 	{
 		rebuild(treeID);
 		rootNode[treeID] = newTreeRoot[treeID];
 		newTreeRoot[treeID] = nullptr;
 		// calculate new current tree size
-		current_tree_size = 0;
-		calcTreeSize(rootNode[treeID]);
+		current_tree_size[treeID] = 0;
+		calcTreeSize(rootNode[treeID], treeID);
 	}
 }
 
-void calcTreeSize(CFTreeNode* node)
+void calcTreeSize(CFTreeNode* node, int treeID)
 {
 	for (int i = 0; i < node->childNodes.size(); ++i)
 	{
-		calcTreeSize(node->childNodes[i]);
+		calcTreeSize(node->childNodes[i], treeID);
 	}
-	current_tree_size++;
+	current_tree_size[treeID] = current_tree_size[treeID] + 1;
 }
 
 void prevNextChain(CFTreeNode* node)
@@ -315,7 +315,7 @@ void kMeans_BIRCH(std::string filename)
     std::ofstream fOutput;
     std::string outName = "";
     outName.append(filename.begin()+5,filename.begin()+8);
-    fOutput.open(("finalOutput_BIRCH_"+outName+"Parallel.csv"));
+    fOutput.open("finalOutput_BIRCH_"+outName+"Parallel.csv");
     fOutput << "x;y;c\n";
     double tmpPoint[dimensions];
     for (int i = 0; i < total.size(); ++i)
@@ -405,16 +405,15 @@ void rebuild(int treeID)
 int birch(std::string filename)
 {
 
-    	current_tree_size = 0;
     for (int j = 0; j < numTrees; ++j) {
         rootNode.push_back(new CFTreeNode());
         threshold_Value.push_back(0.0);
         newTreeRoot.push_back(nullptr);
+        current_tree_size.push_back(0);
     }
 
 
-	current_tree_size++;
-	tree_height = 1;
+
 	std::ofstream csvOutputfile;
 	// read CSV
 	readBIRCHCSV(filename);
@@ -423,13 +422,15 @@ int birch(std::string filename)
     max_tree_size = max_tree_size / numTrees;
 
 
-    #pragma omp parallel num_threads(numTrees) private(current_tree_size, tree_height, newTreeRoot)
+    #pragma omp parallel num_threads(numTrees)
     {
         double tmpLS[dimensions];
         long double tmpSS[dimensions];
         ClusteringFeature newCF;
 
         int treeID = omp_get_thread_num();
+        current_tree_size[treeID] = current_tree_size[treeID] + 1;
+
 
         #pragma omp for schedule(dynamic)
         for (int k = 0; k < total.size(); ++k)
@@ -472,7 +473,7 @@ int birch(std::string filename)
 	// write leaf CFs in CSV
 	std::string outName= "";
 	outName.append(filename.begin()+5,filename.begin()+8);
-	writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_Phase1__" + outName +".csv");
+	//writeBIRCH_CSVFile(csvOutputfile, "outputBIRCH_Phase1__" + outName +".csv");
     phase_time = std::chrono::high_resolution_clock::now();
     //Phase 3
 	kMeans_BIRCH(filename);
@@ -485,6 +486,7 @@ int birch(std::string filename)
     rootNode.clear();
     newTreeRoot.clear();
 	threshold_Value.clear();
+	current_tree_size.clear();
 	mergedRoot = nullptr;
 	return 0;
 }
@@ -535,12 +537,14 @@ int main(int argc, char *argv[])
     out.append(dataFile.begin()+5,dataFile.begin()+8);
     fileOStream.open(("BIRCH_Parallel_"+out+"_times.csv"));
 	std::cerr << testCaseName;
-	fileOStream << testCaseName << std::endl;
+	//fileOStream << testCaseName << std::endl;
 	long long int avgRead = 0;
 	long long int avgBIRCH = 0;
 	long long int avgKMeans = 0;
 	long long int avgWrite = 0;
 	long long int avgMerge = 0;
+
+    fileOStream << testCaseName;
 
 	for (int i = 0; i < runs; ++i) {
 		std::cerr << "Testrun #" << i << std::endl;
@@ -554,20 +558,23 @@ int main(int argc, char *argv[])
 		long long int timeKMeans = std::chrono::duration_cast<std::chrono::microseconds>(write_time - phase_time).count();
 		long long int timeWrite = std::chrono::duration_cast<std::chrono::microseconds>(endTime - write_time).count();
 
-		fileOStream << "Run:" << i << "  --  Read: " << timeRead << " ms  --- BIRCH Build Phase 1: " << timeBIRCH << " ms  --- Tree merge: " << timeMerge <<" ms  --- k-Means Phase 3: " << timeKMeans << " ms  --- Write: " << timeWrite << "ms" << std::endl;
+	//	fileOStream << "Run:" << i << "  --  Read: " << timeRead << " ms  --- BIRCH Build Phase 1: " << timeBIRCH << " ms  --- Tree merge: " << timeMerge <<" ms  --- k-Means Phase 3: " << timeKMeans << " ms  --- Write: " << timeWrite << "ms" << std::endl;
 		avgRead += timeRead;
 		avgBIRCH += timeBIRCH;
 		avgMerge += timeMerge;
 		avgKMeans += timeKMeans;
 		avgWrite += timeWrite;
 
+        fileOStream << ";" << timeBIRCH;
 	}
-	fileOStream << "----------------------------------" << std::endl << "Average Read: " << (avgRead/runs) << " ms  --- Average BIRCH Phase 1: ";
-	fileOStream << (avgBIRCH/runs) << " ms  --- Average tree merging: " << (avgMerge/runs) << " ms  --- Average k-Means Phase 3: " << (avgKMeans/runs) << " ms  --- Average Write: " << (avgWrite/runs)<< "ms" << std::endl;
-	fileOStream.close();
+	//fileOStream << "----------------------------------" << std::endl << "Average Read: " << (avgRead/runs) << " ms  --- Average BIRCH Phase 1: ";
+	//fileOStream << (avgBIRCH/runs) << " ms  --- Average tree merging: " << (avgMerge/runs) << " ms  --- Average k-Means Phase 3: " << (avgKMeans/runs) << " ms  --- Average Write: " << (avgWrite/runs)<< "ms" << std::endl;
 
+
+    fileOStream << std::endl;
+    fileOStream.close();
 	// standard output to be piped in extra file
-	std::cout << dataFile << "_BIRCH_Seq;" << (avgRead/runs) << ";" << (avgBIRCH/runs) << ";" << (avgMerge/runs) << ";" << (avgKMeans/runs) << ";" << (avgWrite/runs) << std::endl;
+	//std::cout << dataFile << "_BIRCH_Seq;" << (avgRead/runs) << ";" << (avgBIRCH/runs) << ";" << (avgMerge/runs) << ";" << (avgKMeans/runs) << ";" << (avgWrite/runs) << std::endl;
 
 	return 0;
 }

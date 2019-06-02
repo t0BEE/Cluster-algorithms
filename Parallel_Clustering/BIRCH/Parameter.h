@@ -15,7 +15,7 @@ extern int b_Entries;
 extern int l_Entries;
 extern int max_tree_size;
 extern int dimensions;
-extern int current_tree_size;
+extern std::vector<int> current_tree_size;
 
 //Help functions
 void extern addTwoPoints(double* dOne, double* dTwo);
